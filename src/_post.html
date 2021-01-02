@@ -1,0 +1,46 @@
+{{ define "head" }}
+  <link rel="stylesheet" href="atom-one-dark.min.css" />
+  <script src="highlight.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('pre code[class^="language-"]').forEach(el => {
+        hljs.highlightElement(el);
+      });
+    });
+  </script>
+  <style>
+    pre > code {
+      background: transparent !important;
+      padding: 0 !important;
+    }
+  </style>
+{{ end }}
+
+{{ define "main" }}
+  <header class="text-center py-8 sm:pt-10 sm:pb-16">
+    <a class="font-extrabold text-2xl px-4 py-2 rounded hover:bg-gray-200 dark:hover:bg-gray-900" href="/">Jason Liang</a>
+  </header>
+  <article
+    class="
+      prose prose-zinc dark:prose-invert px-4 pb-16 mx-auto
+      dark:prose-headings:text-gray-200
+      prose-img:rounded prose-img:mx-auto
+      prose-a:p-0.5 prose-a:-m-0.5 prose-a:rounded prose-a:text-gray-900 dark:prose-a:text-gray-100 hover:prose-a:text-white dark:hover:prose-a:text-gray-900 hover:prose-a:bg-gray-800 dark:hover:prose-a:bg-gray-100 hover:prose-a:no-underline
+      prose-code:font-bold before:prose-code:content-[''] after:prose-code:content-['']
+    "
+    itemscope
+    itemtype="http://schema.org/BlogPosting"
+  >
+    <span class="uppercase text-xs tracking-wider font-bold text-gray-500">
+      <time datetime="{{ timeParse "2006-01-02" "2006-01-02T15:04:05-0700" .Post.Date }}" itemprop="datePublished">
+        {{ timeParse "2006-01-02" "January 2, 2006" .Post.Date }}
+      </time>
+    </span>
+    <h1 itemprop="name headline">
+      {{ .Post.Title }}
+    </h1>
+    <section itemprop="articleBody">
+      {{ .Post.Content }}
+    </section>
+  </article>
+{{ end }}

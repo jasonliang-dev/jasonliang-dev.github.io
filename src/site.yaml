@@ -1,0 +1,107 @@
+title: Jason Liang
+author: Jason Liang
+projects:
+- title: Costello
+  image: /images/discord-stickers.png
+  source: https://github.com/jasonliang-dev/costello
+  classname: >-
+    from-violet-400 to-violet-500 text-violet-50
+    dark:from-violet-800 dark:to-violet-900 dark:text-violet-200
+  description: >-
+    BetterDiscord plugin that lets you quickly save and send a
+    collection of images.
+
+- title: dream-eater
+  image: /images/php.png
+  source: https://github.com/jasonliang-dev/dream-eater
+  classname: >-
+    from-emerald-400 to-emerald-500 text-emerald-50
+    dark:from-emerald-600 dark:to-emerald-700 dark:text-emerald-200
+  description: >-
+    Emacs minor mode that implements Dreamweaver's check in/out
+    system.
+
+- title: ECS
+  image: /images/ecs.png
+  source: https://github.com/jasonliang-dev/entity-component-system
+  classname: >-
+    from-amber-400 to-amber-500 text-amber-50
+    dark:from-amber-600 dark:to-amber-700 dark:text-amber-100
+  description: >-
+    Archetype entity component system for C.
+
+- title: Game of Life
+  image: /images/game-of-life.png
+  source: https://github.com/jasonliang-dev/game-of-life
+  classname: >-
+    from-gray-600 to-gray-700 text-gray-200
+    dark:from-gray-700 dark:to-gray-800 dark:text-gray-300
+  description: >-
+    Conway's Game of Life written in C with SDL2.
+
+- title: Heroicons for Elm
+  image: /images/elm-heroicons.png
+  source: https://github.com/jasonliang-dev/heroicons-for-elm
+  classname: >-
+    from-blue-400 to-blue-500 text-blue-50
+    dark:from-blue-600 dark:to-blue-700 dark:text-blue-200
+  description: >-
+    Web app that provides SVG icons for the Elm programming language.
+
+- title: lite-vim
+  image: /images/lite-vim.png
+  source: https://github.com/jasonliang-dev/lite-vim
+  classname: >-
+    from-violet-400 to-violet-500 text-violet-50
+    dark:from-violet-800 dark:to-violet-900 dark:text-violet-200
+  description: >-
+    A plugin for the Lite text editor that emulates a subset of Vim.
+
+- title: lulu
+  image: /images/lulu.png
+  source: https://github.com/jasonliang-dev/lulu
+  classname: >-
+    from-pink-400 to-pink-500 text-pink-50
+    dark:from-pink-500 dark:to-pink-700 dark:text-pink-200
+  description: >-
+    Tiny lisp-like toy programming language. Compiler written in
+    Haskell under 300 SLOC.
+
+- title: STARSPEED SHOOTER 2000
+  image: /images/spaceshooter.png
+  source: https://github.com/jasonliang-dev/space-shooter
+  classname: >-
+    from-violet-400 to-violet-500 text-violet-50
+    dark:from-violet-800 dark:to-violet-900 dark:text-violet-200
+  description: >-
+    A fast paced arcade romp. Windows only.
+
+- title: Temtem Type Calculator
+  image: /images/temtem.png
+  source: https://github.com/jasonliang-dev/temtem-type-calculator
+  classname: >-
+    from-amber-400 to-amber-500 text-amber-50
+    dark:from-amber-600 dark:to-amber-700 dark:text-amber-100
+  description: >-
+    Web app for the game, Temtem. View matchups between
+    different Temtem types.
+
+- title: Wildermaze
+  image: /images/maze.png
+  source: https://github.com/jasonliang-dev/wildermaze
+  classname: >-
+    from-emerald-400 to-emerald-500 text-emerald-50
+    dark:from-emerald-600 dark:to-emerald-700 dark:text-emerald-200
+  description: >-
+    A game that sees the player move a rabbit around a maze, eating
+    carrots, and avoiding wolves. Created during BC Game Jam 2020
+
+- title: Yet Another Chat App
+  image: /images/chat-app.png
+  source: https://github.com/jasonliang-dev/yet-another-chat-app
+  classname: >-
+    from-pink-400 to-pink-500 text-pink-50
+    dark:from-pink-500 dark:to-pink-700 dark:text-pink-200
+  description: >-
+    Chat application that uses the MERN stack. Messages are sent in
+    real time using Socket.IO

@@ -1,0 +1,15 @@
+{
+  "scripts": {
+    "build:css": "tailwindcss -i src/style.css -o dist/style.css",
+    "watch:css": "tailwindcss -i src/style.css -o dist/style.css --watch",
+    "watch:html": "nodemon --exec generator.exe --ext html,yaml,md --ignore dist",
+    "build": "npm run build:css && go build generator.go && generator.exe",
+    "server": "live-server --cors --no-css-inject dist"
+  },
+  "devDependencies": {
+    "@tailwindcss/typography": "^0.5.0",
+    "live-server": "^1.2.1",
+    "nodemon": "^2.0.15",
+    "tailwindcss": "^3.0.8"
+  }
+}
