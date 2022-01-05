@@ -885,8 +885,16 @@ Ensure the default browser behavior of the `hidden` attribute.
   --tw-prose-invert-td-borders: #3f3f46;
 }
 
+.fixed {
+  position: fixed;
+}
+
 .absolute {
   position: absolute;
+}
+
+.relative {
+  position: relative;
 }
 
 .sticky {
@@ -900,6 +908,14 @@ Ensure the default browser behavior of the `hidden` attribute.
 
 .right-0 {
   right: 0px;
+}
+
+.-z-10 {
+  z-index: -10;
+}
+
+.z-0 {
+  z-index: 0;
 }
 
 .z-10 {
@@ -1191,6 +1207,18 @@ Ensure the default browser behavior of the `hidden` attribute.
 
 .pb-16 {
   padding-bottom: 4rem;
+}
+
+.pt-32 {
+  padding-top: 8rem;
+}
+
+.pt-48 {
+  padding-top: 12rem;
+}
+
+.pt-36 {
+  padding-top: 9rem;
 }
 
 .text-center {
@@ -1530,6 +1558,22 @@ Ensure the default browser behavior of the `hidden` attribute.
   background-color: rgb(228 228 231 / var(--tw-bg-opacity));
 }
 
+.hover\:bg-gray-500\/50:hover {
+  background-color: rgb(113 113 122 / 0.5);
+}
+
+.hover\:bg-gray-400\/50:hover {
+  background-color: rgb(161 161 170 / 0.5);
+}
+
+.hover\:bg-gray-300\/50:hover {
+  background-color: rgb(212 212 216 / 0.5);
+}
+
+.hover\:bg-gray-200\/50:hover {
+  background-color: rgb(228 228 231 / 0.5);
+}
+
 .hover\:text-white:hover {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
@@ -1780,6 +1824,18 @@ Ensure the default browser behavior of the `hidden` attribute.
   background-color: rgb(244 244 245 / var(--tw-bg-opacity));
 }
 
+.dark .dark\:hover\:bg-gray-900\/75:hover {
+  background-color: rgb(24 24 27 / 0.75);
+}
+
+.dark .dark\:hover\:bg-black\/75:hover {
+  background-color: rgb(0 0 0 / 0.75);
+}
+
+.dark .dark\:hover\:bg-black\/50:hover {
+  background-color: rgb(0 0 0 / 0.5);
+}
+
 .dark .dark\:hover\:text-gray-900:hover {
   --tw-text-opacity: 1;
   color: rgb(24 24 27 / var(--tw-text-opacity));
@@ -1824,6 +1880,14 @@ Ensure the default browser behavior of the `hidden` attribute.
 
   .sm\:pb-16 {
     padding-bottom: 4rem;
+  }
+
+  .sm\:pt-48 {
+    padding-top: 12rem;
+  }
+
+  .sm\:pt-36 {
+    padding-top: 9rem;
   }
 
   .sm\:text-6xl {

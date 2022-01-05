@@ -20,6 +20,22 @@
       } else {
         document.documentElement.classList.remove("dark");
       }
+
+      function toggleDark() {
+        if (document.documentElement.classList.contains("dark")) {
+          document.documentElement.classList.remove('dark');
+          localStorage.theme = 'light';
+          if (window.onToggleDark) {
+            window.onToggleDark('light');
+          }
+        } else {
+          document.documentElement.classList.add('dark');
+          localStorage.theme = 'dark';
+          if (window.onToggleDark) {
+            window.onToggleDark('dark');
+          }
+        }
+      }
     </script>
     
   <link rel="stylesheet" href="atom-one-dark.min.css" />
@@ -43,11 +59,7 @@
     <div class="sticky z-10 top-0">
       <button
         class="absolute shadow-md focus:ring-4 right-0 m-3 md:m-6 p-3 flex justify-center items-center bg-gray-800 dark:bg-white text-gray-50 dark:text-gray-900 rounded-full"
-        onclick="document.documentElement.classList.toggle('dark');
-          localStorage.theme === 'dark'
-            ? (localStorage.theme = 'light')
-            : (localStorage.theme = 'dark')
-        "
+        onclick="toggleDark()"
       >
         
         <svg
@@ -399,7 +411,7 @@ performance and efficiency:</p>
 <ul>
 <li>Store uniform locations to avoid <code>glGetUniformLocation()</code> in <code>r_flush()</code></li>
 <li>Create an index buffer to improve efficiency and memory usage when exclusively
-drawing quads</li>
+drawing quads. Drawing a quad would need four calls to <code>r_push_vertex()</code> instead of six.</li>
 <li>Create multiple buffers and store them into buckets, where each bucket is
 associated with a texture ID, reducing draw calls and state changes when
 texture changes are interleaved.</li>
