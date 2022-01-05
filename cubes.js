@@ -331,23 +331,11 @@ function init() {
 
   state.cube_distance_timer = 0;
 
-  state.cubes = [
-    {
-      rotation: 0,
-      orbit: Math.PI * 2 * 0.33,
-      axis: vec3.normalize([5, 4, 3]),
-    },
-    {
-      rotation: 1,
-      orbit: Math.PI * 2 * 0.66,
-      axis: vec3.normalize([5, 3, 2]),
-    },
-    {
-      rotation: 2,
-      orbit: Math.PI * 2 * 0.99,
-      axis: vec3.normalize([5, 2, 1]),
-    },
-  ];
+  state.cubes = Array.from({ length: 5 }).map((_, i, arr) => ({
+      rotation: i,
+      orbit: Math.PI * 2 * i / arr.length,
+      axis: vec3.normalize([5, i, i - 1]),
+  }));
 
   state.mouse = {
     x: canvas.width / 2,
