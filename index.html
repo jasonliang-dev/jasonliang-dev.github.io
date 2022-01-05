@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>
+      
+        Jason Liang
+      
+    </title>
+    <link href="style.css" rel="stylesheet" />
+    <script>
+      if (
+        localStorage.theme === "dark" ||
+        (!("theme" in localStorage) &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches)
+      ) {
+        document.documentElement.classList.add("dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+      }
+    </script>
+    
+  </head>
+  <body class="bg-gray-50 dark:text-gray-200 dark:bg-gray-800">
+    <div class="sticky z-10 top-0">
+      <button
+        class="absolute shadow-md focus:ring-4 right-0 m-3 md:m-6 p-3 flex justify-center items-center bg-gray-800 dark:bg-white text-gray-50 dark:text-gray-900 rounded-full"
+        onclick="document.documentElement.classList.toggle('dark');
+          localStorage.theme === 'dark'
+            ? (localStorage.theme = 'light')
+            : (localStorage.theme = 'dark')
+        "
+      >
+        
+        <svg
+          class="w-4 h-4 block dark:hidden"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+        >
+          <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
+        </svg>
+
+        
+        <svg
+          class="w-4 h-4 hidden dark:block"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+        >
+          <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd" />
+        </svg>
+      </button>
+    </div>
+
+    
+  <div class="font-bold text-center font-mono py-10 text-gray-500">&lt;webpage&gt;</div>
+
+  <div class="max-w-4xl mx-auto px-5 pb-4">
+    <header class="pt-28">
+      <small class="block text-xs uppercase font-bold tracking-wider text-gray-500 dark:text-gray-400">
+        Welcome to my website
+        <span class="text-sm"> 👋</span>
+      </small>
+      <h1 class="text-4xl sm:text-6xl font-extrabold text-gray-900 dark:text-gray-200">
+        Hi! I’m Jason Liang
+      </h1>
+      <p class="text-gray-500 dark:text-gray-400 pt-3 sm:pt-4 text-lg sm:text-xl max-w-xl leading-relaxed">
+        I write web apps and 3D graphics programs. My hobbies include guitar, video games, and sleeping.
+      </p>
+    </header>
+    <main class="pt-40">
+      <h2 class="font-extrabold text-4xl text-gray-900 dark:text-gray-200">Words</h2>
+      <ul class="pt-4 sm:pt-5 grid">
+        
+          <li class="-my-1 -mx-4">
+            <a
+              class="rounded-lg px-4 py-4 block transition motion-reduce:transition-none motion-reduce:transform-none hover:translate-x-0.5 hover:bg-gray-100 dark:hover:bg-gray-900"
+              href="batch-renderer.html"
+            >
+              <time
+                class="text-gray-600 dark:text-gray-400 inline-block w-40"
+                datetime="2022-01-04T00:00:00&#43;0000"
+                itemprop="datePublished"
+              >
+                January 4, 2022
+              </time>
+              <h3 class="inline-block font-medium">A Tiny OpenGL 2D Batch Renderer</h3>
+            </a>
+          </li>
+        
+          <li class="-my-1 -mx-4">
+            <a
+              class="rounded-lg px-4 py-4 block transition motion-reduce:transition-none motion-reduce:transform-none hover:translate-x-0.5 hover:bg-gray-100 dark:hover:bg-gray-900"
+              href="unit-testing.html"
+            >
+              <time
+                class="text-gray-600 dark:text-gray-400 inline-block w-40"
+                datetime="2022-01-03T00:00:00&#43;0000"
+                itemprop="datePublished"
+              >
+                January 3, 2022
+              </time>
+              <h3 class="inline-block font-medium">Write Your Own C&#43;&#43; Unit Testing Library</h3>
+            </a>
+          </li>
+        
+      </ul>
+      <h2 class="font-extrabold text-4xl text-gray-900 dark:text-gray-200 pt-16">Projects</h2>
+      <p class="text-gray-600 dark:text-gray-400 pt-4 sm:pt-5 text-md sm:text-lg max-w-xl leading-relaxed">
+        All of my projects listed here are on my
+        <a
+          class="p-0.5 -m-0.5 rounded text-gray-900 dark:text-gray-100 hover:text-white dark:hover:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-100 underline hover:no-underline"
+          href="https://github.com/jasonliang-dev"
+        >GitHub</a> profile.
+      </p>
+      <ul class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-5 gap-y-6 pt-10">
+        
+          <li class="
+            group w-full max-w-sm mx-auto block transition-transform motion-reduce:transition-none motion-reduce:transform-none transform hover:-translate-y-0.5 rounded-xl overflow-hidden block bg-gradient-to-br shadow-lg hover:shadow-xl
+            from-violet-400 to-violet-500 text-violet-50 dark:from-violet-800 dark:to-violet-900 dark:text-violet-200
+          ">
+            <a class="h-full block" href="https://github.com/jasonliang-dev/costello">
+              <img
+                class="opacity-75 group-hover:opacity-100 transition-opacity motion-reduce:transition-none motion-reduce:transform-none object-cover h-32 w-full"
+                src="/images/discord-stickers.png"
+              />
+              <div class="p-4">
+                <h3 class="text-lg leading-tight font-bold text-shadow text-gray-50 dark:text-gray-100">
+                  Costello
+                </h3>
+                <p class="pt-1.5 font-medium text-shadow">
+                  BetterDiscord plugin that lets you quickly save and send a collection of images.
+                </p>
+              </div>
+            </a>
+          </li>
+        
+          <li class="
+            group w-full max-w-sm mx-auto block transition-transform motion-reduce:transition-none motion-reduce:transform-none transform hover:-translate-y-0.5 rounded-xl overflow-hidden block bg-gradient-to-br shadow-lg hover:shadow-xl
+            from-emerald-400 to-emerald-500 text-emerald-50 dark:from-emerald-600 dark:to-emerald-700 dark:text-emerald-200
+          ">
+            <a class="h-full block" href="https://github.com/jasonliang-dev/dream-eater">
+              <img
+                class="opacity-75 group-hover:opacity-100 transition-opacity motion-reduce:transition-none motion-reduce:transform-none object-cover h-32 w-full"
+                src="/images/php.png"
+              />
+              <div class="p-4">
+                <h3 class="text-lg leading-tight font-bold text-shadow text-gray-50 dark:text-gray-100">
+                  dream-eater
+                </h3>
+                <p class="pt-1.5 font-medium text-shadow">
+                  Emacs minor mode that implements Dreamweaver&#39;s check in/out system.
+                </p>
+              </div>
+            </a>
+          </li>
+        
+          <li class="
+            group w-full max-w-sm mx-auto block transition-transform motion-reduce:transition-none motion-reduce:transform-none transform hover:-translate-y-0.5 rounded-xl overflow-hidden block bg-gradient-to-br shadow-lg hover:shadow-xl
+            from-amber-400 to-amber-500 text-amber-50 dark:from-amber-600 dark:to-amber-700 dark:text-amber-100
+          ">
+            <a class="h-full block" href="https://github.com/jasonliang-dev/entity-component-system">
+              <img
+                class="opacity-75 group-hover:opacity-100 transition-opacity motion-reduce:transition-none motion-reduce:transform-none object-cover h-32 w-full"
+                src="/images/ecs.png"
+              />
+              <div class="p-4">
+                <h3 class="text-lg leading-tight font-bold text-shadow text-gray-50 dark:text-gray-100">
+                  ECS
+                </h3>
+                <p class="pt-1.5 font-medium text-shadow">
+                  Archetype entity component system for C.
+                </p>
+              </div>
+            </a>
+          </li>
+        
+          <li class="
+            group w-full max-w-sm mx-auto block transition-transform motion-reduce:transition-none motion-reduce:transform-none transform hover:-translate-y-0.5 rounded-xl overflow-hidden block bg-gradient-to-br shadow-lg hover:shadow-xl
+            from-gray-600 to-gray-700 text-gray-200 dark:from-gray-700 dark:to-gray-800 dark:text-gray-300
+          ">
+            <a class="h-full block" href="https://github.com/jasonliang-dev/game-of-life">
+              <img
+                class="opacity-75 group-hover:opacity-100 transition-opacity motion-reduce:transition-none motion-reduce:transform-none object-cover h-32 w-full"
+                src="/images/game-of-life.png"
+              />
+              <div class="p-4">
+                <h3 class="text-lg leading-tight font-bold text-shadow text-gray-50 dark:text-gray-100">
+                  Game of Life
+                </h3>
+                <p class="pt-1.5 font-medium text-shadow">
+                  Conway&#39;s Game of Life written in C with SDL2.
+                </p>
+              </div>
+            </a>
+          </li>
+        
+          <li class="
+            group w-full max-w-sm mx-auto block transition-transform motion-reduce:transition-none motion-reduce:transform-none transform hover:-translate-y-0.5 rounded-xl overflow-hidden block bg-gradient-to-br shadow-lg hover:shadow-xl
+            from-blue-400 to-blue-500 text-blue-50 dark:from-blue-600 dark:to-blue-700 dark:text-blue-200
+          ">
+            <a class="h-full block" href="https://github.com/jasonliang-dev/heroicons-for-elm">
+              <img
+                class="opacity-75 group-hover:opacity-100 transition-opacity motion-reduce:transition-none motion-reduce:transform-none object-cover h-32 w-full"
+                src="/images/elm-heroicons.png"
+              />
+              <div class="p-4">
+                <h3 class="text-lg leading-tight font-bold text-shadow text-gray-50 dark:text-gray-100">
+                  Heroicons for Elm
+                </h3>
+                <p class="pt-1.5 font-medium text-shadow">
+                  Web app that provides SVG icons for the Elm programming language.
+                </p>
+              </div>
+            </a>
+          </li>
+        
+          <li class="
+            group w-full max-w-sm mx-auto block transition-transform motion-reduce:transition-none motion-reduce:transform-none transform hover:-translate-y-0.5 rounded-xl overflow-hidden block bg-gradient-to-br shadow-lg hover:shadow-xl
+            from-violet-400 to-violet-500 text-violet-50 dark:from-violet-800 dark:to-violet-900 dark:text-violet-200
+          ">
+            <a class="h-full block" href="https://github.com/jasonliang-dev/lite-vim">
+              <img
+                class="opacity-75 group-hover:opacity-100 transition-opacity motion-reduce:transition-none motion-reduce:transform-none object-cover h-32 w-full"
+                src="/images/lite-vim.png"
+              />
+              <div class="p-4">
+                <h3 class="text-lg leading-tight font-bold text-shadow text-gray-50 dark:text-gray-100">
+                  lite-vim
+                </h3>
+                <p class="pt-1.5 font-medium text-shadow">
+                  A plugin for the Lite text editor that emulates a subset of Vim.
+                </p>
+              </div>
+            </a>
+          </li>
+        
+          <li class="
+            group w-full max-w-sm mx-auto block transition-transform motion-reduce:transition-none motion-reduce:transform-none transform hover:-translate-y-0.5 rounded-xl overflow-hidden block bg-gradient-to-br shadow-lg hover:shadow-xl
+            from-pink-400 to-pink-500 text-pink-50 dark:from-pink-500 dark:to-pink-700 dark:text-pink-200
+          ">
+            <a class="h-full block" href="https://github.com/jasonliang-dev/lulu">
+              <img
+                class="opacity-75 group-hover:opacity-100 transition-opacity motion-reduce:transition-none motion-reduce:transform-none object-cover h-32 w-full"
+                src="/images/lulu.png"
+              />
+              <div class="p-4">
+                <h3 class="text-lg leading-tight font-bold text-shadow text-gray-50 dark:text-gray-100">
+                  lulu
+                </h3>
+                <p class="pt-1.5 font-medium text-shadow">
+                  Tiny lisp-like toy programming language. Compiler written in Haskell under 300 SLOC.
+                </p>
+              </div>
+            </a>
+          </li>
+        
+          <li class="
+            group w-full max-w-sm mx-auto block transition-transform motion-reduce:transition-none motion-reduce:transform-none transform hover:-translate-y-0.5 rounded-xl overflow-hidden block bg-gradient-to-br shadow-lg hover:shadow-xl
+            from-violet-400 to-violet-500 text-violet-50 dark:from-violet-800 dark:to-violet-900 dark:text-violet-200
+          ">
+            <a class="h-full block" href="https://github.com/jasonliang-dev/space-shooter">
+              <img
+                class="opacity-75 group-hover:opacity-100 transition-opacity motion-reduce:transition-none motion-reduce:transform-none object-cover h-32 w-full"
+                src="/images/spaceshooter.png"
+              />
+              <div class="p-4">
+                <h3 class="text-lg leading-tight font-bold text-shadow text-gray-50 dark:text-gray-100">
+                  STARSPEED SHOOTER 2000
+                </h3>
+                <p class="pt-1.5 font-medium text-shadow">
+                  A fast paced arcade romp. Windows only.
+                </p>
+              </div>
+            </a>
+          </li>
+        
+          <li class="
+            group w-full max-w-sm mx-auto block transition-transform motion-reduce:transition-none motion-reduce:transform-none transform hover:-translate-y-0.5 rounded-xl overflow-hidden block bg-gradient-to-br shadow-lg hover:shadow-xl
+            from-amber-400 to-amber-500 text-amber-50 dark:from-amber-600 dark:to-amber-700 dark:text-amber-100
+          ">
+            <a class="h-full block" href="https://github.com/jasonliang-dev/temtem-type-calculator">
+              <img
+                class="opacity-75 group-hover:opacity-100 transition-opacity motion-reduce:transition-none motion-reduce:transform-none object-cover h-32 w-full"
+                src="/images/temtem.png"
+              />
+              <div class="p-4">
+                <h3 class="text-lg leading-tight font-bold text-shadow text-gray-50 dark:text-gray-100">
+                  Temtem Type Calculator
+                </h3>
+                <p class="pt-1.5 font-medium text-shadow">
+                  Web app for the game, Temtem. View matchups between different Temtem types.
+                </p>
+              </div>
+            </a>
+          </li>
+        
+          <li class="
+            group w-full max-w-sm mx-auto block transition-transform motion-reduce:transition-none motion-reduce:transform-none transform hover:-translate-y-0.5 rounded-xl overflow-hidden block bg-gradient-to-br shadow-lg hover:shadow-xl
+            from-emerald-400 to-emerald-500 text-emerald-50 dark:from-emerald-600 dark:to-emerald-700 dark:text-emerald-200
+          ">
+            <a class="h-full block" href="https://github.com/jasonliang-dev/wildermaze">
+              <img
+                class="opacity-75 group-hover:opacity-100 transition-opacity motion-reduce:transition-none motion-reduce:transform-none object-cover h-32 w-full"
+                src="/images/maze.png"
+              />
+              <div class="p-4">
+                <h3 class="text-lg leading-tight font-bold text-shadow text-gray-50 dark:text-gray-100">
+                  Wildermaze
+                </h3>
+                <p class="pt-1.5 font-medium text-shadow">
+                  A game that sees the player move a rabbit around a maze, eating carrots, and avoiding wolves. Created during BC Game Jam 2020
+                </p>
+              </div>
+            </a>
+          </li>
+        
+          <li class="
+            group w-full max-w-sm mx-auto block transition-transform motion-reduce:transition-none motion-reduce:transform-none transform hover:-translate-y-0.5 rounded-xl overflow-hidden block bg-gradient-to-br shadow-lg hover:shadow-xl
+            from-pink-400 to-pink-500 text-pink-50 dark:from-pink-500 dark:to-pink-700 dark:text-pink-200
+          ">
+            <a class="h-full block" href="https://github.com/jasonliang-dev/yet-another-chat-app">
+              <img
+                class="opacity-75 group-hover:opacity-100 transition-opacity motion-reduce:transition-none motion-reduce:transform-none object-cover h-32 w-full"
+                src="/images/chat-app.png"
+              />
+              <div class="p-4">
+                <h3 class="text-lg leading-tight font-bold text-shadow text-gray-50 dark:text-gray-100">
+                  Yet Another Chat App
+                </h3>
+                <p class="pt-1.5 font-medium text-shadow">
+                  Chat application that uses the MERN stack. Messages are sent in real time using Socket.IO
+                </p>
+              </div>
+            </a>
+          </li>
+        
+      </ul>
+    </main>
+  </div>
+
+  <div class="font-bold text-center font-mono py-10 text-gray-500">&lt;/webpage&gt;</div>
+
+  </body>
+</html>
+<!-- Be nice to people, and brush your teeth -->
+

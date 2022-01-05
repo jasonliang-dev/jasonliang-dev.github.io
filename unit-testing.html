@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>
+      
+        Write Your Own C&#43;&#43; Unit Testing Library | Jason Liang
+      
+    </title>
+    <link href="style.css" rel="stylesheet" />
+    <script>
+      if (
+        localStorage.theme === "dark" ||
+        (!("theme" in localStorage) &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches)
+      ) {
+        document.documentElement.classList.add("dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+      }
+    </script>
+    
+  <link rel="stylesheet" href="atom-one-dark.min.css" />
+  <script src="highlight.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('pre code[class^="language-"]').forEach(el => {
+        hljs.highlightElement(el);
+      });
+    });
+  </script>
+  <style>
+    pre > code {
+      background: transparent !important;
+      padding: 0 !important;
+    }
+  </style>
+
+  </head>
+  <body class="bg-gray-50 dark:text-gray-200 dark:bg-gray-800">
+    <div class="sticky z-10 top-0">
+      <button
+        class="absolute shadow-md focus:ring-4 right-0 m-3 md:m-6 p-3 flex justify-center items-center bg-gray-800 dark:bg-white text-gray-50 dark:text-gray-900 rounded-full"
+        onclick="document.documentElement.classList.toggle('dark');
+          localStorage.theme === 'dark'
+            ? (localStorage.theme = 'light')
+            : (localStorage.theme = 'dark')
+        "
+      >
+        
+        <svg
+          class="w-4 h-4 block dark:hidden"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+        >
+          <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
+        </svg>
+
+        
+        <svg
+          class="w-4 h-4 hidden dark:block"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+        >
+          <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd" />
+        </svg>
+      </button>
+    </div>
+
+    
+  <header class="text-center py-8 sm:pt-10 sm:pb-16">
+    <a class="font-extrabold text-2xl px-4 py-2 rounded hover:bg-gray-200 dark:hover:bg-gray-900" href="/">Jason Liang</a>
+  </header>
+  <article
+    class="
+      prose prose-zinc dark:prose-invert px-4 pb-16 mx-auto
+      dark:prose-headings:text-gray-200
+      prose-img:rounded prose-img:mx-auto
+      prose-a:p-0.5 prose-a:-m-0.5 prose-a:rounded prose-a:text-gray-900 dark:prose-a:text-gray-100 hover:prose-a:text-white dark:hover:prose-a:text-gray-900 hover:prose-a:bg-gray-800 dark:hover:prose-a:bg-gray-100 hover:prose-a:no-underline
+      prose-code:font-bold before:prose-code:content-[''] after:prose-code:content-['']
+    "
+    itemscope
+    itemtype="http://schema.org/BlogPosting"
+  >
+    <span class="uppercase text-xs tracking-wider font-bold text-gray-500">
+      <time datetime="2022-01-03T00:00:00&#43;0000" itemprop="datePublished">
+        January 3, 2022
+      </time>
+    </span>
+    <h1 itemprop="name headline">
+      Write Your Own C&#43;&#43; Unit Testing Library
+    </h1>
+    <section itemprop="articleBody">
+      <p>By abusing the fact that you can run code before <code>main()</code> by putting it in the
+contructor of a global variable, you can make a very small, yet serviceable,
+unit testing library in C++:</p>
+<pre><code class="language-c++">#include &quot;test.h&quot;
+
+TEST(OnePlusOne) { EXPECT(1 + 1 == 2); }
+TEST(OnePlusOneFail) { EXPECT(1 + 1 == 3); }
+
+int main() {
+    int err_count = run_all_tests();
+    return err_count == 0 ? 0 : -1;
+}
+</code></pre>
+<p>The output:</p>
+<pre><code>[ PASS ] OnePlusOne
+[ FAIL ] OnePlusOneFail: 1 + 1 == 3
+
+1 out of 2 tests passed
+</code></pre>
+<h2>Behind The Scenes</h2>
+<p><code>test.h</code> takes each <code>TEST()</code> and stores them in a vector of <code>TestCase</code> structs.</p>
+<pre><code class="language-c++">struct TestCase {
+    const char *name;
+    void (*run)(const char *&amp;);
+};
+
+static std::vector&lt;TestCase&gt; global_all_tests;
+</code></pre>
+<p>Let's take <code>TEST(OnePlusOne) { EXPECT(1 + 1 == 2); }</code> as an example: The <code>name</code>
+for this test case will be set to <code>&quot;OnePlusOne&quot;</code>, and <code>run</code> will become a
+pointer to a function that executes <code>EXPECT(1 + 1 == 2)</code> when invoked.
+This test case gets added to <code>global_all_tests</code>. The <code>run_all_tests()</code> function
+goes through each test case in the vector and invokes run on each of them.</p>
+<p>Here is the implementation of the <code>TEST()</code> and <code>EXCEPT()</code> macros:</p>
+<pre><code class="language-c++">#define TEST(name)                                                             \
+    void(_test_##name)(const char *&amp;);                                         \
+    static void _init_##name() {                                               \
+        global_all_tests.push_back({#name, _test_##name});                     \
+    }                                                                          \
+    struct _struct_##name {                                                    \
+        _struct_##name() { _init_##name(); }                                   \
+    };                                                                         \
+    static _struct_##name _var_##name;                                         \
+    void(_test_##name)(const char *&amp;_test_reason)
+
+#define EXPECT(cond)                                                           \
+    if (!(cond)) {                                                             \
+        _test_reason = #cond;                                                  \
+        return;                                                                \
+    }
+</code></pre>
+<p>To break this down:</p>
+<ol>
+<li><code>void(_test_##name)(const char *&amp;);</code> is the function signature for the test case.
+The implementation is for the user to fill in, which is why the <code>TEST()</code> macro
+ends with the same function, except the body is missing.</li>
+<li><code>static void _init_##name() { ... }</code> is a function that will get called before <code>main()</code>.
+The function <code>_test_##name</code> is added to <code>global_all_tests</code>.</li>
+<li><code>struct _struct_##name { ... };</code> is a type that calls the function above in its
+constructor.</li>
+<li><code>static _struct_##name _var_##name;</code> actually runs the <code>_init_##name()</code> function
+by creating a variable of the type that was written above.</li>
+<li><code>void(_test_##name)(const char *&amp;_test_reason)</code> is the actual function for the test.
+To check if a test passed, each test function takes a string. The value of the
+string passed in will be null, and the <code>EXCEPT()</code> macro sets the string whenever
+the test fails. The test passes when the string remains null.</li>
+</ol>
+<p>That's pretty much it. Create a <code>run_all_tests()</code> and create <code>const char *</code> variable.
+Make a loop and pass the variable to each test case. For each test, check if the
+variable gets mutated to see if it passed or failed.</p>
+<h2>The Full Source Code</h2>
+<p>Here is <code>test.h</code> in its entirety. It's only 47 lines.</p>
+<pre><code class="language-c++">#pragma once
+
+#include &lt;cstdio&gt;
+#include &lt;vector&gt;
+
+struct TestCase {
+    const char *name;
+    void (*run)(const char *&amp;);
+};
+
+static std::vector&lt;TestCase&gt; global_all_tests;
+
+#define TEST(name)                                                             \
+    void(_test_##name)(const char *&amp;);                                         \
+    static void _init_##name() {                                               \
+        global_all_tests.push_back({#name, _test_##name});                     \
+    }                                                                          \
+    struct _struct_##name {                                                    \
+        _struct_##name() { _init_##name(); }                                   \
+    };                                                                         \
+    static _struct_##name _var_##name;                                         \
+    void(_test_##name)(const char *&amp;_test_reason)
+
+#define EXPECT(cond)                                                           \
+    if (!(cond)) {                                                             \
+        _test_reason = #cond;                                                  \
+        return;                                                                \
+    }
+
+static int run_all_tests() {
+    const char *reason = nullptr;
+    int passed = 0;
+
+    for (const auto test : global_all_tests) {
+        test.run(reason);
+        if (reason) {
+            printf(&quot;[ FAIL ] %s: %s\n&quot;, test.name, reason);
+            reason = nullptr;
+        } else {
+            printf(&quot;[ PASS ] %s\n&quot;, test.name);
+            passed++;
+        }
+    }
+
+    printf(&quot;\n%d out of %u tests passed\n&quot;, passed, global_all_tests.size());
+    return global_all_tests.size() - passed;
+}
+</code></pre>
+
+    </section>
+  </article>
+
+  </body>
+</html>
+<!-- Be nice to people, and brush your teeth -->
+
