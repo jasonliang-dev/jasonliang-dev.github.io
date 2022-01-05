@@ -351,7 +351,7 @@ performance and efficiency:
 
 - Store uniform locations to avoid `glGetUniformLocation()` in `r_flush()`
 - Create an index buffer to improve efficiency and memory usage when exclusively
-  drawing quads
+  drawing quads. Drawing a quad would need four calls to `r_push_vertex()` instead of six.
 - Create multiple buffers and store them into buckets, where each bucket is
   associated with a texture ID, reducing draw calls and state changes when
   texture changes are interleaved.

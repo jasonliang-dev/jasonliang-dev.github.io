@@ -2,7 +2,7 @@
   "scripts": {
     "build:css": "tailwindcss -i src/style.css -o dist/style.css",
     "watch:css": "tailwindcss -i src/style.css -o dist/style.css --watch",
-    "watch:html": "nodemon --exec generator.exe --ext html,yaml,md --ignore dist",
+    "watch:html": "nodemon --exec generator.exe --ext html,yaml,md,css,js --ignore dist",
     "build": "npm run build:css && go build generator.go && generator.exe",
     "server": "live-server --cors --no-css-inject dist",
     "deploy": "gh-pages -d dist"
