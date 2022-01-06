@@ -4,7 +4,7 @@ date: 2022-01-03
 ---
 
 By abusing the fact that you can run code before `main()` by putting it in the
-contructor of a global variable, you can make a very small, yet serviceable,
+constructor of a global variable, you can make a very small, yet serviceable,
 unit testing library in C++:
 
 ```c++
@@ -44,8 +44,8 @@ static std::vector<TestCase> global_all_tests;
 Let's take `TEST(OnePlusOne) { EXPECT(1 + 1 == 2); }` as an example: The `name`
 for this test case will be set to `"OnePlusOne"`, and `run` will become a
 pointer to a function that executes `EXPECT(1 + 1 == 2)` when invoked.
-This test case gets added to `global_all_tests`. The `run_all_tests()` function
-goes through each test case in the vector and invokes run on each of them.
+This test case gets added to `global_all_tests` and the `run_all_tests()` function
+goes through each test case in the vector and calls the `run` function on each of them.
 
 Here is the implementation of the `TEST()` and `EXCEPT()` macros:
 

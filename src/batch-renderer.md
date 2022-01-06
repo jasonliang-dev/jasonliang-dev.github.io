@@ -10,7 +10,7 @@ on [GitHub](https://github.com/jasonliang-dev/tiny-batch-renderer).
 
 This article describes a small batch renderer written in C using modern OpenGL.
 The goal is to write the minimum amount to code to reduce draw calls.
-It's not going to be the fastest or the most efficent implementation,
+It's not going to be the fastest or the most efficient implementation,
 but it's probably one of the smallest.
 
 Below is an example of how the batch renderer can be used to draw a grid of sprites
@@ -111,18 +111,18 @@ int main() {
 }
 ```
 
-Each individual alien performs a draw call. Six vertices are drawn from the
+Each alien performs a draw call. Six vertices are drawn from the
 vertex array, which probably describes two triangles that make up a
 single quad.
 
 A batch renderer avoids making draw calls by setting up a large dynamic vertex buffer object,
 where vertex data gets written to a buffer every frame and then the buffer gets used in
 a single draw call. The data itself may contain multiple quads with different vertex
-positions, texture coordinates, and perhaps tint color.
+positions, texture coordinates, and perhaps tint colour.
 
 A draw call should be performed:
   - When the vertex buffer reaches its capacity
-  - When any uniform values needs to change
+  - When any uniform values need to change
   - When it's the end of the frame
 
 After submitting a draw call, the vertex buffer is "flushed" to set up for the next
@@ -184,7 +184,7 @@ typedef struct {
 
 The `vertices` buffer is needed to write vertex data somewhere in CPU memory, and
 the vertex buffer object `vbo` is needed to read vertex data in GPU memory. To avoid
-confusion, I'll be refering to the vertex buffer object as the GPU vertex buffer
+confusion, I'll be referring to the vertex buffer object as the GPU vertex buffer
 or VBO, and the array of vertices in CPU memory as the CPU vertex buffer.
 
 The following function initializes a batch renderer with a given capacity for the CPU
@@ -254,9 +254,9 @@ means the VBO data living in VRAM is uninitialized.
 I won't go into detail about the `load_shader()` function since it's nothing
 special. The function returns the result of `glCreateProgram()` after
 compiling the given vertex and fragment shaders. The shaders themselves
-consists of simple GLSL that would be expected from a basic 2D renderer.
+consist of simple GLSL that would be expected from a basic 2D renderer.
 
-The memory allocated for `vertices` should should be the same size as the VBO,
+The memory allocated for `vertices` should be the same size as the VBO,
 which is `sizeof(Vertex) * vertex_capacity`. This array of vertices living
 in CPU memory is the buffer that will be written to whenever something needs
 to be drawn, but it should not be mutated directly. `r_push_vertex()` should
@@ -341,7 +341,7 @@ That's it! To use the renderer, call `create_renderer()` during program initiali
 `r_push_vertex()` when drawing in the main render loop, and `r_flush()` at the
 end of each frame.
 
-The source code for entire program is available on
+The source code for the entire program is available on
 [GitHub](https://github.com/jasonliang-dev/tiny-batch-renderer).
 
 ## Improvements
