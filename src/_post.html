@@ -1,4 +1,6 @@
 {{ define "head" }}
+  <meta property="og:type" content="article" />
+  <meta property="article:published_time" content="{{ timeParse "2006-01-02" "2006-01-02T15:04:05-0700" .Post.Date }}" />
   <link rel="stylesheet" href="atom-one-dark.min.css" />
   <script src="highlight.min.js"></script>
   <script>
