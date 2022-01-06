@@ -322,8 +322,6 @@ function init() {
   state.u_ambientStrength = gl.getUniformLocation(state.program, "u_ambientStrength");
   state.u_diffuseStrength = gl.getUniformLocation(state.program, "u_diffuseStrength");
 
-  gfx.checkForError();
-
   state.center = {
     rotation: 0,
     axis: vec3.normalize([5, 4, 3]),
@@ -426,7 +424,6 @@ function update() {
 
   mat4.flush();
 
-  gfx.checkForError();
   requestAnimationFrame(update);
 }
 
