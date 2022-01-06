@@ -108,7 +108,7 @@
     </h1>
     <section itemprop="articleBody">
       <p>By abusing the fact that you can run code before <code>main()</code> by putting it in the
-contructor of a global variable, you can make a very small, yet serviceable,
+constructor of a global variable, you can make a very small, yet serviceable,
 unit testing library in C++:</p>
 <pre><code class="language-c++">#include &quot;test.h&quot;
 
@@ -138,8 +138,8 @@ static std::vector&lt;TestCase&gt; global_all_tests;
 <p>Let's take <code>TEST(OnePlusOne) { EXPECT(1 + 1 == 2); }</code> as an example: The <code>name</code>
 for this test case will be set to <code>&quot;OnePlusOne&quot;</code>, and <code>run</code> will become a
 pointer to a function that executes <code>EXPECT(1 + 1 == 2)</code> when invoked.
-This test case gets added to <code>global_all_tests</code>. The <code>run_all_tests()</code> function
-goes through each test case in the vector and invokes run on each of them.</p>
+This test case gets added to <code>global_all_tests</code> and the <code>run_all_tests()</code> function
+goes through each test case in the vector and calls the <code>run</code> function on each of them.</p>
 <p>Here is the implementation of the <code>TEST()</code> and <code>EXCEPT()</code> macros:</p>
 <pre><code class="language-c++">#define TEST(name)                                                             \
     void(_test_##name)(const char *&amp;);                                         \

@@ -112,7 +112,7 @@
 on <a href="https://github.com/jasonliang-dev/tiny-batch-renderer">GitHub</a>.</p>
 <p>This article describes a small batch renderer written in C using modern OpenGL.
 The goal is to write the minimum amount to code to reduce draw calls.
-It's not going to be the fastest or the most efficent implementation,
+It's not going to be the fastest or the most efficient implementation,
 but it's probably one of the smallest.</p>
 <p>Below is an example of how the batch renderer can be used to draw a grid of sprites
 representing aliens:</p>
@@ -204,17 +204,17 @@ int main() {
     }
 }
 </code></pre>
-<p>Each individual alien performs a draw call. Six vertices are drawn from the
+<p>Each alien performs a draw call. Six vertices are drawn from the
 vertex array, which probably describes two triangles that make up a
 single quad.</p>
 <p>A batch renderer avoids making draw calls by setting up a large dynamic vertex buffer object,
 where vertex data gets written to a buffer every frame and then the buffer gets used in
 a single draw call. The data itself may contain multiple quads with different vertex
-positions, texture coordinates, and perhaps tint color.</p>
+positions, texture coordinates, and perhaps tint colour.</p>
 <p>A draw call should be performed:</p>
 <ul>
 <li>When the vertex buffer reaches its capacity</li>
-<li>When any uniform values needs to change</li>
+<li>When any uniform values need to change</li>
 <li>When it's the end of the frame</li>
 </ul>
 <p>After submitting a draw call, the vertex buffer is &quot;flushed&quot; to set up for the next
@@ -264,7 +264,7 @@ typedef struct {
 </code></pre>
 <p>The <code>vertices</code> buffer is needed to write vertex data somewhere in CPU memory, and
 the vertex buffer object <code>vbo</code> is needed to read vertex data in GPU memory. To avoid
-confusion, I'll be refering to the vertex buffer object as the GPU vertex buffer
+confusion, I'll be referring to the vertex buffer object as the GPU vertex buffer
 or VBO, and the array of vertices in CPU memory as the CPU vertex buffer.</p>
 <p>The following function initializes a batch renderer with a given capacity for the CPU
 vertex buffer:</p>
@@ -329,8 +329,8 @@ means the VBO data living in VRAM is uninitialized.</p>
 <p>I won't go into detail about the <code>load_shader()</code> function since it's nothing
 special. The function returns the result of <code>glCreateProgram()</code> after
 compiling the given vertex and fragment shaders. The shaders themselves
-consists of simple GLSL that would be expected from a basic 2D renderer.</p>
-<p>The memory allocated for <code>vertices</code> should should be the same size as the VBO,
+consist of simple GLSL that would be expected from a basic 2D renderer.</p>
+<p>The memory allocated for <code>vertices</code> should be the same size as the VBO,
 which is <code>sizeof(Vertex) * vertex_capacity</code>. This array of vertices living
 in CPU memory is the buffer that will be written to whenever something needs
 to be drawn, but it should not be mutated directly. <code>r_push_vertex()</code> should
@@ -403,7 +403,7 @@ void r_mvp(BatchRenderer *renderer, Matrix mat) {
 <p>That's it! To use the renderer, call <code>create_renderer()</code> during program initialization,
 <code>r_push_vertex()</code> when drawing in the main render loop, and <code>r_flush()</code> at the
 end of each frame.</p>
-<p>The source code for entire program is available on
+<p>The source code for the entire program is available on
 <a href="https://github.com/jasonliang-dev/tiny-batch-renderer">GitHub</a>.</p>
 <h2>Improvements</h2>
 <p>Here is a list of changes that can be made to this renderer to improve its
