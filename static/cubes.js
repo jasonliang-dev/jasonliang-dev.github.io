@@ -322,8 +322,6 @@ function init() {
   state.u_ambientStrength = gl.getUniformLocation(state.program, "u_ambientStrength");
   state.u_diffuseStrength = gl.getUniformLocation(state.program, "u_diffuseStrength");
 
-  gfx.checkForError();
-
   state.center = {
     rotation: 0,
     axis: vec3.normalize([5, 4, 3]),
@@ -331,7 +329,7 @@ function init() {
 
   state.cube_distance_timer = 0;
 
-  state.cubes = Array.from({ length: 3 }).map((_, i, arr) => ({
+  state.cubes = Array.from({ length: 5 }).map((_, i, arr) => ({
       rotation: i,
       orbit: Math.PI * 2 * i / arr.length,
       axis: vec3.normalize([5, i, i - 1]),
@@ -426,7 +424,6 @@ function update() {
 
   mat4.flush();
 
-  gfx.checkForError();
   requestAnimationFrame(update);
 }
 
