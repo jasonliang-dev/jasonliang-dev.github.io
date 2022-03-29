@@ -3,7 +3,7 @@ title: A Tiny OpenGL 2D Batch Renderer
 date: 2022-01-04
 ---
 
-![A grid of 2D sprites](/images/batch-rendering/aliens.png)
+![A grid of 2D sprites](images/batch-rendering/aliens.png)
 
 If you rather read code than words, the source is available
 on [GitHub](https://github.com/jasonliang-dev/tiny-batch-renderer).
@@ -147,12 +147,12 @@ int main() {
 
 In summary, instead of naively making a draw call for each alien:
 
-![](/images/batch-rendering/draw1.png)
+![](images/batch-rendering/draw1.png)
 
 `draw_alien()` writes to a buffer, and then `r_flush()` performs
 a single draw call.
 
-![](/images/batch-rendering/draw2.png)
+![](images/batch-rendering/draw2.png)
 
 By reducing the number of draw calls, we can increase the performance of our program.
 
