@@ -133,7 +133,7 @@
       A Tiny OpenGL 2D Batch Renderer
     </h1>
     <section itemprop="articleBody">
-      <p><img src="/images/batch-rendering/aliens.png" alt="A grid of 2D sprites"></p>
+      <p><img src="images/batch-rendering/aliens.png" alt="A grid of 2D sprites"></p>
 <p>If you rather read code than words, the source is available
 on <a href="https://github.com/jasonliang-dev/tiny-batch-renderer">GitHub</a>.</p>
 <p>This article describes a small batch renderer written in C using modern OpenGL.
@@ -261,10 +261,10 @@ int main() {
 }
 </code></pre>
 <p>In summary, instead of naively making a draw call for each alien:</p>
-<p><img src="/images/batch-rendering/draw1.png" alt=""></p>
+<p><img src="images/batch-rendering/draw1.png" alt=""></p>
 <p><code>draw_alien()</code> writes to a buffer, and then <code>r_flush()</code> performs
 a single draw call.</p>
-<p><img src="/images/batch-rendering/draw2.png" alt=""></p>
+<p><img src="images/batch-rendering/draw2.png" alt=""></p>
 <p>By reducing the number of draw calls, we can increase the performance of our program.</p>
 <h2>Implementation</h2>
 <p>The <code>BatchRenderer</code> struct contains a shader program <code>shader</code>, a vertex array object <code>vao</code>,
