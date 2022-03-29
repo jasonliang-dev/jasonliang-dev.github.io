@@ -43,8 +43,7 @@ projects:
     from-emerald-400 to-emerald-500 text-emerald-50
     dark:from-emerald-600 dark:to-emerald-700 dark:text-emerald-200
   description: >-
-    A game that sees the player move a rabbit around a maze, eating
-    carrots, and avoiding wolves. Created during BC Game Jam 2020
+    A game where you escape a maze while avoiding wolves. Created during BC Game Jam 2020
 
 - title: STARSPEED SHOOTER 2000
   image: images/spaceshooter.png
@@ -53,7 +52,7 @@ projects:
     from-gray-600 to-gray-700 text-gray-200
     dark:from-gray-700 dark:to-gray-800 dark:text-gray-300
   description: >-
-    A fast paced arcade romp. Windows only.
+    Avoid asteroids and enemy fire in a fast paced arcade romp. Windows only.
 
 - title: lite-vim
   image: images/lite-vim.png
