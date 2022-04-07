@@ -133,10 +133,10 @@
       Lua Coroutines By Example
     </h1>
     <section itemprop="articleBody">
-      <p>Corutines allow you to pause the execution of a function. The same function can
-resume its execution in the future:</p>
+      <p>Coroutines allow you to pause the execution of a function. The same function
+can resume its execution in the future:</p>
 <pre><code class="language-lua">local function print_recipe()
-    print &quot;mix 1 tbsp sugar, 1 tsp vanilla extract, 1 egg yolk, 1 cup heavy cream&quot;
+    print &quot;mix 1 tbsp sugar, 1 tsp vanilla extract, 1 egg yolk, 1/2 cup heavy cream&quot;
     coroutine.yield()
     print &quot;bake at 300f (150c) for 30 mins. cool down before chilling in fridge&quot;
     coroutine.yield()
@@ -150,7 +150,7 @@ end
 print &quot;yay! I made creme brulee!&quot;
 </code></pre>
 <p>Output:</p>
-<pre><code>mix 1 tbsp sugar, 1 tsp vanilla extract, 1 egg yolk, 1 cup heavy cream
+<pre><code>mix 1 tbsp sugar, 1 tsp vanilla extract, 1 egg yolk, 1/2 cup heavy cream
 okay...
 bake at 300f (150c) for 30 mins. cool down before chilling in fridge
 okay...
@@ -158,14 +158,12 @@ top custard with sugar, heat sugar with torch
 okay...
 yay! I made creme brulee!
 </code></pre>
-<p>Coroutines allow you to restrict where state lives and rewires control flow in
-a way that reads like a step by step recipe. I'll be going over some use cases for
-coroutines in the context of video games. Coroutines exist in many programming
-languages such as C#, C++, Rust, Python, and Lua. The code examples below will
-be using Lua.</p>
+<p>I'll be going over some use cases for coroutines in the context of video games.
+Coroutines exist in many programming languages such as C#, C++, Rust, Python,
+and Lua. The code examples below will be using Lua.</p>
 <h2>AI Patrolling</h2>
-<p><img src="images/coroutines/patrol.gif" alt=""></p>
-<p>How would you write a simple AI that covers a square path, turning 90 degress
+<p><img src="images/coroutines/patrol.gif" alt="Robot moving in a square path"></p>
+<p>How would you write a simple AI that covers a square path, turning 90 degrees
 every second? Here is what I've come up with:</p>
 <pre><code class="language-lua">-- constructor
 function Robot:new(desc)
@@ -192,10 +190,10 @@ function Robot:update(dt)
     self.y = self.y - self.dy * speed * dt
 end
 </code></pre>
-<p>This code is alright. I felt kinda clever when I realized the patrol behaviour
-can be done by swapping the x and y velocity components, it's nice and terse,
-but it's not immediately clear that the object performs a patrol path in a
-square shape.</p>
+<p>This code is alright. I felt a little clever when I realized the patrolling
+behaviour can be expressed by swapping the x and y velocity components. It's
+terse, but it's not immediately clear that the object performs a patrol path in
+a square shape.</p>
 <p>Below is the same gameplay behaviour, but now with coroutines:</p>
 <pre><code class="language-lua">function Robot:new(desc)
     self.x = desc.x
@@ -233,25 +231,29 @@ function Robot:co_update(dt)
     end
 end
 </code></pre>
-<p>Yes, using coroutines in this example requires more lines of code, but the
-point is that the control flow reads in a linear fashion, like a recipe. Step 1
-is to move the robot right, step 2 is to move it down, then left, then up. The
-outer loop moves the control flow back up to step 1. It's now more apparent
-that this object moves in the path of a square.</p>
+<p>Yes, this example uses more lines of code than the previous, but the point is
+that the control flow reads linearly, step-by-step, like a recipe. First, move
+the robot to the right, then, move it down, then left, then up. The outer loop
+moves the control flow back up to the first step. It's now more apparent that
+this object moves in the path of a square.</p>
 <p>Notice how there's also less state to keep track of between frames. The
-state for velocity <code>dx</code> and <code>dy</code> has disappeared. This is important, because
+state for velocity <code>dx</code> and <code>dy</code> has disappeared. This is important because
 coroutines excel when it comes to representing...</p>
 <h2>State Machines</h2>
-<p>Let's try something more complex. How would you implement an entity that moves
-to a random location, then stops and shoots bullets in a spiral, then shoots a
-ring of bullets, then picks a new random location and repeats the previous
-steps?</p>
+<p>Let's try something more complex. Let's implement an entity that:</p>
+<ol>
+<li>moves to a random location</li>
+<li>then stops and shoots bullets in a spiral</li>
+<li>then shoots a ring of bullets</li>
+<li>then picks a new random location</li>
+<li>then repeats step 1</li>
+</ol>
 <p><img src="images/coroutines/bullets.gif" alt=""></p>
 <p>My solution without coroutines consists of three distinct states: <code>move</code>,
 <code>shoot1</code>, and <code>shoot2</code>. <code>move</code> nudges the position closer to the random target
-position. <code>shoot1</code> keeps track of a shoot timer and an angle, creating a bullet
-every 0.1 seconds. <code>shoot2</code> adds several bullets to the scene and then picks a
-new target for <code>move</code>.</p>
+position, <code>shoot1</code> keeps track of a timer and an angle, creating a bullet
+every 0.1 seconds, and <code>shoot2</code> creates a ring of bullets to the scene and then
+picks a new target for the <code>move</code> state.</p>
 <pre><code class="language-lua">function Block:new(desc)
     self.x = desc.x
     self.y = desc.y
@@ -302,14 +304,15 @@ function Block:update(dt)
     end
 end
 </code></pre>
-<p>This is a state machine. Or at least the crude beginning of a state machine.
-<code>target_x</code>, <code>target_y</code>, <code>shoot_angle</code>, and <code>shoot_timer</code> needs to be
-stored across frame boundaries. Notice that the <code>move</code> case is concerned with
-<code>shoot_timer</code> and <code>shoot_angle</code>, even though the act of moving this object has
-nothing to do with shooting. Same goes for <code>target_x</code> and <code>target_y</code> in the
-<code>shoot2</code> case. There are ways around this, such as writing finite state
-machines that handles transitions between states, a la Gang of Four. But let's
-try rewriting this in the top to bottom, step by step style that coroutines allows:</p>
+<p>That's a state machine. Or at least the crude beginnings of a state machine.
+Notice that the <code>move</code> case is concerned with <code>shoot_timer</code> and <code>shoot_angle</code>,
+despite the act of moving this object having nothing to do with the shooting.
+The same goes for <code>target_x</code> and <code>target_y</code> in the <code>shoot2</code> case. The
+variables <code>target_x</code>, <code>target_y</code>, <code>shoot_angle</code>, and <code>shoot_timer</code> are
+stored across frame boundaries. There are ways around these problems, such as
+writing finite state machines that handle transitions between states, and/or
+using the State pattern à la Gang of Four, but let's try rewriting this in the
+step-by-step style that coroutines allow:</p>
 <pre><code class="language-lua">function Block:co_update(dt)
     while true do
         local target_x = math.random() * getWidth()
@@ -341,20 +344,18 @@ try rewriting this in the top to bottom, step by step style that coroutines allo
     end
 end
 </code></pre>
-<p>Unlike the previous coroutine example where the state of velocity disappeared,
-the data moved from living inside the object to living as local variables
-in the <code>co_update</code> function. No more does the programmer have to deal with
-variables that are defined far away from where they are being used. Not to
-mention that the function reads in a clear step by step fashion. It's very easy
-to add additional behaviour. Imagine that the object shoots a second spirl of
-bullets after shooting the ring. With coroutines, you can copy and paste the
-spirl shooting code and it's done. With the previous version, you might add a
-new <code>shoot3</code> state, or keep track of the number of times <code>shoot1</code> has been
-visited. Neither solution sounds pleasant to me (but then again, maybe I missed
-something).</p>
-<p>Up until now I failed to acknowledge the existance of <code>repeat_for</code>. This is a
+<p>Look at how the data moved from living inside the object to living as local
+variables in the <code>co_update</code> function. No more does the programmer have to deal
+with variables defined far away from where they are being used, or think about
+jumping around switch/case or if statements. It's easy to add additional
+behaviour. Imagine that the object shoots another spiral of bullets after
+shooting the ring. With coroutines, you can copy and paste the spiral shooting
+code. With the previous version, you might add a new state <code>shoot3</code>, or keep
+track of the number of times <code>shoot1</code> has been visited. Neither solution sounds
+pleasant to me (but then again, maybe I missed something).</p>
+<p>Until now, I failed to acknowledge the existence of <code>repeat_for</code>. This is a
 function that keeps track of the time elapsed. It keeps returning true until
-the threshold is met:</p>
+the timer meets the threshold:</p>
 <pre><code class="language-lua">g_time = 0
 
 function repeat_for(time, dt)
@@ -368,12 +369,14 @@ function repeat_for(time, dt)
 end
 </code></pre>
 <p>There's still a whole other side of coroutines that I am not going to touch in
-this article, and it's how coroutines simplify asynchronous tasks by making it
+this article, and it's how coroutines simplify asynchronous code by making them
 read like synchronous code (network requests, file io, etc). Coroutines can be
 hard to get your head wrapped around. They provide a radically different way of
 thinking about state and control flow. Personally, writing code with coroutines
 has been a very joyful experience. Maybe the same also applies to you.</p>
-<h2>Further Resources</h2>
+<p>The recordings in this article are from a LÖVE application. The source code
+is available on <a href="https://github.com/jasonliang-dev/coroutine-demo">GitHub</a>.</p>
+<h2>More Resources</h2>
 <ul>
 <li><a href="https://www.lua.org/manual/5.4/manual.html#2.6">Lua Reference Manual - Coroutines</a></li>
 <li><a href="https://docs.unity3d.com/Manual/Coroutines.html">Unity Manual - Coroutines</a></li>
