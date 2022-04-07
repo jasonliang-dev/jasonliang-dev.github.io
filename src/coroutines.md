@@ -3,12 +3,12 @@ title: Lua Coroutines By Example
 date: 2022-04-06
 ---
 
-Corutines allow you to pause the execution of a function. The same function can
-resume its execution in the future:
+Coroutines allow you to pause the execution of a function. The same function
+can resume its execution in the future:
 
 ```lua
 local function print_recipe()
-    print "mix 1 tbsp sugar, 1 tsp vanilla extract, 1 egg yolk, 1 cup heavy cream"
+    print "mix 1 tbsp sugar, 1 tsp vanilla extract, 1 egg yolk, 1/2 cup heavy cream"
     coroutine.yield()
     print "bake at 300f (150c) for 30 mins. cool down before chilling in fridge"
     coroutine.yield()
@@ -25,7 +25,7 @@ print "yay! I made creme brulee!"
 Output:
 
 ```
-mix 1 tbsp sugar, 1 tsp vanilla extract, 1 egg yolk, 1 cup heavy cream
+mix 1 tbsp sugar, 1 tsp vanilla extract, 1 egg yolk, 1/2 cup heavy cream
 okay...
 bake at 300f (150c) for 30 mins. cool down before chilling in fridge
 okay...
@@ -34,17 +34,15 @@ okay...
 yay! I made creme brulee!
 ```
 
-Coroutines allow you to restrict where state lives and rewires control flow in
-a way that reads like a step by step recipe. I'll be going over some use cases for
-coroutines in the context of video games. Coroutines exist in many programming
-languages such as C#, C++, Rust, Python, and Lua. The code examples below will
-be using Lua.
+I'll be going over some use cases for coroutines in the context of video games.
+Coroutines exist in many programming languages such as C#, C++, Rust, Python,
+and Lua. The code examples below will be using Lua.
 
 ## AI Patrolling
 
-![](images/coroutines/patrol.gif)
+![Robot moving in a square path](images/coroutines/patrol.gif)
 
-How would you write a simple AI that covers a square path, turning 90 degress
+How would you write a simple AI that covers a square path, turning 90 degrees
 every second? Here is what I've come up with:
 
 ```lua
@@ -74,10 +72,10 @@ function Robot:update(dt)
 end
 ```
 
-This code is alright. I felt kinda clever when I realized the patrol behaviour
-can be done by swapping the x and y velocity components, it's nice and terse,
-but it's not immediately clear that the object performs a patrol path in a
-square shape.
+This code is alright. I felt a little clever when I realized the patrolling
+behaviour can be expressed by swapping the x and y velocity components. It's
+terse, but it's not immediately clear that the object performs a patrol path in
+a square shape.
 
 Below is the same gameplay behaviour, but now with coroutines:
 
@@ -119,30 +117,33 @@ function Robot:co_update(dt)
 end
 ```
 
-Yes, using coroutines in this example requires more lines of code, but the
-point is that the control flow reads in a linear fashion, like a recipe. Step 1
-is to move the robot right, step 2 is to move it down, then left, then up. The
-outer loop moves the control flow back up to step 1. It's now more apparent
-that this object moves in the path of a square.
+Yes, this example uses more lines of code than the previous, but the point is
+that the control flow reads linearly, step-by-step, like a recipe. First, move
+the robot to the right, then, move it down, then left, then up. The outer loop
+moves the control flow back up to the first step. It's now more apparent that
+this object moves in the path of a square.
 
 Notice how there's also less state to keep track of between frames. The
-state for velocity `dx` and `dy` has disappeared. This is important, because
+state for velocity `dx` and `dy` has disappeared. This is important because
 coroutines excel when it comes to representing...
 
 ## State Machines
 
-Let's try something more complex. How would you implement an entity that moves
-to a random location, then stops and shoots bullets in a spiral, then shoots a
-ring of bullets, then picks a new random location and repeats the previous
-steps?
+Let's try something more complex. Let's implement an entity that:
+
+1. moves to a random location
+2. then stops and shoots bullets in a spiral
+3. then shoots a ring of bullets
+4. then picks a new random location
+5. then repeats step 1
 
 ![](images/coroutines/bullets.gif)
 
 My solution without coroutines consists of three distinct states: `move`,
 `shoot1`, and `shoot2`. `move` nudges the position closer to the random target
-position. `shoot1` keeps track of a shoot timer and an angle, creating a bullet
-every 0.1 seconds. `shoot2` adds several bullets to the scene and then picks a
-new target for `move`.
+position, `shoot1` keeps track of a timer and an angle, creating a bullet
+every 0.1 seconds, and `shoot2` creates a ring of bullets to the scene and then
+picks a new target for the `move` state.
 
 ```lua
 function Block:new(desc)
@@ -196,14 +197,15 @@ function Block:update(dt)
 end
 ```
 
-This is a state machine. Or at least the crude beginning of a state machine.
-`target_x`, `target_y`, `shoot_angle`, and `shoot_timer` needs to be
-stored across frame boundaries. Notice that the `move` case is concerned with
-`shoot_timer` and `shoot_angle`, even though the act of moving this object has
-nothing to do with shooting. Same goes for `target_x` and `target_y` in the
-`shoot2` case. There are ways around this, such as writing finite state
-machines that handles transitions between states, a la Gang of Four. But let's
-try rewriting this in the top to bottom, step by step style that coroutines allows:
+That's a state machine. Or at least the crude beginnings of a state machine.
+Notice that the `move` case is concerned with `shoot_timer` and `shoot_angle`,
+despite the act of moving this object having nothing to do with the shooting.
+The same goes for `target_x` and `target_y` in the `shoot2` case. The
+variables `target_x`, `target_y`, `shoot_angle`, and `shoot_timer` are
+stored across frame boundaries. There are ways around these problems, such as
+writing finite state machines that handle transitions between states, and/or
+using the State pattern à la Gang of Four, but let's try rewriting this in the
+step-by-step style that coroutines allow:
 
 ```lua
 function Block:co_update(dt)
@@ -238,21 +240,19 @@ function Block:co_update(dt)
 end
 ```
 
-Unlike the previous coroutine example where the state of velocity disappeared,
-the data moved from living inside the object to living as local variables
-in the `co_update` function. No more does the programmer have to deal with
-variables that are defined far away from where they are being used. Not to
-mention that the function reads in a clear step by step fashion. It's very easy
-to add additional behaviour. Imagine that the object shoots a second spirl of
-bullets after shooting the ring. With coroutines, you can copy and paste the
-spirl shooting code and it's done. With the previous version, you might add a
-new `shoot3` state, or keep track of the number of times `shoot1` has been
-visited. Neither solution sounds pleasant to me (but then again, maybe I missed
-something).
+Look at how the data moved from living inside the object to living as local
+variables in the `co_update` function. No more does the programmer have to deal
+with variables defined far away from where they are being used, or think about
+jumping around switch/case or if statements. It's easy to add additional
+behaviour. Imagine that the object shoots another spiral of bullets after
+shooting the ring. With coroutines, you can copy and paste the spiral shooting
+code. With the previous version, you might add a new state `shoot3`, or keep
+track of the number of times `shoot1` has been visited. Neither solution sounds
+pleasant to me (but then again, maybe I missed something).
 
-Up until now I failed to acknowledge the existance of `repeat_for`. This is a
+Until now, I failed to acknowledge the existence of `repeat_for`. This is a
 function that keeps track of the time elapsed. It keeps returning true until
-the threshold is met:
+the timer meets the threshold:
 
 ```lua
 g_time = 0
@@ -269,13 +269,16 @@ end
 ```
 
 There's still a whole other side of coroutines that I am not going to touch in
-this article, and it's how coroutines simplify asynchronous tasks by making it
+this article, and it's how coroutines simplify asynchronous code by making them
 read like synchronous code (network requests, file io, etc). Coroutines can be
 hard to get your head wrapped around. They provide a radically different way of
 thinking about state and control flow. Personally, writing code with coroutines
 has been a very joyful experience. Maybe the same also applies to you.
 
-## Further Resources
+The recordings in this article are from a LÖVE application. The source code
+is available on [GitHub](https://github.com/jasonliang-dev/coroutine-demo).
+
+## More Resources
 
 - [Lua Reference Manual - Coroutines](https://www.lua.org/manual/5.4/manual.html#2.6)
 - [Unity Manual - Coroutines](https://docs.unity3d.com/Manual/Coroutines.html)

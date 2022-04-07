@@ -11,7 +11,7 @@ on [GitHub](https://github.com/jasonliang-dev/tiny-batch-renderer).
 This article describes a small batch renderer written in C using modern OpenGL.
 The goal is to write the minimum amount to code to reduce draw calls.
 It's not going to be the fastest or the most efficient implementation,
-but it's probably one of the smallest.
+but it's probably one of the smallest, for learning purposes.
 
 Below is an example of how the batch renderer can be used to draw a grid of sprites
 representing aliens:
@@ -121,9 +121,10 @@ a single draw call. The data itself may contain multiple quads with different ve
 positions, texture coordinates, and perhaps tint colour.
 
 A draw call should be performed:
-  - When the vertex buffer reaches its capacity
-  - When any uniform values need to change
-  - When it's the end of the frame
+
+- When the vertex buffer reaches its capacity
+- When any uniform values need to change
+- When it's the end of the frame
 
 After submitting a draw call, the vertex buffer is "flushed" to set up for the next
 draw call.
@@ -349,10 +350,8 @@ The source code for the entire program is available on
 Here is a list of changes that can be made to this renderer to improve its
 performance and efficiency:
 
-- Store uniform locations to avoid `glGetUniformLocation()` in `r_flush()`
+- Store uniform locations to avoid `glGetUniformLocation()` in `r_flush()`.
 - Create an index buffer to improve efficiency and memory usage when exclusively
   drawing quads. Drawing a quad would need four calls to `r_push_vertex()` instead of six.
-- Create multiple buffers and store them into buckets, where each bucket is
-  associated with a texture ID, reducing draw calls and state changes when
-  texture changes are interleaved.
+- Create multiple buffers and group them based on texture to minimize state changes.
 
