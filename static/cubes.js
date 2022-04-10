@@ -340,18 +340,18 @@ function init() {
     y: canvas.height / 2,
   };
 
-  state.camera = {
-    initial: {
-      x: -1, y: -2.2, z: 8,
-    },
-    x: -1, y: -2.2, z: 8,
-  };
-
   state.theme = document.documentElement.classList.contains("dark")
     ? "dark"
     : "light";
 
   state.scrollY = window.scrollY;
+
+  state.camera = {
+    target: {
+      x: -1, y: -2.2, z: 8,
+    },
+    x: -1, y: -2.2 - state.scrollY * 0.016, z: 8,
+  };
 }
 
 function update() {
@@ -389,8 +389,8 @@ function update() {
 
   const dx = state.mouse.x / width;
   const dy = (state.mouse.y / height * 0.5) - state.scrollY * 0.016;
-  state.camera.x += (state.camera.initial.x - state.camera.x - dx) * 0.1;
-  state.camera.y += (state.camera.initial.y - state.camera.y + dy) * 0.2;
+  state.camera.x += (state.camera.target.x - state.camera.x - dx) * 0.1;
+  state.camera.y += (state.camera.target.y - state.camera.y + dy) * 0.2;
   const view = mat4.translate(-state.camera.x, -state.camera.y, -state.camera.z);
   gl.uniformMatrix4fv(state.u_view, false, view);
 

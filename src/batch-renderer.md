@@ -9,9 +9,9 @@ If you rather read code than words, the source is available
 on [GitHub](https://github.com/jasonliang-dev/tiny-batch-renderer).
 
 This article describes a small batch renderer written in C using modern OpenGL.
-The goal is to write the minimum amount to code to reduce draw calls.
-It's not going to be the fastest or the most efficient implementation,
-but it's probably one of the smallest, for learning purposes.
+The goal is to write the minimum amount to code to reduce draw calls. It's not
+going to be the fastest or the most efficient implementation, but it's probably
+one of the smallest, for learning purposes.
 
 Below is an example of how the batch renderer can be used to draw a grid of sprites
 representing aliens:
@@ -111,14 +111,14 @@ int main() {
 }
 ```
 
-Each alien performs a draw call. Six vertices are drawn from the
-vertex array, which probably describes two triangles that make up a
-single quad.
+Each alien performs a draw call. Six vertices are drawn from the vertex array,
+which probably describes two triangles that make up a single quad.
 
-A batch renderer avoids making draw calls by setting up a large dynamic vertex buffer object,
-where vertex data gets written to a buffer every frame and then the buffer gets used in
-a single draw call. The data itself may contain multiple quads with different vertex
-positions, texture coordinates, and perhaps tint colour.
+A batch renderer avoids making draw calls by setting up a large dynamic vertex
+buffer object, where vertex data gets written to a buffer every frame and then
+the buffer gets used in a single draw call. The data itself may contain
+multiple quads with different vertex positions, texture coordinates, and
+perhaps tint colour.
 
 A draw call should be performed:
 
@@ -126,8 +126,8 @@ A draw call should be performed:
 - When any uniform values need to change
 - When it's the end of the frame
 
-After submitting a draw call, the vertex buffer is "flushed" to set up for the next
-draw call.
+After submitting a draw call, the vertex buffer is "flushed" to set up for the
+next draw call.
 
 ```c
 void draw_alien() {
@@ -150,18 +150,19 @@ In summary, instead of naively making a draw call for each alien:
 
 ![](images/batch-rendering/draw1.png)
 
-`draw_alien()` writes to a buffer, and then `r_flush()` performs
-a single draw call.
+`draw_alien()` writes to a buffer, and then `r_flush()` performs a single draw
+call.
 
 ![](images/batch-rendering/draw2.png)
 
-By reducing the number of draw calls, we can increase the performance of our program.
+By reducing the number of draw calls, we can increase the performance of our
+program.
 
 ## Implementation
 
-The `BatchRenderer` struct contains a shader program `shader`, a vertex array object `vao`,
-a vertex buffer object `vbo`, an array of vertices in CPU memory `vertices`, and values
-that get bound to uniforms `texture` and `mvp`.
+The `BatchRenderer` struct contains a shader program `shader`, a vertex array
+object `vao`, a vertex buffer object `vbo`, an array of vertices in CPU memory
+`vertices`, and values that get bound to uniforms `texture` and `mvp`.
 
 ```c
 typedef struct { float cols[4][4]; } Matrix;
@@ -183,13 +184,14 @@ typedef struct {
 } BatchRenderer;
 ```
 
-The `vertices` buffer is needed to write vertex data somewhere in CPU memory, and
-the vertex buffer object `vbo` is needed to read vertex data in GPU memory. To avoid
-confusion, I'll be referring to the vertex buffer object as the GPU vertex buffer
-or VBO, and the array of vertices in CPU memory as the CPU vertex buffer.
+The `vertices` buffer is needed to write vertex data somewhere in CPU memory,
+and the vertex buffer object `vbo` is needed to read vertex data in GPU memory.
+To avoid confusion, I'll be referring to the vertex buffer object as the GPU
+vertex buffer or VBO, and the array of vertices in CPU memory as the CPU vertex
+buffer.
 
-The following function initializes a batch renderer with a given capacity for the CPU
-vertex buffer:
+The following function initializes a batch renderer with a given capacity for
+the CPU vertex buffer:
 
 ```c
 BatchRenderer create_renderer(int vertex_capacity) {
@@ -247,22 +249,22 @@ BatchRenderer create_renderer(int vertex_capacity) {
 ```
 
 The main takeaway is the call to `glBufferData()`. The usage pattern for the
-GPU vertex buffer is `GL_DYNAMIC_DRAW` instead of something like `GL_STATIC_DRAW`.
-This allows us to change the contents of the GPU vertex buffer in the future
-using the `glBufferSubData()` function. The data parameter is `NULL`, which
-means the VBO data living in VRAM is uninitialized.
+GPU vertex buffer is `GL_DYNAMIC_DRAW` instead of something like
+`GL_STATIC_DRAW`.  This allows us to change the contents of the GPU vertex
+buffer in the future using the `glBufferSubData()` function. The data parameter
+is `NULL`, which means the VBO data living in VRAM is uninitialized.
 
 I won't go into detail about the `load_shader()` function since it's nothing
-special. The function returns the result of `glCreateProgram()` after
-compiling the given vertex and fragment shaders. The shaders themselves
-consist of simple GLSL that would be expected from a basic 2D renderer.
+special. The function returns the result of `glCreateProgram()` after compiling
+the given vertex and fragment shaders. The shaders themselves consist of simple
+GLSL that would be expected from a basic 2D renderer.
 
-The memory allocated for `vertices` should be the same size as the VBO,
-which is `sizeof(Vertex) * vertex_capacity`. This array of vertices living
-in CPU memory is the buffer that will be written to whenever something needs
-to be drawn, but it should not be mutated directly. `r_push_vertex()` should
-be used instead, which does some housekeeping by incrementing `vertex_count`
-by one and it checks when the CPU vertex buffer is at capacity.
+The memory allocated for `vertices` should be the same size as the VBO, which
+is `sizeof(Vertex) * vertex_capacity`. This array of vertices living in CPU
+memory is the buffer that will be written to whenever something needs to be
+drawn, but it should not be mutated directly. `r_push_vertex()` should be used
+instead, which does some housekeeping by incrementing `vertex_count` by one and
+it checks when the CPU vertex buffer is at capacity.
 
 ```c
 void r_push_vertex(BatchRenderer *renderer, float x, float y, float u,
