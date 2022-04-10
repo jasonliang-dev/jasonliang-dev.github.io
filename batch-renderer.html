@@ -137,9 +137,9 @@
 <p>If you rather read code than words, the source is available
 on <a href="https://github.com/jasonliang-dev/tiny-batch-renderer">GitHub</a>.</p>
 <p>This article describes a small batch renderer written in C using modern OpenGL.
-The goal is to write the minimum amount to code to reduce draw calls.
-It's not going to be the fastest or the most efficient implementation,
-but it's probably one of the smallest, for learning purposes.</p>
+The goal is to write the minimum amount to code to reduce draw calls. It's not
+going to be the fastest or the most efficient implementation, but it's probably
+one of the smallest, for learning purposes.</p>
 <p>Below is an example of how the batch renderer can be used to draw a grid of sprites
 representing aliens:</p>
 <pre><code class="language-c">typedef struct {
@@ -230,21 +230,21 @@ int main() {
     }
 }
 </code></pre>
-<p>Each alien performs a draw call. Six vertices are drawn from the
-vertex array, which probably describes two triangles that make up a
-single quad.</p>
-<p>A batch renderer avoids making draw calls by setting up a large dynamic vertex buffer object,
-where vertex data gets written to a buffer every frame and then the buffer gets used in
-a single draw call. The data itself may contain multiple quads with different vertex
-positions, texture coordinates, and perhaps tint colour.</p>
+<p>Each alien performs a draw call. Six vertices are drawn from the vertex array,
+which probably describes two triangles that make up a single quad.</p>
+<p>A batch renderer avoids making draw calls by setting up a large dynamic vertex
+buffer object, where vertex data gets written to a buffer every frame and then
+the buffer gets used in a single draw call. The data itself may contain
+multiple quads with different vertex positions, texture coordinates, and
+perhaps tint colour.</p>
 <p>A draw call should be performed:</p>
 <ul>
 <li>When the vertex buffer reaches its capacity</li>
 <li>When any uniform values need to change</li>
 <li>When it's the end of the frame</li>
 </ul>
-<p>After submitting a draw call, the vertex buffer is &quot;flushed&quot; to set up for the next
-draw call.</p>
+<p>After submitting a draw call, the vertex buffer is &quot;flushed&quot; to set up for the
+next draw call.</p>
 <pre><code class="language-c">void draw_alien() {
     // nothing is actually drawn at this stage.
     // data is just being written to a buffer
@@ -262,14 +262,15 @@ int main() {
 </code></pre>
 <p>In summary, instead of naively making a draw call for each alien:</p>
 <p><img src="images/batch-rendering/draw1.png" alt=""></p>
-<p><code>draw_alien()</code> writes to a buffer, and then <code>r_flush()</code> performs
-a single draw call.</p>
+<p><code>draw_alien()</code> writes to a buffer, and then <code>r_flush()</code> performs a single draw
+call.</p>
 <p><img src="images/batch-rendering/draw2.png" alt=""></p>
-<p>By reducing the number of draw calls, we can increase the performance of our program.</p>
+<p>By reducing the number of draw calls, we can increase the performance of our
+program.</p>
 <h2>Implementation</h2>
-<p>The <code>BatchRenderer</code> struct contains a shader program <code>shader</code>, a vertex array object <code>vao</code>,
-a vertex buffer object <code>vbo</code>, an array of vertices in CPU memory <code>vertices</code>, and values
-that get bound to uniforms <code>texture</code> and <code>mvp</code>.</p>
+<p>The <code>BatchRenderer</code> struct contains a shader program <code>shader</code>, a vertex array
+object <code>vao</code>, a vertex buffer object <code>vbo</code>, an array of vertices in CPU memory
+<code>vertices</code>, and values that get bound to uniforms <code>texture</code> and <code>mvp</code>.</p>
 <pre><code class="language-c">typedef struct { float cols[4][4]; } Matrix;
 typedef struct { float position[2]; float texcoord[2]; } Vertex;
 
@@ -288,12 +289,13 @@ typedef struct {
     Matrix mvp;
 } BatchRenderer;
 </code></pre>
-<p>The <code>vertices</code> buffer is needed to write vertex data somewhere in CPU memory, and
-the vertex buffer object <code>vbo</code> is needed to read vertex data in GPU memory. To avoid
-confusion, I'll be referring to the vertex buffer object as the GPU vertex buffer
-or VBO, and the array of vertices in CPU memory as the CPU vertex buffer.</p>
-<p>The following function initializes a batch renderer with a given capacity for the CPU
-vertex buffer:</p>
+<p>The <code>vertices</code> buffer is needed to write vertex data somewhere in CPU memory,
+and the vertex buffer object <code>vbo</code> is needed to read vertex data in GPU memory.
+To avoid confusion, I'll be referring to the vertex buffer object as the GPU
+vertex buffer or VBO, and the array of vertices in CPU memory as the CPU vertex
+buffer.</p>
+<p>The following function initializes a batch renderer with a given capacity for
+the CPU vertex buffer:</p>
 <pre><code class="language-c">BatchRenderer create_renderer(int vertex_capacity) {
     GLuint vao;
     glGenVertexArrays(1, &amp;vao);
@@ -348,20 +350,20 @@ vertex buffer:</p>
 }
 </code></pre>
 <p>The main takeaway is the call to <code>glBufferData()</code>. The usage pattern for the
-GPU vertex buffer is <code>GL_DYNAMIC_DRAW</code> instead of something like <code>GL_STATIC_DRAW</code>.
-This allows us to change the contents of the GPU vertex buffer in the future
-using the <code>glBufferSubData()</code> function. The data parameter is <code>NULL</code>, which
-means the VBO data living in VRAM is uninitialized.</p>
+GPU vertex buffer is <code>GL_DYNAMIC_DRAW</code> instead of something like
+<code>GL_STATIC_DRAW</code>.  This allows us to change the contents of the GPU vertex
+buffer in the future using the <code>glBufferSubData()</code> function. The data parameter
+is <code>NULL</code>, which means the VBO data living in VRAM is uninitialized.</p>
 <p>I won't go into detail about the <code>load_shader()</code> function since it's nothing
-special. The function returns the result of <code>glCreateProgram()</code> after
-compiling the given vertex and fragment shaders. The shaders themselves
-consist of simple GLSL that would be expected from a basic 2D renderer.</p>
-<p>The memory allocated for <code>vertices</code> should be the same size as the VBO,
-which is <code>sizeof(Vertex) * vertex_capacity</code>. This array of vertices living
-in CPU memory is the buffer that will be written to whenever something needs
-to be drawn, but it should not be mutated directly. <code>r_push_vertex()</code> should
-be used instead, which does some housekeeping by incrementing <code>vertex_count</code>
-by one and it checks when the CPU vertex buffer is at capacity.</p>
+special. The function returns the result of <code>glCreateProgram()</code> after compiling
+the given vertex and fragment shaders. The shaders themselves consist of simple
+GLSL that would be expected from a basic 2D renderer.</p>
+<p>The memory allocated for <code>vertices</code> should be the same size as the VBO, which
+is <code>sizeof(Vertex) * vertex_capacity</code>. This array of vertices living in CPU
+memory is the buffer that will be written to whenever something needs to be
+drawn, but it should not be mutated directly. <code>r_push_vertex()</code> should be used
+instead, which does some housekeeping by incrementing <code>vertex_count</code> by one and
+it checks when the CPU vertex buffer is at capacity.</p>
 <pre><code class="language-c">void r_push_vertex(BatchRenderer *renderer, float x, float y, float u,
                    float v) {
     if (renderer-&gt;vertex_count == renderer-&gt;vertex_capacity) {
