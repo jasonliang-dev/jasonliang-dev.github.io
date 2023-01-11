@@ -1,6 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
+  <!doctype html>
+  <html lang="en">
   <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jason Liang</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@500;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-156434015-1"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -8,520 +14,684 @@
       gtag('js', new Date());
       gtag('config', 'UA-156434015-1');
     </script>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-    <meta name="twitter:card" content="summary" />
-    <meta property="twitter:title" content="
-      
-        Home
-      
-    " />
-    <meta property="og:title" content="
-      
-        Home
-      
-    ">
-    <title>
-      
-        Jason Liang
-      
-    </title>
-    <meta name="description" content="I work with web, UI, and graphics." />
-    <meta property="og:description" content="I work with web, UI, and graphics." />
-    <meta property="og:site_name" content="Jason Liang" />
-    <meta property="og:url" content="https://jasonliang.js.org/" />
-    <link href="style.css" rel="stylesheet" />
+    <link rel="stylesheet" href="static/tachyons.min.css">
+    <link rel="stylesheet" href="static/default-dark.min.css">
+    <link rel="stylesheet" href="static/style.css">
+    <script src="static/highlight.min.js"></script>
     <script>
-      if (
-        localStorage.theme === "dark" ||
-        (!("theme" in localStorage) &&
-          window.matchMedia("(prefers-color-scheme: dark)").matches)
-      ) {
-        document.documentElement.classList.add("dark");
+      const prefersDark = localStorage.theme !== undefined && window.matchMedia("(prefers-color-scheme: dark)").matches;
+      if (localStorage.theme === "dark" || prefersDark) {
+        document.documentElement.classList.add("dark-mode");
       } else {
-        document.documentElement.classList.remove("dark");
+        document.documentElement.classList.remove("dark-mode");
       }
 
       function toggleDark() {
-        if (document.documentElement.classList.contains("dark")) {
-          document.documentElement.classList.remove('dark');
-          localStorage.theme = 'light';
-          if (window.onToggleDark) {
-            window.onToggleDark('light');
+        if (document.documentElement.classList.contains("dark-mode")) {
+          document.documentElement.classList.remove("dark-mode");
+          localStorage.theme = "light";
+          if (window.changeTheme) {
+            window.changeTheme("light");
           }
         } else {
-          document.documentElement.classList.add('dark');
-          localStorage.theme = 'dark';
-          if (window.onToggleDark) {
-            window.onToggleDark('dark');
+          document.documentElement.classList.add("dark-mode");
+          localStorage.theme = "dark";
+          if (window.changeTheme) {
+            window.changeTheme("dark");
           }
         }
       }
     </script>
-    
-  <meta property="og:type" content="website" />
-  <script src="cubes.js" defer></script>
-
   </head>
-  <body class="bg-gray-50 dark:text-gray-200 dark:bg-gray-800">
-    <div class="sticky z-10 top-0">
-      <button
-        class="absolute shadow-md focus:ring-4 right-0 m-3 md:m-6 p-3 flex justify-center items-center bg-gray-800 dark:bg-white text-gray-50 dark:text-gray-900 rounded-full"
-        onclick="toggleDark()"
-        type="button"
-        aria-label="toggle theme button"
-      >
-        
-        <svg
-          class="w-4 h-4 block dark:hidden"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-        >
-          <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
-        </svg>
-
-        
-        <svg
-          class="w-4 h-4 hidden dark:block"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-        >
-          <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd" />
-        </svg>
-      </button>
-    </div>
-
-    
-  <div class="relative">
-    <canvas id="canvas" class="fixed -z-10"></canvas>
-    <div class="z-0">
-      <div class="font-bold text-center font-mono py-10 text-gray-500">&lt;webpage&gt;</div>
-
-      <div class="max-w-4xl mx-auto px-5 pb-4">
-        <header class="pt-28 sm:pt-36">
-          <small class="block text-xs uppercase font-bold tracking-wider text-gray-500 dark:text-gray-400">
-            Welcome to my website
-            <span class="text-sm"> 👋</span>
-          </small>
-          <h1 class="text-4xl sm:text-6xl font-extrabold text-gray-900 dark:text-gray-200">
-            Hi! I’m Jason Liang
-          </h1>
-          <p class="text-gray-500 dark:text-gray-400 pt-3 sm:pt-4 text-lg sm:text-xl max-w-lg leading-relaxed">
-            I like learning about web, UI, and graphics. I play guitar and video games. Here, you'll find my blog posts and a list of my favourite projects.
-          </p>
-        </header>
-        <main class="pt-40 sm:pt-48">
-          <h2 class="font-extrabold text-4xl text-gray-900 dark:text-gray-200">Words</h2>
-          <ul class="pt-4 sm:pt-5 grid">
-            
-              <li class="-my-1 -mx-4">
-                <a
-                  class="rounded-lg px-4 py-4 block transition motion-reduce:transition-none motion-reduce:transform-none hover:translate-x-0.5 hover:bg-gray-200/50 dark:hover:bg-black/50"
-                  href="coroutines.html"
-                >
-                  <time
-                    class="text-gray-600 dark:text-gray-400 inline-block w-40"
-                    datetime="2022-04-06T00:00:00&#43;0000"
-                    itemprop="datePublished"
-                  >
-                    April 6, 2022
-                  </time>
-                  <h3 class="inline-block font-medium">Lua Coroutines By Example</h3>
-                </a>
-              </li>
-            
-              <li class="-my-1 -mx-4">
-                <a
-                  class="rounded-lg px-4 py-4 block transition motion-reduce:transition-none motion-reduce:transform-none hover:translate-x-0.5 hover:bg-gray-200/50 dark:hover:bg-black/50"
-                  href="batch-renderer.html"
-                >
-                  <time
-                    class="text-gray-600 dark:text-gray-400 inline-block w-40"
-                    datetime="2022-01-04T00:00:00&#43;0000"
-                    itemprop="datePublished"
-                  >
-                    January 4, 2022
-                  </time>
-                  <h3 class="inline-block font-medium">A Tiny OpenGL 2D Batch Renderer</h3>
-                </a>
-              </li>
-            
-              <li class="-my-1 -mx-4">
-                <a
-                  class="rounded-lg px-4 py-4 block transition motion-reduce:transition-none motion-reduce:transform-none hover:translate-x-0.5 hover:bg-gray-200/50 dark:hover:bg-black/50"
-                  href="unit-testing.html"
-                >
-                  <time
-                    class="text-gray-600 dark:text-gray-400 inline-block w-40"
-                    datetime="2022-01-03T00:00:00&#43;0000"
-                    itemprop="datePublished"
-                  >
-                    January 3, 2022
-                  </time>
-                  <h3 class="inline-block font-medium">Write Your Own C&#43;&#43; Unit Testing Library</h3>
-                </a>
-              </li>
-            
-          </ul>
-          <h2 class="font-extrabold text-4xl text-gray-900 dark:text-gray-200 pt-16">Projects</h2>
-          <p class="text-gray-600 dark:text-gray-400 pt-4 sm:pt-5 text-md sm:text-lg max-w-xl leading-relaxed">
-            All of my projects listed below are also on my
-            <a
-              class="p-0.5 -m-0.5 rounded text-gray-900 dark:text-gray-100 hover:text-white dark:hover:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-100 underline hover:no-underline"
-              href="https://github.com/jasonliang-dev"
-            >GitHub</a> profile.
-          </p>
-          <ul class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-5 gap-y-6 pt-10">
-            
-              <li class="
-                group w-full max-w-sm mx-auto flex flex-col transition-transform motion-reduce:transition-none motion-reduce:transform-none transform hover:-translate-y-0.5 rounded-xl overflow-hidden block bg-gradient-to-br shadow-lg hover:shadow-xl
-                from-blue-400 to-blue-500 text-blue-50 dark:from-blue-600 dark:to-blue-700 dark:text-blue-200
-              ">
-                <a class="flex-1 block" href="
-                  
-                    https://jasonliang.js.org/heroicons-for-elm/
-                   
-                ">
-                  <img
-                    class="opacity-75 group-hover:opacity-100 transition-opacity motion-reduce:transition-none motion-reduce:transform-none object-cover h-32 w-full"
-                    src="images/elm-heroicons.png"
-                    alt="Heroicons for Elm"
-                  />
-                  <div class="p-4">
-                    <h3 class="text-lg leading-tight font-bold text-gray-50 dark:text-gray-100">
-                      Heroicons for Elm
-                    </h3>
-                    <p class="pt-1.5 font-medium">
-                      Web app that provides SVG icons for the Elm programming language.
-                    </p>
-                  </div>
-                </a>
-                
-                  <div class="pb-4 px-4 flex">
-                    <a class="flex-1 transition-transform motion-reduce:transition-none motion-reduce:transform-none transform hover:-translate-y-0.5 font-medium flex items-center justify-center" href="https://jasonliang.js.org/heroicons-for-elm/">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 opacity-75" viewBox="0 0 20 20" fill="currentColor">
-                        <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z" />
-                        <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" />
-                      </svg>
-                      View
-                    </a>
-                    <div class="bg-white/50 w-px"></div>
-                    <a class="flex-1 transition-transform motion-reduce:transition-none motion-reduce:transform-none transform hover:-translate-y-0.5 font-medium flex items-center justify-center" href="https://github.com/jasonliang-dev/heroicons-for-elm">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 opacity-75" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
-                      </svg>
-                      Code
-                    </a>
-                  </div>
-                
-              </li>
-            
-              <li class="
-                group w-full max-w-sm mx-auto flex flex-col transition-transform motion-reduce:transition-none motion-reduce:transform-none transform hover:-translate-y-0.5 rounded-xl overflow-hidden block bg-gradient-to-br shadow-lg hover:shadow-xl
-                from-pink-400 to-pink-500 text-pink-50 dark:from-pink-500 dark:to-pink-700 dark:text-pink-200
-              ">
-                <a class="flex-1 block" href="
-                  
-                    https://github.com/jasonliang-dev/yet-another-chat-app
-                   
-                ">
-                  <img
-                    class="opacity-75 group-hover:opacity-100 transition-opacity motion-reduce:transition-none motion-reduce:transform-none object-cover h-32 w-full"
-                    src="images/chat-app.png"
-                    alt="Yet Another Chat App"
-                  />
-                  <div class="p-4">
-                    <h3 class="text-lg leading-tight font-bold text-gray-50 dark:text-gray-100">
-                      Yet Another Chat App
-                    </h3>
-                    <p class="pt-1.5 font-medium">
-                      Chat application that uses the MERN stack. Messages are sent in real time using Socket.IO
-                    </p>
-                  </div>
-                </a>
-                
-              </li>
-            
-              <li class="
-                group w-full max-w-sm mx-auto flex flex-col transition-transform motion-reduce:transition-none motion-reduce:transform-none transform hover:-translate-y-0.5 rounded-xl overflow-hidden block bg-gradient-to-br shadow-lg hover:shadow-xl
-                from-amber-400 to-amber-500 text-amber-50 dark:from-amber-600 dark:to-amber-700 dark:text-amber-100
-              ">
-                <a class="flex-1 block" href="
-                  
-                    https://temtypecalc.netlify.app/
-                   
-                ">
-                  <img
-                    class="opacity-75 group-hover:opacity-100 transition-opacity motion-reduce:transition-none motion-reduce:transform-none object-cover h-32 w-full"
-                    src="images/temtem.png"
-                    alt="Temtem Type Calculator"
-                  />
-                  <div class="p-4">
-                    <h3 class="text-lg leading-tight font-bold text-gray-50 dark:text-gray-100">
-                      Temtem Type Calculator
-                    </h3>
-                    <p class="pt-1.5 font-medium">
-                      Web app for the game, Temtem. View matchups between different Temtem types.
-                    </p>
-                  </div>
-                </a>
-                
-                  <div class="pb-4 px-4 flex">
-                    <a class="flex-1 transition-transform motion-reduce:transition-none motion-reduce:transform-none transform hover:-translate-y-0.5 font-medium flex items-center justify-center" href="https://temtypecalc.netlify.app/">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 opacity-75" viewBox="0 0 20 20" fill="currentColor">
-                        <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z" />
-                        <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" />
-                      </svg>
-                      View
-                    </a>
-                    <div class="bg-white/50 w-px"></div>
-                    <a class="flex-1 transition-transform motion-reduce:transition-none motion-reduce:transform-none transform hover:-translate-y-0.5 font-medium flex items-center justify-center" href="https://github.com/jasonliang-dev/temtem-type-calculator">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 opacity-75" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
-                      </svg>
-                      Code
-                    </a>
-                  </div>
-                
-              </li>
-            
-              <li class="
-                group w-full max-w-sm mx-auto flex flex-col transition-transform motion-reduce:transition-none motion-reduce:transform-none transform hover:-translate-y-0.5 rounded-xl overflow-hidden block bg-gradient-to-br shadow-lg hover:shadow-xl
-                from-emerald-400 to-emerald-500 text-emerald-50 dark:from-emerald-600 dark:to-emerald-700 dark:text-emerald-200
-              ">
-                <a class="flex-1 block" href="
-                  
-                    https://jasonliang.js.org/wildermaze/
-                   
-                ">
-                  <img
-                    class="opacity-75 group-hover:opacity-100 transition-opacity motion-reduce:transition-none motion-reduce:transform-none object-cover h-32 w-full"
-                    src="images/maze.png"
-                    alt="Wildermaze"
-                  />
-                  <div class="p-4">
-                    <h3 class="text-lg leading-tight font-bold text-gray-50 dark:text-gray-100">
-                      Wildermaze
-                    </h3>
-                    <p class="pt-1.5 font-medium">
-                      A game where you escape a maze while avoiding wolves. Created during BC Game Jam 2020
-                    </p>
-                  </div>
-                </a>
-                
-                  <div class="pb-4 px-4 flex">
-                    <a class="flex-1 transition-transform motion-reduce:transition-none motion-reduce:transform-none transform hover:-translate-y-0.5 font-medium flex items-center justify-center" href="https://jasonliang.js.org/wildermaze/">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 opacity-75" viewBox="0 0 20 20" fill="currentColor">
-                        <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z" />
-                        <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" />
-                      </svg>
-                      View
-                    </a>
-                    <div class="bg-white/50 w-px"></div>
-                    <a class="flex-1 transition-transform motion-reduce:transition-none motion-reduce:transform-none transform hover:-translate-y-0.5 font-medium flex items-center justify-center" href="https://github.com/jasonliang-dev/wildermaze">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 opacity-75" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
-                      </svg>
-                      Code
-                    </a>
-                  </div>
-                
-              </li>
-            
-              <li class="
-                group w-full max-w-sm mx-auto flex flex-col transition-transform motion-reduce:transition-none motion-reduce:transform-none transform hover:-translate-y-0.5 rounded-xl overflow-hidden block bg-gradient-to-br shadow-lg hover:shadow-xl
-                from-gray-600 to-gray-700 text-gray-200 dark:from-gray-700 dark:to-gray-800 dark:text-gray-300
-              ">
-                <a class="flex-1 block" href="
-                  
-                    https://github.com/jasonliang-dev/space-shooter
-                   
-                ">
-                  <img
-                    class="opacity-75 group-hover:opacity-100 transition-opacity motion-reduce:transition-none motion-reduce:transform-none object-cover h-32 w-full"
-                    src="images/spaceshooter.png"
-                    alt="STARSPEED SHOOTER 2000"
-                  />
-                  <div class="p-4">
-                    <h3 class="text-lg leading-tight font-bold text-gray-50 dark:text-gray-100">
-                      STARSPEED SHOOTER 2000
-                    </h3>
-                    <p class="pt-1.5 font-medium">
-                      Avoid asteroids and enemy fire in a fast paced arcade romp. Windows only.
-                    </p>
-                  </div>
-                </a>
-                
-              </li>
-            
-              <li class="
-                group w-full max-w-sm mx-auto flex flex-col transition-transform motion-reduce:transition-none motion-reduce:transform-none transform hover:-translate-y-0.5 rounded-xl overflow-hidden block bg-gradient-to-br shadow-lg hover:shadow-xl
-                from-blue-400 to-blue-500 text-blue-50 dark:from-blue-600 dark:to-blue-700 dark:text-blue-200
-              ">
-                <a class="flex-1 block" href="
-                  
-                    https://github.com/jasonliang-dev/lite-vim
-                   
-                ">
-                  <img
-                    class="opacity-75 group-hover:opacity-100 transition-opacity motion-reduce:transition-none motion-reduce:transform-none object-cover h-32 w-full"
-                    src="images/lite-vim.png"
-                    alt="lite-vim"
-                  />
-                  <div class="p-4">
-                    <h3 class="text-lg leading-tight font-bold text-gray-50 dark:text-gray-100">
-                      lite-vim
-                    </h3>
-                    <p class="pt-1.5 font-medium">
-                      A plugin for the Lite text editor that emulates a subset of Vim.
-                    </p>
-                  </div>
-                </a>
-                
-              </li>
-            
-              <li class="
-                group w-full max-w-sm mx-auto flex flex-col transition-transform motion-reduce:transition-none motion-reduce:transform-none transform hover:-translate-y-0.5 rounded-xl overflow-hidden block bg-gradient-to-br shadow-lg hover:shadow-xl
-                from-amber-400 to-amber-500 text-amber-50 dark:from-amber-600 dark:to-amber-700 dark:text-amber-100
-              ">
-                <a class="flex-1 block" href="
-                  
-                    https://github.com/jasonliang-dev/entity-component-system
-                   
-                ">
-                  <img
-                    class="opacity-75 group-hover:opacity-100 transition-opacity motion-reduce:transition-none motion-reduce:transform-none object-cover h-32 w-full"
-                    src="images/ecs.png"
-                    alt="ECS"
-                  />
-                  <div class="p-4">
-                    <h3 class="text-lg leading-tight font-bold text-gray-50 dark:text-gray-100">
-                      ECS
-                    </h3>
-                    <p class="pt-1.5 font-medium">
-                      Archetype entity component system for C.
-                    </p>
-                  </div>
-                </a>
-                
-              </li>
-            
-              <li class="
-                group w-full max-w-sm mx-auto flex flex-col transition-transform motion-reduce:transition-none motion-reduce:transform-none transform hover:-translate-y-0.5 rounded-xl overflow-hidden block bg-gradient-to-br shadow-lg hover:shadow-xl
-                from-violet-400 to-violet-500 text-violet-50 dark:from-violet-800 dark:to-violet-900 dark:text-violet-200
-              ">
-                <a class="flex-1 block" href="
-                  
-                    https://github.com/jasonliang-dev/costello
-                   
-                ">
-                  <img
-                    class="opacity-75 group-hover:opacity-100 transition-opacity motion-reduce:transition-none motion-reduce:transform-none object-cover h-32 w-full"
-                    src="images/discord-stickers.png"
-                    alt="Costello"
-                  />
-                  <div class="p-4">
-                    <h3 class="text-lg leading-tight font-bold text-gray-50 dark:text-gray-100">
-                      Costello
-                    </h3>
-                    <p class="pt-1.5 font-medium">
-                      BetterDiscord plugin that lets you quickly save and send a collection of images.
-                    </p>
-                  </div>
-                </a>
-                
-              </li>
-            
-              <li class="
-                group w-full max-w-sm mx-auto flex flex-col transition-transform motion-reduce:transition-none motion-reduce:transform-none transform hover:-translate-y-0.5 rounded-xl overflow-hidden block bg-gradient-to-br shadow-lg hover:shadow-xl
-                from-emerald-400 to-emerald-500 text-emerald-50 dark:from-emerald-600 dark:to-emerald-700 dark:text-emerald-200
-              ">
-                <a class="flex-1 block" href="
-                  
-                    https://github.com/jasonliang-dev/dream-eater
-                   
-                ">
-                  <img
-                    class="opacity-75 group-hover:opacity-100 transition-opacity motion-reduce:transition-none motion-reduce:transform-none object-cover h-32 w-full"
-                    src="images/php.png"
-                    alt="dream-eater"
-                  />
-                  <div class="p-4">
-                    <h3 class="text-lg leading-tight font-bold text-gray-50 dark:text-gray-100">
-                      dream-eater
-                    </h3>
-                    <p class="pt-1.5 font-medium">
-                      Emacs minor mode that implements Dreamweaver&#39;s check in/out system.
-                    </p>
-                  </div>
-                </a>
-                
-              </li>
-            
-              <li class="
-                group w-full max-w-sm mx-auto flex flex-col transition-transform motion-reduce:transition-none motion-reduce:transform-none transform hover:-translate-y-0.5 rounded-xl overflow-hidden block bg-gradient-to-br shadow-lg hover:shadow-xl
-                from-pink-400 to-pink-500 text-pink-50 dark:from-pink-500 dark:to-pink-700 dark:text-pink-200
-              ">
-                <a class="flex-1 block" href="
-                  
-                    https://github.com/jasonliang-dev/lulu
-                   
-                ">
-                  <img
-                    class="opacity-75 group-hover:opacity-100 transition-opacity motion-reduce:transition-none motion-reduce:transform-none object-cover h-32 w-full"
-                    src="images/lulu.png"
-                    alt="lulu"
-                  />
-                  <div class="p-4">
-                    <h3 class="text-lg leading-tight font-bold text-gray-50 dark:text-gray-100">
-                      lulu
-                    </h3>
-                    <p class="pt-1.5 font-medium">
-                      Tiny lisp-like toy programming language. Compiler written in Haskell under 300 SLOC.
-                    </p>
-                  </div>
-                </a>
-                
-              </li>
-            
-              <li class="
-                group w-full max-w-sm mx-auto flex flex-col transition-transform motion-reduce:transition-none motion-reduce:transform-none transform hover:-translate-y-0.5 rounded-xl overflow-hidden block bg-gradient-to-br shadow-lg hover:shadow-xl
-                from-gray-600 to-gray-700 text-gray-200 dark:from-gray-700 dark:to-gray-800 dark:text-gray-300
-              ">
-                <a class="flex-1 block" href="
-                  
-                    https://github.com/jasonliang-dev/game-of-life
-                   
-                ">
-                  <img
-                    class="opacity-75 group-hover:opacity-100 transition-opacity motion-reduce:transition-none motion-reduce:transform-none object-cover h-32 w-full"
-                    src="images/game-of-life.png"
-                    alt="Game of Life"
-                  />
-                  <div class="p-4">
-                    <h3 class="text-lg leading-tight font-bold text-gray-50 dark:text-gray-100">
-                      Game of Life
-                    </h3>
-                    <p class="pt-1.5 font-medium">
-                      Conway&#39;s Game of Life written in C with SDL2.
-                    </p>
-                  </div>
-                </a>
-                
-              </li>
-            
-          </ul>
-        </main>
-      </div>
-
-      <div class="font-bold text-center font-mono py-10 text-gray-500">&lt;/webpage&gt;</div>
-    </div>
+  <body class="bg-near-white near-black dm-bg-near-black dm-near-white mb6">
+    <button
+      class="
+        bg-near-black near-white hover-bg-mid-gray
+        dm-bg-near-white dm-near-black dm-hover-bg-moon-gray
+        fixed top-0 right-0 z-999
+        flex justify-center items-center mr3 mt3
+        shadow bn br-pill
+      "
+      type="button"
+      style="width: 2.25rem; height: 2.25rem"
+      onclick="toggleDark()"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 20px; height: 20px">
+        <path fill-rule="evenodd" d="M7.455 2.004a.75.75 0 01.26.77 7 7 0 009.958 7.967.75.75 0 011.067.853A8.5 8.5 0 116.647 1.921a.75.75 0 01.808.083z" clip-rule="evenodd" />
+      </svg>
+    </button>
+    <header>
+  <div class="vh-100 overflow-hidden">
+    <canvas id="canvas"></canvas>
   </div>
+</header>
+<main>
+  <div class="mw8 center mb5">
+    <h2 class="mb4 ph3">Posts</h2>
+    <ul class="pl0 list">
+              <li>
+          <a
+            href="cpp-style.html"
+            class="
+              link br2
+              hover-bg-black-10 dm-hover-bg-black-40
+              flex flex-wrap flex-nowrap-ns ph3 pv3
+            "
+          >
+            <time class="gray dib f6 f5-ns" style="min-width: 12rem">
+              January 6, 2023            </time>
+            <span class="fw5 dark-gray dm-moon-gray w-100">
+              C++ Coding Style            </span>
+          </a>
+        </li>
+              <li>
+          <a
+            href="metatables-in-c.html"
+            class="
+              link br2
+              hover-bg-black-10 dm-hover-bg-black-40
+              flex flex-wrap flex-nowrap-ns ph3 pv3
+            "
+          >
+            <time class="gray dib f6 f5-ns" style="min-width: 12rem">
+              November 30, 2022            </time>
+            <span class="fw5 dark-gray dm-moon-gray w-100">
+              Using Lua Metatables With The C API            </span>
+          </a>
+        </li>
+              <li>
+          <a
+            href="coroutines.html"
+            class="
+              link br2
+              hover-bg-black-10 dm-hover-bg-black-40
+              flex flex-wrap flex-nowrap-ns ph3 pv3
+            "
+          >
+            <time class="gray dib f6 f5-ns" style="min-width: 12rem">
+              April 6, 2022            </time>
+            <span class="fw5 dark-gray dm-moon-gray w-100">
+              Lua Coroutines By Example            </span>
+          </a>
+        </li>
+              <li>
+          <a
+            href="batch-renderer.html"
+            class="
+              link br2
+              hover-bg-black-10 dm-hover-bg-black-40
+              flex flex-wrap flex-nowrap-ns ph3 pv3
+            "
+          >
+            <time class="gray dib f6 f5-ns" style="min-width: 12rem">
+              January 4, 2022            </time>
+            <span class="fw5 dark-gray dm-moon-gray w-100">
+              A Tiny OpenGL 2D Batch Renderer            </span>
+          </a>
+        </li>
+              <li>
+          <a
+            href="unit-testing.html"
+            class="
+              link br2
+              hover-bg-black-10 dm-hover-bg-black-40
+              flex flex-wrap flex-nowrap-ns ph3 pv3
+            "
+          >
+            <time class="gray dib f6 f5-ns" style="min-width: 12rem">
+              January 3, 2022            </time>
+            <span class="fw5 dark-gray dm-moon-gray w-100">
+              Write Your Own C++ Unit Testing Library            </span>
+          </a>
+        </li>
+          </ul>
+  </div>
+  <div class="mw8 center mb5">
+    <h2 class="mb4 ph3">Projects</h2>
+    <div class="flex flex-wrap items-stretch">
+              <div class="pa3 w-100 w-50-m w-third-l">
+          <div
+            class="project-card shadow br3 overflow-hidden h-100 flex flex-column"
+            style="
+              --color: #334155;
+              --dark-color: #1e293b;
+            "
+          >
+            <a class="link db h-100" href="https://github.com/jasonliang-dev/file-sink">
+              <img class="w-100" src="static/images/sftp.png" alt="">
+              <div class="ph3 flex flex-column pb3">
+                <div class="flex-auto">
+                  <h3 class="near-white mt0 mb2 f5 fw5">file-sink</h3>
+                  <p class="mv0 white-50 lh-copy">
+                    Tiny SFTP client with automatic file synchronization.                  </p>
+                </div>
+              </div>
+            </a>
+                      </div>
+        </div>
+              <div class="pa3 w-100 w-50-m w-third-l">
+          <div
+            class="project-card shadow br3 overflow-hidden h-100 flex flex-column"
+            style="
+              --color: #1e40af;
+              --dark-color: #1e3a8a;
+            "
+          >
+            <a class="link db h-100" href="https://github.com/jasonliang-dev/odin-lua">
+              <img class="w-100" src="static/images/odin-lua.png" alt="">
+              <div class="ph3 flex flex-column pb3">
+                <div class="flex-auto">
+                  <h3 class="near-white mt0 mb2 f5 fw5">odin-lua</h3>
+                  <p class="mv0 white-50 lh-copy">
+                    Lua 5.4.4 and LuaJIT support for the Odin programming language.                  </p>
+                </div>
+              </div>
+            </a>
+                      </div>
+        </div>
+              <div class="pa3 w-100 w-50-m w-third-l">
+          <div
+            class="project-card shadow br3 overflow-hidden h-100 flex flex-column"
+            style="
+              --color: #6b21a8;
+              --dark-color: #581c87;
+            "
+          >
+            <a class="link db h-100" href="https://github.com/jasonliang-dev/heroicons-for-elm">
+              <img class="w-100" src="static/images/elm-heroicons.png" alt="">
+              <div class="ph3 flex flex-column ">
+                <div class="flex-auto">
+                  <h3 class="near-white mt0 mb2 f5 fw5">Heroicons for Elm</h3>
+                  <p class="mv0 white-50 lh-copy">
+                    Web app that provides SVG icons for the Elm programming language.                  </p>
+                </div>
+              </div>
+            </a>
+                          <div class="flex justify-between fw5 f6">
+                <a
+                  class="white-80 pv3 link dim flex justify-center items-center w-100"
+                  href="https://github.com/jasonliang-dev/heroicons-for-elm"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 20px; height: 20px" class="white-60">
+                    <path fill-rule="evenodd" d="M6.28 5.22a.75.75 0 010 1.06L2.56 10l3.72 3.72a.75.75 0 01-1.06 1.06L.97 10.53a.75.75 0 010-1.06l4.25-4.25a.75.75 0 011.06 0zm7.44 0a.75.75 0 011.06 0l4.25 4.25a.75.75 0 010 1.06l-4.25 4.25a.75.75 0 01-1.06-1.06L17.44 10l-3.72-3.72a.75.75 0 010-1.06zM11.377 2.011a.75.75 0 01.612.867l-2.5 14.5a.75.75 0 01-1.478-.255l2.5-14.5a.75.75 0 01.866-.612z" clip-rule="evenodd" />
+                  </svg>
+                  <span class="ml2 mr2">Code</span>
+                </a>
+                  <a
+                    class="white-80 link dim flex justify-center items-center w-100"
+                    href="https://jasonliang.js.org/heroicons-for-elm/"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 20px; height: 20px" class="white-60">
+                      <path fill-rule="evenodd" d="M4.25 5.5a.75.75 0 00-.75.75v8.5c0 .414.336.75.75.75h8.5a.75.75 0 00.75-.75v-4a.75.75 0 011.5 0v4A2.25 2.25 0 0112.75 17h-8.5A2.25 2.25 0 012 14.75v-8.5A2.25 2.25 0 014.25 4h5a.75.75 0 010 1.5h-5z" clip-rule="evenodd" />
+                      <path fill-rule="evenodd" d="M6.194 12.753a.75.75 0 001.06.053L16.5 4.44v2.81a.75.75 0 001.5 0v-4.5a.75.75 0 00-.75-.75h-4.5a.75.75 0 000 1.5h2.553l-9.056 8.194a.75.75 0 00-.053 1.06z" clip-rule="evenodd" />
+                    </svg>
+                    <span class="ml2 mr2">Visit</span>
+                  </a>
+              </div>
+                      </div>
+        </div>
+              <div class="pa3 w-100 w-50-m w-third-l">
+          <div
+            class="project-card shadow br3 overflow-hidden h-100 flex flex-column"
+            style="
+              --color: #166534;
+              --dark-color: #14532d;
+            "
+          >
+            <a class="link db h-100" href="https://github.com/jasonliang-dev/yet-another-chat-app">
+              <img class="w-100" src="static/images/chat-app.png" alt="">
+              <div class="ph3 flex flex-column pb3">
+                <div class="flex-auto">
+                  <h3 class="near-white mt0 mb2 f5 fw5">Yet Another Chat App</h3>
+                  <p class="mv0 white-50 lh-copy">
+                    Chat application that uses the MERN stack. Messages are sent in real time using Socket.IO.                  </p>
+                </div>
+              </div>
+            </a>
+                      </div>
+        </div>
+              <div class="pa3 w-100 w-50-m w-third-l">
+          <div
+            class="project-card shadow br3 overflow-hidden h-100 flex flex-column"
+            style="
+              --color: #854d0e;
+              --dark-color: #713f12;
+            "
+          >
+            <a class="link db h-100" href="https://github.com/jasonliang-dev/temtem-type-calculator">
+              <img class="w-100" src="static/images/temtem.png" alt="">
+              <div class="ph3 flex flex-column ">
+                <div class="flex-auto">
+                  <h3 class="near-white mt0 mb2 f5 fw5">Temtem Type Calculator</h3>
+                  <p class="mv0 white-50 lh-copy">
+                    For the game Temtem, view matchups between different creature types.                  </p>
+                </div>
+              </div>
+            </a>
+                          <div class="flex justify-between fw5 f6">
+                <a
+                  class="white-80 pv3 link dim flex justify-center items-center w-100"
+                  href="https://github.com/jasonliang-dev/temtem-type-calculator"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 20px; height: 20px" class="white-60">
+                    <path fill-rule="evenodd" d="M6.28 5.22a.75.75 0 010 1.06L2.56 10l3.72 3.72a.75.75 0 01-1.06 1.06L.97 10.53a.75.75 0 010-1.06l4.25-4.25a.75.75 0 011.06 0zm7.44 0a.75.75 0 011.06 0l4.25 4.25a.75.75 0 010 1.06l-4.25 4.25a.75.75 0 01-1.06-1.06L17.44 10l-3.72-3.72a.75.75 0 010-1.06zM11.377 2.011a.75.75 0 01.612.867l-2.5 14.5a.75.75 0 01-1.478-.255l2.5-14.5a.75.75 0 01.866-.612z" clip-rule="evenodd" />
+                  </svg>
+                  <span class="ml2 mr2">Code</span>
+                </a>
+                  <a
+                    class="white-80 link dim flex justify-center items-center w-100"
+                    href="https://temtypecalc.netlify.app/"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 20px; height: 20px" class="white-60">
+                      <path fill-rule="evenodd" d="M4.25 5.5a.75.75 0 00-.75.75v8.5c0 .414.336.75.75.75h8.5a.75.75 0 00.75-.75v-4a.75.75 0 011.5 0v4A2.25 2.25 0 0112.75 17h-8.5A2.25 2.25 0 012 14.75v-8.5A2.25 2.25 0 014.25 4h5a.75.75 0 010 1.5h-5z" clip-rule="evenodd" />
+                      <path fill-rule="evenodd" d="M6.194 12.753a.75.75 0 001.06.053L16.5 4.44v2.81a.75.75 0 001.5 0v-4.5a.75.75 0 00-.75-.75h-4.5a.75.75 0 000 1.5h2.553l-9.056 8.194a.75.75 0 00-.053 1.06z" clip-rule="evenodd" />
+                    </svg>
+                    <span class="ml2 mr2">Visit</span>
+                  </a>
+              </div>
+                      </div>
+        </div>
+              <div class="pa3 w-100 w-50-m w-third-l">
+          <div
+            class="project-card shadow br3 overflow-hidden h-100 flex flex-column"
+            style="
+              --color: #115e59;
+              --dark-color: #134e4a;
+            "
+          >
+            <a class="link db h-100" href="https://github.com/jasonliang-dev/wildermaze">
+              <img class="w-100" src="static/images/maze.png" alt="">
+              <div class="ph3 flex flex-column ">
+                <div class="flex-auto">
+                  <h3 class="near-white mt0 mb2 f5 fw5">Wildermaze</h3>
+                  <p class="mv0 white-50 lh-copy">
+                    A game where you escape a maze while avoiding wolves. Created during BC Game Jam 2020.                  </p>
+                </div>
+              </div>
+            </a>
+                          <div class="flex justify-between fw5 f6">
+                <a
+                  class="white-80 pv3 link dim flex justify-center items-center w-100"
+                  href="https://github.com/jasonliang-dev/wildermaze"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 20px; height: 20px" class="white-60">
+                    <path fill-rule="evenodd" d="M6.28 5.22a.75.75 0 010 1.06L2.56 10l3.72 3.72a.75.75 0 01-1.06 1.06L.97 10.53a.75.75 0 010-1.06l4.25-4.25a.75.75 0 011.06 0zm7.44 0a.75.75 0 011.06 0l4.25 4.25a.75.75 0 010 1.06l-4.25 4.25a.75.75 0 01-1.06-1.06L17.44 10l-3.72-3.72a.75.75 0 010-1.06zM11.377 2.011a.75.75 0 01.612.867l-2.5 14.5a.75.75 0 01-1.478-.255l2.5-14.5a.75.75 0 01.866-.612z" clip-rule="evenodd" />
+                  </svg>
+                  <span class="ml2 mr2">Code</span>
+                </a>
+                  <a
+                    class="white-80 link dim flex justify-center items-center w-100"
+                    href="https://jasonliang.js.org/wildermaze/"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 20px; height: 20px" class="white-60">
+                      <path fill-rule="evenodd" d="M4.25 5.5a.75.75 0 00-.75.75v8.5c0 .414.336.75.75.75h8.5a.75.75 0 00.75-.75v-4a.75.75 0 011.5 0v4A2.25 2.25 0 0112.75 17h-8.5A2.25 2.25 0 012 14.75v-8.5A2.25 2.25 0 014.25 4h5a.75.75 0 010 1.5h-5z" clip-rule="evenodd" />
+                      <path fill-rule="evenodd" d="M6.194 12.753a.75.75 0 001.06.053L16.5 4.44v2.81a.75.75 0 001.5 0v-4.5a.75.75 0 00-.75-.75h-4.5a.75.75 0 000 1.5h2.553l-9.056 8.194a.75.75 0 00-.053 1.06z" clip-rule="evenodd" />
+                    </svg>
+                    <span class="ml2 mr2">Visit</span>
+                  </a>
+              </div>
+                      </div>
+        </div>
+              <div class="pa3 w-100 w-50-m w-third-l">
+          <div
+            class="project-card shadow br3 overflow-hidden h-100 flex flex-column"
+            style="
+              --color: #86198f;
+              --dark-color: #701a75;
+            "
+          >
+            <a class="link db h-100" href="https://github.com/jasonliang-dev/space-shooter">
+              <img class="w-100" src="static/images/spaceshooter.png" alt="">
+              <div class="ph3 flex flex-column pb3">
+                <div class="flex-auto">
+                  <h3 class="near-white mt0 mb2 f5 fw5">Space Shooter Game</h3>
+                  <p class="mv0 white-50 lh-copy">
+                    Avoid asteroids and enemy fire in a fast paced arcade romp.                  </p>
+                </div>
+              </div>
+            </a>
+                      </div>
+        </div>
+              <div class="pa3 w-100 w-50-m w-third-l">
+          <div
+            class="project-card shadow br3 overflow-hidden h-100 flex flex-column"
+            style="
+              --color: #3f6212;
+              --dark-color: #365314;
+            "
+          >
+            <a class="link db h-100" href="https://github.com/jasonliang-dev/lite-vim">
+              <img class="w-100" src="static/images/lite-vim.png" alt="">
+              <div class="ph3 flex flex-column pb3">
+                <div class="flex-auto">
+                  <h3 class="near-white mt0 mb2 f5 fw5">lite-vim</h3>
+                  <p class="mv0 white-50 lh-copy">
+                    A plugin for the Lite text editor that emulates a subset of Vim.                  </p>
+                </div>
+              </div>
+            </a>
+                      </div>
+        </div>
+              <div class="pa3 w-100 w-50-m w-third-l">
+          <div
+            class="project-card shadow br3 overflow-hidden h-100 flex flex-column"
+            style="
+              --color: #9a3412;
+              --dark-color: #7c2d12;
+            "
+          >
+            <a class="link db h-100" href="https://github.com/jasonliang-dev/entity-component-system">
+              <img class="w-100" src="static/images/ecs.png" alt="">
+              <div class="ph3 flex flex-column pb3">
+                <div class="flex-auto">
+                  <h3 class="near-white mt0 mb2 f5 fw5">Entity Component System</h3>
+                  <p class="mv0 white-50 lh-copy">
+                    Archetype entity component system library for C.                  </p>
+                </div>
+              </div>
+            </a>
+                      </div>
+        </div>
+              <div class="pa3 w-100 w-50-m w-third-l">
+          <div
+            class="project-card shadow br3 overflow-hidden h-100 flex flex-column"
+            style="
+              --color: #3730a3;
+              --dark-color: #312e81;
+            "
+          >
+            <a class="link db h-100" href="https://github.com/jasonliang-dev/costello">
+              <img class="w-100" src="static/images/discord-stickers.png" alt="">
+              <div class="ph3 flex flex-column pb3">
+                <div class="flex-auto">
+                  <h3 class="near-white mt0 mb2 f5 fw5">Costello</h3>
+                  <p class="mv0 white-50 lh-copy">
+                    BetterDiscord plugin that lets you save and rapidly send a collection of images.                  </p>
+                </div>
+              </div>
+            </a>
+                      </div>
+        </div>
+              <div class="pa3 w-100 w-50-m w-third-l">
+          <div
+            class="project-card shadow br3 overflow-hidden h-100 flex flex-column"
+            style="
+              --color: #6b21a8;
+              --dark-color: #581c87;
+            "
+          >
+            <a class="link db h-100" href="https://github.com/jasonliang-dev/dream-eater">
+              <img class="w-100" src="static/images/php.png" alt="">
+              <div class="ph3 flex flex-column pb3">
+                <div class="flex-auto">
+                  <h3 class="near-white mt0 mb2 f5 fw5">dream-eater</h3>
+                  <p class="mv0 white-50 lh-copy">
+                    Emacs minor mode that respects Dreamweaver&#039;s check in/out system.                  </p>
+                </div>
+              </div>
+            </a>
+                      </div>
+        </div>
+              <div class="pa3 w-100 w-50-m w-third-l">
+          <div
+            class="project-card shadow br3 overflow-hidden h-100 flex flex-column"
+            style="
+              --color: #9d174d;
+              --dark-color: #831843;
+            "
+          >
+            <a class="link db h-100" href="https://github.com/jasonliang-dev/lulu">
+              <img class="w-100" src="static/images/lulu.png" alt="">
+              <div class="ph3 flex flex-column pb3">
+                <div class="flex-auto">
+                  <h3 class="near-white mt0 mb2 f5 fw5">lulu</h3>
+                  <p class="mv0 white-50 lh-copy">
+                    Tiny lispy toy programming language. Written in Haskell under 300 SLOC.                  </p>
+                </div>
+              </div>
+            </a>
+                      </div>
+        </div>
+              <div class="pa3 w-100 w-50-m w-third-l">
+          <div
+            class="project-card shadow br3 overflow-hidden h-100 flex flex-column"
+            style="
+              --color: #334155;
+              --dark-color: #1e293b;
+            "
+          >
+            <a class="link db h-100" href="https://github.com/jasonliang-dev/game-of-life">
+              <img class="w-100" src="static/images/game-of-life.png" alt="">
+              <div class="ph3 flex flex-column pb3">
+                <div class="flex-auto">
+                  <h3 class="near-white mt0 mb2 f5 fw5">Game of Life</h3>
+                  <p class="mv0 white-50 lh-copy">
+                    Conway&#039;s Game of Life written in C with SDL2.                  </p>
+                </div>
+              </div>
+            </a>
+                      </div>
+        </div>
+          </div>
+  </div>
+</main>
+<script type="module">
+  const canvas = document.getElementById("canvas");
+  const ctx = canvas.getContext("2d");
 
+  const state = {
+    theme: document.documentElement.classList.contains("dark-mode") ? "dark" : "light",
+    firstFrame: false,
+    reservedWidth: 0,
+    reservedHeight: 0,
+    scrollPos: 0,
+    hue: 90,
+    jason: makeFancyText("Jason", 2, 5),
+    liang: makeFancyText("Liang", 3, 6),
+    about: makeFancyText("I make games and web stuff", 7, 10),
+    points: [],
+  }
+
+  function changeTheme(theme) {
+    state.theme = theme;
+  }
+  window.changeTheme = changeTheme;
+
+  function onscroll() {
+    state.scrollPos = window.scrollY;
+  }
+  document.addEventListener("scroll", onscroll);
+
+  function onresize() {
+    canvas.width = canvas.parentNode.clientWidth;
+    canvas.height = canvas.parentNode.clientHeight;
+
+    if (state.reservedWidth < canvas.width || state.reservedHeight < canvas.height) {
+      state.reservedWidth = Math.max(state.reservedWidth, canvas.width);
+      state.reservedHeight = Math.max(state.reservedHeight, canvas.height);
+      makePoints();
+    }
+  }
+  window.addEventListener("resize", onresize);
+
+  let makePointsTimeout = 0;
+  function makePoints() {
+    clearTimeout(makePointsTimeout);
+    makePointsTimeout = setTimeout(() => {
+      const PI2 = Math.PI * 2;
+      const arr = [];
+      for (let y = 0; y < window.innerHeight; y += 120) {
+        for (let x = 0; x < window.innerWidth; x += 120) {
+          arr.push({
+            x,
+            y,
+            angle: Math.random() * PI2,
+            mag: Math.random() * 20 + 10,
+            angleVel: Math.random() * 0.002 + 0.003,
+          });
+        }
+      }
+      state.points = arr;
+    }, 150);
+  }
+
+  function makeFancyText(text, min, max) {
+    const arr = [];
+    for (const c of text) {
+      arr.push({
+        char: c,
+        x: 0,
+        y: 0,
+        scrollOff: Math.random() * (max - min) + min,
+      });
+    }
+
+    return {
+      text,
+      arr,
+    };
+  }
+
+  function drawFancyText(fancy, opts) {
+    const widths = [];
+    for (const item of fancy.arr) {
+      widths.push(ctx.measureText(item.char).width);
+    }
+
+    const left = (canvas.width - ctx.measureText(fancy.text).width) / 2;
+    let advance = 0;
+    for (let i = 0; i < fancy.arr.length; i++) {
+      const item = fancy.arr[i];
+
+      const xGap = (i - fancy.arr.length / 2) * state.scrollPos * opts.xGapFactor;
+      const x = left + advance + xGap;
+      const y = opts.y - item.scrollOff * state.scrollPos * opts.scrollFactor;
+
+      if (!state.firstFrame) {
+        item.x = x;
+        item.y = y;
+      }
+
+      item.x += (x - item.x) * 0.25;
+      item.y += (y - item.y) * 0.25;
+
+      opts.draw(item.char, item.x, item.y);
+
+      advance += widths[i];
+    }
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    if (state.hue >= 360) {
+      state.hue -= 360;
+    }
+    state.hue += 0.15;
+
+    for (const p of state.points) {
+      p.angle += p.angleVel;
+    }
+
+    let headerFontSize = 250;
+    let fontSize = 30;
+    if (window.innerHeight < 700 || window.innerWidth < 900) {
+      headerFontSize = 150;
+      fontSize = 20;
+    }
+
+    if (window.innerWidth < 600) {
+      headerFontSize = 100;
+    }
+
+    const top = window.innerHeight * 0.4;
+
+    ctx.lineWidth = 1;
+
+    if (state.theme === "dark") {
+      ctx.strokeStyle = "rgb(255 255 255 / 0.08)";
+    } else {
+      ctx.strokeStyle = "rgb(0 0 0 / 0.08)";
+    }
+
+    ctx.beginPath();
+    for (const p1 of state.points) {
+      const mag = 33;
+
+      const c1 = Math.cos(p1.angle) * mag;
+      const s1 = Math.sin(p1.angle) * mag;
+      const x1 = c1 + p1.x;
+      const y1 = s1 + p1.y;
+
+      for (const p2 of state.points) {
+        if (p1 === p2) {
+          continue;
+        }
+        const c2 = Math.cos(p2.angle) * mag;
+        const s2 = Math.sin(p2.angle) * mag;
+        const x2 = c2 + p2.x;
+        const y2 = s2 + p2.y;
+
+        const dx = x2 - x1;
+        const dy = y2 - y1;
+        const len = Math.sqrt(dx * dx + dy * dy);
+        if (len < 120) {
+          ctx.moveTo(x2, y2);
+          ctx.lineTo(x1, y1);
+        }
+      }
+    }
+    ctx.stroke();
+
+    const opacity = 1 - Math.min(state.scrollPos * 0.003, 1);
+    ctx.font = `700 ${fontSize}px Inter`;
+
+    if (state.theme === "dark") {
+      ctx.fillStyle = `rgb(250 250 250 / ${opacity})`;
+    } else {
+      ctx.fillStyle = `rgb(0 0 0 / ${opacity})`;
+    }
+
+    drawFancyText(state.about, {
+      y: top + headerFontSize + fontSize + 80,
+      xGapFactor: 0.03,
+      scrollFactor: 0.2,
+      draw: ctx.fillText.bind(ctx),
+    });
+
+    const grad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+    grad.addColorStop(0.25, `hsl(${state.hue}, 100%, 50%)`);
+    grad.addColorStop(0.5, `hsl(${state.hue + 120}, 100%, 50%)`);
+    grad.addColorStop(0.75, `hsl(${state.hue + 240}, 100%, 50%)`);
+
+    ctx.strokeStyle = grad;
+
+    ctx.lineWidth = 3;
+    ctx.font = `900 ${headerFontSize}px Inter`;
+
+    drawFancyText(state.jason, {
+      y: top,
+      xGapFactor: 0.1,
+      scrollFactor: 0.15,
+      draw: ctx.strokeText.bind(ctx),
+    });
+    drawFancyText(state.liang, {
+      y: top + headerFontSize,
+      xGapFactor: 0.1,
+      scrollFactor: 0.15,
+      draw: ctx.strokeText.bind(ctx),
+    });
+
+    state.firstFrame = true;
+
+    requestAnimationFrame(draw);
+  }
+
+  onscroll();
+  onresize();
+  requestAnimationFrame(draw);
+</script>
   </body>
-</html>
-<!-- Be nice to people, and brush your teeth -->
-
+  </html>
+  <!-- be nice to people -->
+  

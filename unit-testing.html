@@ -1,6 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
+  <!doctype html>
+  <html lang="en">
   <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Write Your Own C++ Unit Testing Library | Jason Liang</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@500;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-156434015-1"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -8,135 +14,69 @@
       gtag('js', new Date());
       gtag('config', 'UA-156434015-1');
     </script>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-    <meta name="twitter:card" content="summary" />
-    <meta property="twitter:title" content="
-      
-        Write Your Own C&#43;&#43; Unit Testing Library
-      
-    " />
-    <meta property="og:title" content="
-      
-        Write Your Own C&#43;&#43; Unit Testing Library
-      
-    ">
-    <title>
-      
-        Write Your Own C&#43;&#43; Unit Testing Library | Jason Liang
-      
-    </title>
-    <meta name="description" content="I work with web, UI, and graphics." />
-    <meta property="og:description" content="I work with web, UI, and graphics." />
-    <meta property="og:site_name" content="Jason Liang" />
-    <meta property="og:url" content="https://jasonliang.js.org/" />
-    <link href="style.css" rel="stylesheet" />
+    <link rel="stylesheet" href="static/tachyons.min.css">
+    <link rel="stylesheet" href="static/default-dark.min.css">
+    <link rel="stylesheet" href="static/style.css">
+    <script src="static/highlight.min.js"></script>
     <script>
-      if (
-        localStorage.theme === "dark" ||
-        (!("theme" in localStorage) &&
-          window.matchMedia("(prefers-color-scheme: dark)").matches)
-      ) {
-        document.documentElement.classList.add("dark");
+      const prefersDark = localStorage.theme !== undefined && window.matchMedia("(prefers-color-scheme: dark)").matches;
+      if (localStorage.theme === "dark" || prefersDark) {
+        document.documentElement.classList.add("dark-mode");
       } else {
-        document.documentElement.classList.remove("dark");
+        document.documentElement.classList.remove("dark-mode");
       }
 
       function toggleDark() {
-        if (document.documentElement.classList.contains("dark")) {
-          document.documentElement.classList.remove('dark');
-          localStorage.theme = 'light';
-          if (window.onToggleDark) {
-            window.onToggleDark('light');
+        if (document.documentElement.classList.contains("dark-mode")) {
+          document.documentElement.classList.remove("dark-mode");
+          localStorage.theme = "light";
+          if (window.changeTheme) {
+            window.changeTheme("light");
           }
         } else {
-          document.documentElement.classList.add('dark');
-          localStorage.theme = 'dark';
-          if (window.onToggleDark) {
-            window.onToggleDark('dark');
+          document.documentElement.classList.add("dark-mode");
+          localStorage.theme = "dark";
+          if (window.changeTheme) {
+            window.changeTheme("dark");
           }
         }
       }
     </script>
-    
-  <meta property="og:type" content="article" />
-  <meta property="article:published_time" content="2022-01-03T00:00:00&#43;0000" />
-  <link rel="stylesheet" href="atom-one-dark.min.css" />
-  <script src="highlight.min.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      document.querySelectorAll('pre code[class^="language-"]').forEach(el => {
-        hljs.highlightElement(el);
-      });
-    });
-  </script>
-  <style>
-    pre > code {
-      background: transparent !important;
-      padding: 0 !important;
-    }
-  </style>
-
   </head>
-  <body class="bg-gray-50 dark:text-gray-200 dark:bg-gray-800">
-    <div class="sticky z-10 top-0">
-      <button
-        class="absolute shadow-md focus:ring-4 right-0 m-3 md:m-6 p-3 flex justify-center items-center bg-gray-800 dark:bg-white text-gray-50 dark:text-gray-900 rounded-full"
-        onclick="toggleDark()"
-        type="button"
-        aria-label="toggle theme button"
-      >
-        
-        <svg
-          class="w-4 h-4 block dark:hidden"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-        >
-          <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
-        </svg>
-
-        
-        <svg
-          class="w-4 h-4 hidden dark:block"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-        >
-          <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd" />
-        </svg>
-      </button>
-    </div>
-
-    
-  <header class="text-center py-8 sm:pt-10 sm:pb-16">
-    <a class="font-extrabold text-2xl px-4 py-2 rounded hover:bg-gray-200 dark:hover:bg-gray-900" href="/">Jason Liang</a>
-  </header>
-  <article
-    class="
-      prose prose-zinc dark:prose-invert px-4 pb-16 mx-auto
-      dark:prose-headings:text-gray-200
-      prose-img:rounded prose-img:mx-auto
-      prose-a:p-0.5 prose-a:-m-0.5 prose-a:rounded prose-a:text-gray-900 dark:prose-a:text-gray-100 hover:prose-a:text-white dark:hover:prose-a:text-gray-900 hover:prose-a:bg-gray-800 dark:hover:prose-a:bg-gray-100 hover:prose-a:no-underline
-      prose-code:font-bold before:prose-code:content-[''] after:prose-code:content-['']
-    "
-    itemscope
-    itemtype="http://schema.org/BlogPosting"
-  >
-    <span class="uppercase text-xs tracking-wider font-bold text-gray-500">
-      <time datetime="2022-01-03T00:00:00&#43;0000" itemprop="datePublished">
-        January 3, 2022
-      </time>
-    </span>
-    <h1 itemprop="name headline">
-      Write Your Own C&#43;&#43; Unit Testing Library
-    </h1>
-    <section itemprop="articleBody">
-      <p>By abusing the fact that you can run code before <code>main()</code> by putting it in the
+  <body class="bg-near-white near-black dm-bg-near-black dm-near-white mb6">
+    <button
+      class="
+        bg-near-black near-white hover-bg-mid-gray
+        dm-bg-near-white dm-near-black dm-hover-bg-moon-gray
+        fixed top-0 right-0 z-999
+        flex justify-center items-center mr3 mt3
+        shadow bn br-pill
+      "
+      type="button"
+      style="width: 2.25rem; height: 2.25rem"
+      onclick="toggleDark()"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 20px; height: 20px">
+        <path fill-rule="evenodd" d="M7.455 2.004a.75.75 0 01.26.77 7 7 0 009.958 7.967.75.75 0 011.067.853A8.5 8.5 0 116.647 1.921a.75.75 0 01.808.083z" clip-rule="evenodd" />
+      </svg>
+    </button>
+    <nav class="tc pv4">
+  <a class="b link near-black dm-near-white dim f4" href="/">Jason Liang</a>
+</nav>
+<article class="prose">
+  <time class="gray flex items-center">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 20px; height: 20px">
+      <path fill-rule="evenodd" d="M5.75 2a.75.75 0 01.75.75V4h7V2.75a.75.75 0 011.5 0V4h.25A2.75 2.75 0 0118 6.75v8.5A2.75 2.75 0 0115.25 18H4.75A2.75 2.75 0 012 15.25v-8.5A2.75 2.75 0 014.75 4H5V2.75A.75.75 0 015.75 2zm-1 5.5c-.69 0-1.25.56-1.25 1.25v6.5c0 .69.56 1.25 1.25 1.25h10.5c.69 0 1.25-.56 1.25-1.25v-6.5c0-.69-.56-1.25-1.25-1.25H4.75z" clip-rule="evenodd" />
+    </svg>
+    <span class="ml1 f6 fw5">
+      January 3, 2022    </span>
+  </time>
+  <h1 class="mt1">Write Your Own C++ Unit Testing Library | Jason Liang</h1>
+  <div class="lh-copy">
+    <p>By abusing the fact that you can run code before <code>main()</code> by putting it in the
 constructor of a global variable, you can make a very small, yet serviceable,
 unit testing library in C++:</p>
-<pre><code class="language-c++">#include &quot;test.h&quot;
+<pre><code class="language-c++">#include "test.h"
 
 TEST(OnePlusOne) { EXPECT(1 + 1 == 2); }
 TEST(OnePlusOneFail) { EXPECT(1 + 1 == 3); }
@@ -144,14 +84,12 @@ TEST(OnePlusOneFail) { EXPECT(1 + 1 == 3); }
 int main() {
     int err_count = run_all_tests();
     return err_count == 0 ? 0 : -1;
-}
-</code></pre>
+}</code></pre>
 <p>The output:</p>
 <pre><code>[ PASS ] OnePlusOne
 [ FAIL ] OnePlusOneFail: 1 + 1 == 3
 
-1 out of 2 tests passed
-</code></pre>
+1 out of 2 tests passed</code></pre>
 <h2>Behind The Scenes</h2>
 <p><code>test.h</code> takes each <code>TEST()</code> and stores them in a vector of <code>TestCase</code> structs.</p>
 <pre><code class="language-c++">struct TestCase {
@@ -159,10 +97,9 @@ int main() {
     void (*run)(const char *&amp;);
 };
 
-static std::vector&lt;TestCase&gt; global_all_tests;
-</code></pre>
+static std::vector&lt;TestCase&gt; global_all_tests;</code></pre>
 <p>Let's take <code>TEST(OnePlusOne) { EXPECT(1 + 1 == 2); }</code> as an example: The <code>name</code>
-for this test case will be set to <code>&quot;OnePlusOne&quot;</code>, and <code>run</code> will become a
+for this test case will be set to <code>"OnePlusOne"</code>, and <code>run</code> will become a
 pointer to a function that executes <code>EXPECT(1 + 1 == 2)</code> when invoked.
 This test case gets added to <code>global_all_tests</code> and the <code>run_all_tests()</code> function
 goes through each test case in the vector and calls the <code>run</code> function on each of them.</p>
@@ -182,8 +119,7 @@ goes through each test case in the vector and calls the <code>run</code> functio
     if (!(cond)) {                                                             \
         _test_reason = #cond;                                                  \
         return;                                                                \
-    }
-</code></pre>
+    }</code></pre>
 <p>To break this down:</p>
 <ol>
 <li><code>void(_test_##name)(const char *&amp;);</code> is the function signature for the test case.
@@ -241,23 +177,20 @@ static int run_all_tests() {
     for (const auto test : global_all_tests) {
         test.run(reason);
         if (reason) {
-            printf(&quot;[ FAIL ] %s: %s\n&quot;, test.name, reason);
+            printf("[ FAIL ] %s: %s\n", test.name, reason);
             reason = nullptr;
         } else {
-            printf(&quot;[ PASS ] %s\n&quot;, test.name);
+            printf("[ PASS ] %s\n", test.name);
             passed++;
         }
     }
 
-    printf(&quot;\n%d out of %u tests passed\n&quot;, passed, global_all_tests.size());
+    printf("\n%d out of %u tests passed\n", passed, global_all_tests.size());
     return global_all_tests.size() - passed;
-}
-</code></pre>
-
-    </section>
-  </article>
-
+}</code></pre>  </div>
+</article>
+<script>hljs.highlightAll();</script>
   </body>
-</html>
-<!-- Be nice to people, and brush your teeth -->
-
+  </html>
+  <!-- be nice to people -->
+  

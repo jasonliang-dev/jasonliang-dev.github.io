@@ -1,6 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
+  <!doctype html>
+  <html lang="en">
   <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lua Coroutines By Example | Jason Liang</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@500;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-156434015-1"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -8,147 +14,80 @@
       gtag('js', new Date());
       gtag('config', 'UA-156434015-1');
     </script>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-    <meta name="twitter:card" content="summary" />
-    <meta property="twitter:title" content="
-      
-        Lua Coroutines By Example
-      
-    " />
-    <meta property="og:title" content="
-      
-        Lua Coroutines By Example
-      
-    ">
-    <title>
-      
-        Lua Coroutines By Example | Jason Liang
-      
-    </title>
-    <meta name="description" content="I work with web, UI, and graphics." />
-    <meta property="og:description" content="I work with web, UI, and graphics." />
-    <meta property="og:site_name" content="Jason Liang" />
-    <meta property="og:url" content="https://jasonliang.js.org/" />
-    <link href="style.css" rel="stylesheet" />
+    <link rel="stylesheet" href="static/tachyons.min.css">
+    <link rel="stylesheet" href="static/default-dark.min.css">
+    <link rel="stylesheet" href="static/style.css">
+    <script src="static/highlight.min.js"></script>
     <script>
-      if (
-        localStorage.theme === "dark" ||
-        (!("theme" in localStorage) &&
-          window.matchMedia("(prefers-color-scheme: dark)").matches)
-      ) {
-        document.documentElement.classList.add("dark");
+      const prefersDark = localStorage.theme !== undefined && window.matchMedia("(prefers-color-scheme: dark)").matches;
+      if (localStorage.theme === "dark" || prefersDark) {
+        document.documentElement.classList.add("dark-mode");
       } else {
-        document.documentElement.classList.remove("dark");
+        document.documentElement.classList.remove("dark-mode");
       }
 
       function toggleDark() {
-        if (document.documentElement.classList.contains("dark")) {
-          document.documentElement.classList.remove('dark');
-          localStorage.theme = 'light';
-          if (window.onToggleDark) {
-            window.onToggleDark('light');
+        if (document.documentElement.classList.contains("dark-mode")) {
+          document.documentElement.classList.remove("dark-mode");
+          localStorage.theme = "light";
+          if (window.changeTheme) {
+            window.changeTheme("light");
           }
         } else {
-          document.documentElement.classList.add('dark');
-          localStorage.theme = 'dark';
-          if (window.onToggleDark) {
-            window.onToggleDark('dark');
+          document.documentElement.classList.add("dark-mode");
+          localStorage.theme = "dark";
+          if (window.changeTheme) {
+            window.changeTheme("dark");
           }
         }
       }
     </script>
-    
-  <meta property="og:type" content="article" />
-  <meta property="article:published_time" content="2022-04-06T00:00:00&#43;0000" />
-  <link rel="stylesheet" href="atom-one-dark.min.css" />
-  <script src="highlight.min.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      document.querySelectorAll('pre code[class^="language-"]').forEach(el => {
-        hljs.highlightElement(el);
-      });
-    });
-  </script>
-  <style>
-    pre > code {
-      background: transparent !important;
-      padding: 0 !important;
-    }
-  </style>
-
   </head>
-  <body class="bg-gray-50 dark:text-gray-200 dark:bg-gray-800">
-    <div class="sticky z-10 top-0">
-      <button
-        class="absolute shadow-md focus:ring-4 right-0 m-3 md:m-6 p-3 flex justify-center items-center bg-gray-800 dark:bg-white text-gray-50 dark:text-gray-900 rounded-full"
-        onclick="toggleDark()"
-        type="button"
-        aria-label="toggle theme button"
-      >
-        
-        <svg
-          class="w-4 h-4 block dark:hidden"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-        >
-          <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
-        </svg>
-
-        
-        <svg
-          class="w-4 h-4 hidden dark:block"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-        >
-          <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd" />
-        </svg>
-      </button>
-    </div>
-
-    
-  <header class="text-center py-8 sm:pt-10 sm:pb-16">
-    <a class="font-extrabold text-2xl px-4 py-2 rounded hover:bg-gray-200 dark:hover:bg-gray-900" href="/">Jason Liang</a>
-  </header>
-  <article
-    class="
-      prose prose-zinc dark:prose-invert px-4 pb-16 mx-auto
-      dark:prose-headings:text-gray-200
-      prose-img:rounded prose-img:mx-auto
-      prose-a:p-0.5 prose-a:-m-0.5 prose-a:rounded prose-a:text-gray-900 dark:prose-a:text-gray-100 hover:prose-a:text-white dark:hover:prose-a:text-gray-900 hover:prose-a:bg-gray-800 dark:hover:prose-a:bg-gray-100 hover:prose-a:no-underline
-      prose-code:font-bold before:prose-code:content-[''] after:prose-code:content-['']
-    "
-    itemscope
-    itemtype="http://schema.org/BlogPosting"
-  >
-    <span class="uppercase text-xs tracking-wider font-bold text-gray-500">
-      <time datetime="2022-04-06T00:00:00&#43;0000" itemprop="datePublished">
-        April 6, 2022
-      </time>
-    </span>
-    <h1 itemprop="name headline">
-      Lua Coroutines By Example
-    </h1>
-    <section itemprop="articleBody">
-      <p>Coroutines allow you to pause the execution of a function. The same function
+  <body class="bg-near-white near-black dm-bg-near-black dm-near-white mb6">
+    <button
+      class="
+        bg-near-black near-white hover-bg-mid-gray
+        dm-bg-near-white dm-near-black dm-hover-bg-moon-gray
+        fixed top-0 right-0 z-999
+        flex justify-center items-center mr3 mt3
+        shadow bn br-pill
+      "
+      type="button"
+      style="width: 2.25rem; height: 2.25rem"
+      onclick="toggleDark()"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 20px; height: 20px">
+        <path fill-rule="evenodd" d="M7.455 2.004a.75.75 0 01.26.77 7 7 0 009.958 7.967.75.75 0 011.067.853A8.5 8.5 0 116.647 1.921a.75.75 0 01.808.083z" clip-rule="evenodd" />
+      </svg>
+    </button>
+    <nav class="tc pv4">
+  <a class="b link near-black dm-near-white dim f4" href="/">Jason Liang</a>
+</nav>
+<article class="prose">
+  <time class="gray flex items-center">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 20px; height: 20px">
+      <path fill-rule="evenodd" d="M5.75 2a.75.75 0 01.75.75V4h7V2.75a.75.75 0 011.5 0V4h.25A2.75 2.75 0 0118 6.75v8.5A2.75 2.75 0 0115.25 18H4.75A2.75 2.75 0 012 15.25v-8.5A2.75 2.75 0 014.75 4H5V2.75A.75.75 0 015.75 2zm-1 5.5c-.69 0-1.25.56-1.25 1.25v6.5c0 .69.56 1.25 1.25 1.25h10.5c.69 0 1.25-.56 1.25-1.25v-6.5c0-.69-.56-1.25-1.25-1.25H4.75z" clip-rule="evenodd" />
+    </svg>
+    <span class="ml1 f6 fw5">
+      April 6, 2022    </span>
+  </time>
+  <h1 class="mt1">Lua Coroutines By Example | Jason Liang</h1>
+  <div class="lh-copy">
+    <p>Coroutines allow you to pause the execution of a function. The same function
 can resume its execution in the future:</p>
 <pre><code class="language-lua">local function print_recipe()
-    print &quot;mix 1 tbsp sugar, 1 tsp vanilla extract, 1 egg yolk, 1/2 cup heavy cream&quot;
-    coroutine.yield()
-    print &quot;bake at 300f (150c) for 30 mins. cool down before chilling in fridge&quot;
-    coroutine.yield()
-    print &quot;top custard with sugar, heat sugar with torch&quot;
+  print "mix 1 tbsp sugar, 1 tsp vanilla extract, 1 egg yolk, 1/2 cup heavy cream"
+  coroutine.yield()
+  print "bake at 300f (150c) for 30 mins. cool down before chilling in fridge"
+  coroutine.yield()
+  print "top custard with sugar, heat sugar with torch"
 end
 
 local co = coroutine.create(print_recipe)
 while coroutine.resume(co) do
-    print &quot;okay...&quot;
+  print "okay..."
 end
-print &quot;yay! I made creme brulee!&quot;
-</code></pre>
+print "yay! I made creme brulee!"</code></pre>
 <p>Output:</p>
 <pre><code>mix 1 tbsp sugar, 1 tsp vanilla extract, 1 egg yolk, 1/2 cup heavy cream
 okay...
@@ -156,81 +95,78 @@ bake at 300f (150c) for 30 mins. cool down before chilling in fridge
 okay...
 top custard with sugar, heat sugar with torch
 okay...
-yay! I made creme brulee!
-</code></pre>
+yay! I made creme brulee!</code></pre>
 <p>I'll be going over some use cases for coroutines in the context of video games.
 Coroutines exist in many programming languages such as C#, C++, Rust, Python,
 and Lua. The code examples below will be using Lua.</p>
 <h2>AI Patrolling</h2>
-<p><img src="images/coroutines/patrol.gif" alt="Robot moving in a square path"></p>
+<p><img src="/static/coroutines/patrol.gif" alt="Robot moving in a square path" /></p>
 <p>How would you write a simple AI that covers a square path, turning 90 degrees
 every second? Here is what I've come up with:</p>
 <pre><code class="language-lua">-- constructor
 function Robot:new(desc)
-    self.x = desc.x
-    self.y = desc.y
-    self.dx = 1
-    self.dy = 0
+  self.x = desc.x
+  self.y = desc.y
+  self.dx = 1
+  self.dy = 0
 
-    self.TIMER_INIT = 1
-    self.timer = self.TIMER_INIT
+  self.TIMER_INIT = 1
+  self.timer = self.TIMER_INIT
 end
 
 -- gets called every frame
 function Robot:update(dt)
-    self.timer = self.timer - dt
+  self.timer = self.timer - dt
 
-    if self.timer &lt;= 0 then
-        self.timer = self.timer + self.TIMER_INIT
-        self.dx, self.dy = self.dy, -self.dx
-    end
+  if self.timer &lt;= 0 then
+    self.timer = self.timer + self.TIMER_INIT
+    self.dx, self.dy = self.dy, -self.dx
+  end
 
-    local speed = 100
-    self.x = self.x + self.dx * speed * dt
-    self.y = self.y - self.dy * speed * dt
-end
-</code></pre>
+  local speed = 100
+  self.x = self.x + self.dx * speed * dt
+  self.y = self.y - self.dy * speed * dt
+end</code></pre>
 <p>This code is alright. I felt a little clever when I realized the patrolling
 behaviour can be expressed by swapping the x and y velocity components. It's
 terse, but it's not immediately clear that the object performs a patrol path in
 a square shape.</p>
 <p>Below is the same gameplay behaviour, but now with coroutines:</p>
 <pre><code class="language-lua">function Robot:new(desc)
-    self.x = desc.x
-    self.y = desc.y
-    self.co = coroutine.create(Robot.co_update)
+  self.x = desc.x
+  self.y = desc.y
+  self.co = coroutine.create(Robot.co_update)
 end
 
 function Robot:update(dt)
-    coroutine.resume(self.co, self, dt)
+  coroutine.resume(self.co, self, dt)
 end
 
 function Robot:co_update(dt)
-    local speed = 100
+  local speed = 100
 
-    while true do
-        while repeat_for(1, dt) do -- move right
-            self.x = self.x + speed * dt
-            _, dt = coroutine.yield()
-        end
-
-        while repeat_for(1, dt) do -- then down
-            self.y = self.y + speed * dt
-            _, dt = coroutine.yield()
-        end
-
-        while repeat_for(1, dt) do -- then left
-            self.x = self.x - speed * dt
-            _, dt = coroutine.yield()
-        end
-
-        while repeat_for(1, dt) do -- finally up
-            self.y = self.y - speed * dt
-            _, dt = coroutine.yield()
-        end
+  while true do
+    while repeat_for(1, dt) do -- move right
+      self.x = self.x + speed * dt
+      _, dt = coroutine.yield()
     end
-end
-</code></pre>
+
+    while repeat_for(1, dt) do -- then down
+      self.y = self.y + speed * dt
+      _, dt = coroutine.yield()
+    end
+
+    while repeat_for(1, dt) do -- then left
+      self.x = self.x - speed * dt
+      _, dt = coroutine.yield()
+    end
+
+    while repeat_for(1, dt) do -- finally up
+      self.y = self.y - speed * dt
+      _, dt = coroutine.yield()
+    end
+  end
+end</code></pre>
 <p>Yes, this example uses more lines of code than the previous, but the point is
 that the control flow reads linearly, step-by-step, like a recipe. First, move
 the robot to the right, then, move it down, then left, then up. The outer loop
@@ -248,62 +184,61 @@ coroutines excel when it comes to representing...</p>
 <li>then picks a new random location</li>
 <li>then repeats step 1</li>
 </ol>
-<p><img src="images/coroutines/bullets.gif" alt=""></p>
+<p><img src="/static/coroutines/bullets.gif" alt="" /></p>
 <p>My solution without coroutines consists of three distinct states: <code>move</code>,
 <code>shoot1</code>, and <code>shoot2</code>. <code>move</code> nudges the position closer to the random target
 position, <code>shoot1</code> keeps track of a timer and an angle, creating a bullet
 every 0.1 seconds, and <code>shoot2</code> creates a ring of bullets to the scene and then
 picks a new target for the <code>move</code> state.</p>
 <pre><code class="language-lua">function Block:new(desc)
-    self.x = desc.x
-    self.y = desc.y
+  self.x = desc.x
+  self.y = desc.y
 
-    -- one of move, shoot1, or shoot2
-    self.stat = &quot;move&quot;
+  -- one of move, shoot1, or shoot2
+  self.stat = "move"
 
-    self.target_x = math.random() * getWidth()
-    self.target_y = math.random() * getHeight()
+  self.target_x = math.random() * getWidth()
+  self.target_y = math.random() * getHeight()
 
-    self.shoot_angle = 0
-    self.shoot_timer = 0
+  self.shoot_angle = 0
+  self.shoot_timer = 0
 end
 
 function Block:update(dt)
-    if self.stat == &quot;move&quot; then
-        if distance(self.x, self.y, self.target_x, self.target_y) &gt; 1 then
-            self.x = lerp(self.x, self.target_x, 4 * dt)
-            self.y = lerp(self.y, self.target_y, 4 * dt)
-        else
-            self.stat = &quot;shoot1&quot;
-            self.shoot_angle = 0
-            self.shoot_timer = 0
-        end
-    elseif self.stat == &quot;shoot1&quot; then
-        self.shoot_timer = self.shoot_timer + dt
-        if self.shoot_timer &gt; 0.1 then
-            self.shoot_timer = self.shoot_timer - 0.1
-            local dx, dy = vector(self.shoot_angle, 1)
-            self.pool:add(Bullet {x = self.x, y = self.y, dx = dx, dy = dy})
-            self.shoot_angle = self.shoot_angle + math.pi / 8
-        end
-
-        if self.shoot_angle &gt; math.pi * 2 then
-            self.stat = &quot;shoot2&quot;
-        end
-    elseif self.stat == &quot;shoot2&quot; then
-        local angle = 0
-        while angle &lt; math.pi * 2 do
-            local dx, dy = vector(angle, 1)
-            self.pool:add(Bullet {x = self.x, y = self.y, dx = dx, dy = dy})
-            angle = angle + math.pi / 8
-        end
-
-        self.target_x = math.random() * getWidth()
-        self.target_y = math.random() * getHeight()
-        self.stat = &quot;move&quot;
+  if self.stat == "move" then
+    if distance(self.x, self.y, self.target_x, self.target_y) &gt; 1 then
+      self.x = lerp(self.x, self.target_x, 4 * dt)
+      self.y = lerp(self.y, self.target_y, 4 * dt)
+    else
+      self.stat = "shoot1"
+      self.shoot_angle = 0
+      self.shoot_timer = 0
     end
-end
-</code></pre>
+  elseif self.stat == "shoot1" then
+    self.shoot_timer = self.shoot_timer + dt
+    if self.shoot_timer &gt; 0.1 then
+      self.shoot_timer = self.shoot_timer - 0.1
+      local dx, dy = vector(self.shoot_angle, 1)
+      self.pool:add(Bullet {x = self.x, y = self.y, dx = dx, dy = dy})
+      self.shoot_angle = self.shoot_angle + math.pi / 8
+    end
+
+    if self.shoot_angle &gt; math.pi * 2 then
+      self.stat = "shoot2"
+    end
+  elseif self.stat == "shoot2" then
+    local angle = 0
+    while angle &lt; math.pi * 2 do
+      local dx, dy = vector(angle, 1)
+      self.pool:add(Bullet {x = self.x, y = self.y, dx = dx, dy = dy})
+      angle = angle + math.pi / 8
+    end
+
+    self.target_x = math.random() * getWidth()
+    self.target_y = math.random() * getHeight()
+    self.stat = "move"
+  end
+end</code></pre>
 <p>That's a state machine. Or at least the crude beginnings of a state machine.
 Notice that the <code>move</code> case is concerned with <code>shoot_timer</code> and <code>shoot_angle</code>,
 despite the act of moving this object having nothing to do with the shooting.
@@ -314,36 +249,35 @@ writing finite state machines that handle transitions between states, and/or
 using the State pattern à la Gang of Four, but let's try rewriting this in the
 step-by-step style that coroutines allow:</p>
 <pre><code class="language-lua">function Block:co_update(dt)
-    while true do
-        local target_x = math.random() * getWidth()
-        local target_y = math.random() * getHeight()
+  while true do
+    local target_x = math.random() * getWidth()
+    local target_y = math.random() * getHeight()
 
-        while distance(self.x, self.y, target_x, target_y) &gt; 1 then
-            self.x = lerp(self.x, target_x, 4 * dt)
-            self.y = lerp(self.y, target_y, 4 * dt)
-            _, dt = coroutine.yield()
-        end
-
-        local angle = 0
-        while angle &lt; math.pi * 2 do
-            while repeat_for(0.1, dt) do _, dt = coroutine.yield() end
-            local dx, dy = vector(angle, 1)
-            self.pool:add(Bullet {x = self.x, y = self.y, dx = dx, dy = dy})
-            angle = angle + math.pi / 8
-            _, dt = coroutine.yield()
-        end
-
-        angle = 0
-        while angle &lt; math.pi * 2 do
-            local dx, dy = vector(angle, 1)
-            self.pool:add(Bullet {x = self.x, y = self.y, dx = dx, dy = dy})
-            angle = angle + math.pi / 8
-        end
-
-        _, dt = coroutine.yield()
+    while distance(self.x, self.y, target_x, target_y) &gt; 1 then
+      self.x = lerp(self.x, target_x, 4 * dt)
+      self.y = lerp(self.y, target_y, 4 * dt)
+      _, dt = coroutine.yield()
     end
-end
-</code></pre>
+
+    local angle = 0
+    while angle &lt; math.pi * 2 do
+      while repeat_for(0.1, dt) do _, dt = coroutine.yield() end
+      local dx, dy = vector(angle, 1)
+      self.pool:add(Bullet {x = self.x, y = self.y, dx = dx, dy = dy})
+      angle = angle + math.pi / 8
+      _, dt = coroutine.yield()
+    end
+
+    angle = 0
+    while angle &lt; math.pi * 2 do
+      local dx, dy = vector(angle, 1)
+      self.pool:add(Bullet {x = self.x, y = self.y, dx = dx, dy = dy})
+      angle = angle + math.pi / 8
+    end
+
+    _, dt = coroutine.yield()
+  end
+end</code></pre>
 <p>Look at how the data moved from living inside the object to living as local
 variables in the <code>co_update</code> function. No more does the programmer have to deal
 with variables defined far away from where they are being used, or think about
@@ -359,15 +293,14 @@ the timer meets the threshold:</p>
 <pre><code class="language-lua">g_time = 0
 
 function repeat_for(time, dt)
-    g_time = g_time + dt
-    if g_time &lt; time then
-        return true
-    else
-        g_time = 0
-        return false
-    end
-end
-</code></pre>
+  g_time = g_time + dt
+  if g_time &lt; time then
+    return true
+  else
+    g_time = 0
+    return false
+  end
+end</code></pre>
 <p>There's still a whole other side of coroutines that I am not going to touch in
 this article, and it's how coroutines simplify asynchronous code by making them
 read like synchronous code (network requests, file io, etc). Coroutines can be
@@ -381,12 +314,10 @@ is available on <a href="https://github.com/jasonliang-dev/coroutine-demo">GitHu
 <li><a href="https://www.lua.org/manual/5.4/manual.html#2.6">Lua Reference Manual - Coroutines</a></li>
 <li><a href="https://docs.unity3d.com/Manual/Coroutines.html">Unity Manual - Coroutines</a></li>
 <li><a href="https://randygaul.github.io/cute_framework/#/coroutine/">Cute Framework's documentation on Coroutines</a></li>
-</ul>
-
-    </section>
-  </article>
-
+</ul>  </div>
+</article>
+<script>hljs.highlightAll();</script>
   </body>
-</html>
-<!-- Be nice to people, and brush your teeth -->
-
+  </html>
+  <!-- be nice to people -->
+  

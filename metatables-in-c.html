@@ -1,0 +1,515 @@
+  <!doctype html>
+  <html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Using Lua Metatables With The C API | Jason Liang</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@500;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-156434015-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-156434015-1');
+    </script>
+    <link rel="stylesheet" href="static/tachyons.min.css">
+    <link rel="stylesheet" href="static/default-dark.min.css">
+    <link rel="stylesheet" href="static/style.css">
+    <script src="static/highlight.min.js"></script>
+    <script>
+      const prefersDark = localStorage.theme !== undefined && window.matchMedia("(prefers-color-scheme: dark)").matches;
+      if (localStorage.theme === "dark" || prefersDark) {
+        document.documentElement.classList.add("dark-mode");
+      } else {
+        document.documentElement.classList.remove("dark-mode");
+      }
+
+      function toggleDark() {
+        if (document.documentElement.classList.contains("dark-mode")) {
+          document.documentElement.classList.remove("dark-mode");
+          localStorage.theme = "light";
+          if (window.changeTheme) {
+            window.changeTheme("light");
+          }
+        } else {
+          document.documentElement.classList.add("dark-mode");
+          localStorage.theme = "dark";
+          if (window.changeTheme) {
+            window.changeTheme("dark");
+          }
+        }
+      }
+    </script>
+  </head>
+  <body class="bg-near-white near-black dm-bg-near-black dm-near-white mb6">
+    <button
+      class="
+        bg-near-black near-white hover-bg-mid-gray
+        dm-bg-near-white dm-near-black dm-hover-bg-moon-gray
+        fixed top-0 right-0 z-999
+        flex justify-center items-center mr3 mt3
+        shadow bn br-pill
+      "
+      type="button"
+      style="width: 2.25rem; height: 2.25rem"
+      onclick="toggleDark()"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 20px; height: 20px">
+        <path fill-rule="evenodd" d="M7.455 2.004a.75.75 0 01.26.77 7 7 0 009.958 7.967.75.75 0 011.067.853A8.5 8.5 0 116.647 1.921a.75.75 0 01.808.083z" clip-rule="evenodd" />
+      </svg>
+    </button>
+    <nav class="tc pv4">
+  <a class="b link near-black dm-near-white dim f4" href="/">Jason Liang</a>
+</nav>
+<article class="prose">
+  <time class="gray flex items-center">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 20px; height: 20px">
+      <path fill-rule="evenodd" d="M5.75 2a.75.75 0 01.75.75V4h7V2.75a.75.75 0 011.5 0V4h.25A2.75 2.75 0 0118 6.75v8.5A2.75 2.75 0 0115.25 18H4.75A2.75 2.75 0 012 15.25v-8.5A2.75 2.75 0 014.75 4H5V2.75A.75.75 0 015.75 2zm-1 5.5c-.69 0-1.25.56-1.25 1.25v6.5c0 .69.56 1.25 1.25 1.25h10.5c.69 0 1.25-.56 1.25-1.25v-6.5c0-.69-.56-1.25-1.25-1.25H4.75z" clip-rule="evenodd" />
+    </svg>
+    <span class="ml1 f6 fw5">
+      November 30, 2022    </span>
+  </time>
+  <h1 class="mt1">Using Lua Metatables With The C API | Jason Liang</h1>
+  <div class="lh-copy">
+    <p>Here is one way to implement the classic object-oriented bank account in Lua:</p>
+<pre><code class="language-lua">local Account = {}
+Account.__index = Account
+
+function Account.new(name, balance)
+  local self = {}
+  self.name = name
+  self.balance = balance
+  return setmetatable(self, Account)
+end
+
+function Account:withdraw(n)
+  self.balance = self.balance - n
+end
+
+function Account:deposit(n)
+  self.balance = self.balance + n
+end
+
+local acc = Account.new("Jason", 1000)
+acc:withdraw(200)
+print(acc.balance) -- prints 800</code></pre>
+<p>But if you have some data that's heavily tied to code written in C (or any
+language, as long as it's part of the host program), then you might want to
+implement the same pattern outside of Lua. This article describes how you can
+do that.</p>
+<h2>Calling C functions from Lua</h2>
+<p>Just to get started off, we'll expose a C function that we can call on the Lua
+side. Let's start off with a host program:</p>
+<pre><code class="language-c">#define MAKE_LIB
+#include "lua/onelua.c"
+
+int main(void) {
+  lua_State *L = luaL_newstate();
+  luaL_openlibs(L);
+
+  luaL_dostring(L, "print 'hello from lua'");
+
+  lua_close(L);
+}</code></pre>
+<p>The <code>lua</code> directory, which contains <code>onelua.c</code> comes from
+<a href="https://github.com/lua/lua">Lua's GitHub repo</a>.</p>
+<p>Compile and run just to check everything's working and the <code>hello from lua</code>
+string is being printed. Now create a <code>main.lua</code> file to run from:</p>
+<pre><code class="language-lua">print 'I am being printed from main.lua'</code></pre>
+<p>Back in the C program, you could use <code>luaL_dofile</code>, but I'll continue to use
+<code>luaL_dostring</code> because it's easy to inspect errors with the follow snippet:</p>
+<pre><code class="language-c">const char *run = "xpcall(function ()\n"
+                  "  require 'main'\n"
+                  "end, function(err)\n"
+                  "  print(tostring(err))\n"
+                  "  print(debug.traceback(nil, 2))\n"
+                  "  os.exit(1)\n"
+                  "end)\n";
+luaL_dostring(L, run);</code></pre>
+<p>So if there's any syntax or runtime errors raised by <code>main.lua</code>, we print the
+error and the backtrace. The same can be done with just the C API, but it
+takes a bit more work.</p>
+<p>We'll create a C function that only prints the string "hi". All C functions
+have the same signature. It takes a <code>lua_State *</code>, and returns an
+integer representing the number of return values:</p>
+<pre><code class="language-c">int sys_say_hi(lua_State *L) {
+  printf("hi\n");
+  return 0;
+}</code></pre>
+<p>We're returning 0, because there's no values to return after printing "hi".</p>
+<p>The function starts with <code>sys_</code> for namespacing. We'll use this function from
+<code>main.lua</code> like so:</p>
+<pre><code class="language-lua">sys.say_hi()</code></pre>
+<p>This can be done by creating a table with <code>luaL_newlib</code>, which accepts a null
+terminated array of C functions to insert into a table that we'll call
+<code>sys</code>:</p>
+<pre><code class="language-c">int open_sys(lua_State *L) {
+  luaL_Reg reg[] = {
+    {"say_hi", sys_say_hi},
+    {NULL, NULL},
+  };
+
+  luaL_newlib(L, reg);
+
+  return 1;
+}
+
+int main(void) {
+  // ...
+  luaL_requiref(L, "sys", open_sys, 1); // add before luaL_dostring
+  // ...
+}</code></pre>
+<p>Now with all of this code in place, check if the program actually prints
+out "hi".</p>
+<h2>Yeah I'd like to open a bank account</h2>
+<p>We need an account type to play with:</p>
+<pre><code class="language-c">typedef struct {
+  char *name;
+  int balance;
+} Account;</code></pre>
+<p>From Lua, making a new account will look like this:</p>
+<pre><code class="language-lua">local acc = sys.Account.new("Jason", 1000)</code></pre>
+<p>The <code>new</code> function will return a full userdata value with a metatable
+attached. Userdata is simply a chunk of data for our Account type.</p>
+<p>To demostrate how an account interacts with the garbage collector, the name
+of the account will be created in heap memory using <code>malloc</code>.</p>
+<pre><code class="language-c">int mt_account_new(lua_State *L) {
+  const char *name = luaL_checkstring(L, 1);
+  int balance = (int)luaL_checkinteger(L, 2);
+
+  Account *self = lua_newuserdata(L, sizeof(Account));
+
+  self-&gt;name = malloc(strlen(name) + 1);
+  strcpy(self-&gt;name, name);
+
+  self-&gt;balance = balance;
+
+  luaL_setmetatable(L, "mt_account");
+
+  return 1;
+}</code></pre>
+<p>This roughly translates to the following Lua code, but the difference is that
+the constructor returns a table instead of full userdata:</p>
+<pre><code class="language-lua">function mt_account.new(name, balance)
+  local self = {}
+  self.name = name
+  self.balance = balance
+  return setmetatable(self, mt_account)
+end</code></pre>
+<p>The "mt_account" will be a table in the Lua registry. The Lua registry is a
+place to store values for the host program to use. It can be accessed in Lua
+with <code>debug.getregistry()</code>. So this:</p>
+<pre><code class="language-lua">local acc = sys.Account.new("Jason", 1000)</code></pre>
+<p>Is the same as this:</p>
+<pre><code class="language-lua">local reg = debug.getregistry()
+local acc = reg.mt_account.new("Jason", 1000)</code></pre>
+<p>To create the <code>mt_account</code> metatable, we can use <code>luaL_newmetatable</code>.</p>
+<pre><code class="language-c">int push_mt_account(lua_State *L) {
+  luaL_Reg reg[] = {
+      {"new", mt_account_new},
+      {NULL, NULL},
+  };
+
+  luaL_newmetatable(L, "mt_account");
+  luaL_setfuncs(L, reg, 0);
+  lua_pushvalue(L, -1);
+  lua_setfield(L, -2, "__index");
+
+  return 1;
+}</code></pre>
+<p>This function will push a new metatable on top of the Lua stack.
+<code>luaL_setfuncs</code> is similar to <code>luaL_newlib</code>, it'll attach the <code>new</code> method to
+the <code>mt_account</code> table. We'll be adding more methods later.</p>
+<p><code>lua_setfield(L, -2, "__index")</code> is there to set the <code>__index</code> value of our
+metatable to itself. <code>lua_setfield</code> pops the value at the top of the stack,
+but we're going to need to keep it so we can access it under the <code>sys</code> table
+that we had created eariler. That's why <code>lua_pushvalue(L, -1)</code> is there.</p>
+<p>The equivalent Lua code looks like this:</p>
+<pre><code class="language-lua">local mt_account = {}
+mt_account.new = function() { --[[ mt_account_new c function ]] }
+mt_account.__index = mt_account
+return mt_account</code></pre>
+<p>And here's a visual of the Lua stack before calling <code>luaL_newmetatable</code>:</p>
+<table>
+<thead>
+<tr>
+<th>index</th>
+<th>value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2</td>
+<td>...</td>
+</tr>
+<tr>
+<td>1</td>
+<td>...</td>
+</tr>
+</tbody>
+</table>
+<p>After calling <code>luaL_newmetatable</code> and <code>luaL_setfuncs</code>:</p>
+<table>
+<thead>
+<tr>
+<th>index</th>
+<th>value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>3</td>
+<td>mt_account</td>
+</tr>
+<tr>
+<td>2</td>
+<td>...</td>
+</tr>
+<tr>
+<td>1</td>
+<td>...</td>
+</tr>
+</tbody>
+</table>
+<p>Then after <code>lua_pushvalue</code>:</p>
+<table>
+<thead>
+<tr>
+<th>index</th>
+<th>value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>4</td>
+<td>mt_account</td>
+</tr>
+<tr>
+<td>3</td>
+<td>mt_account</td>
+</tr>
+<tr>
+<td>2</td>
+<td>...</td>
+</tr>
+<tr>
+<td>1</td>
+<td>...</td>
+</tr>
+</tbody>
+</table>
+<p>Finally, after <code>lua_setfield</code>:</p>
+<table>
+<thead>
+<tr>
+<th>index</th>
+<th>value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>3</td>
+<td>mt_account</td>
+</tr>
+<tr>
+<td>2</td>
+<td>...</td>
+</tr>
+<tr>
+<td>1</td>
+<td>...</td>
+</tr>
+</tbody>
+</table>
+<p>Our <code>push_mt_account</code> function returns one value, the metatable. We'll add it
+to the <code>sys</code> table:</p>
+<pre><code class="language-c">int open_sys(lua_State *L) {
+  // ...
+
+  luaL_newlib(L, reg);
+  register_mt_account(L);
+  lua_setfield(L, -2, "Account");
+
+  return 1;
+}</code></pre>
+<h2>Adding more methods</h2>
+<p>Withdrawing money will look like this:</p>
+<pre><code class="language-lua">acc:withdraw(200)</code></pre>
+<p>Which is syntax sugar for:</p>
+<pre><code class="language-lua">acc.withdraw(acc, 200)</code></pre>
+<p>So we need a function that takes an account for the first parameter, and a
+number for the second. Here it is in C:</p>
+<pre><code class="language-c">int mt_account_withdraw(lua_State *L) {
+  Account *self = luaL_checkudata(L, 1, "mt_account");
+  int n = (int)luaL_checknumber(L, 2);
+  self-&gt;balance -= n;
+  return 0;
+}</code></pre>
+<p>You can probably guess how the deposit function will look like.</p>
+<p>We don't have a way to inspect the account. So we'll create getters for that.</p>
+<pre><code class="language-c">int mt_account_get_name(lua_State *L) {
+  Account *self = luaL_checkudata(L, 1, "mt_account");
+  lua_pushstring(L, self-&gt;name);
+  return 1;
+}
+
+int mt_account_get_balance(lua_State *L) {
+  Account *self = luaL_checkudata(L, 1, "mt_account");
+  lua_pushinteger(L, self-&gt;balance);
+  return 1;
+}</code></pre>
+<p>Add the newly created functions to the function list:</p>
+<pre><code class="language-c">luaL_Reg reg[] = {
+  {"new", mt_account_new},
+  {"withdraw", mt_account_withdraw},
+  {"get_name", mt_account_get_name},
+  {"get_balance", mt_account_get_balance},
+  {NULL, NULL},
+};</code></pre>
+<h2>Cleaning up the mess</h2>
+<p>Our program is nearly done, but there's just one more thing.</p>
+<p>Whenever we're done with an account, we leak memory. This is because we used
+<code>malloc</code> for the account's name and never called <code>free</code>. The <code>__gc</code>
+metamethod let's us perform some stuff right before we lose the account to
+the garbage collector. Add the following to the function list:</p>
+<pre><code class="language-c">luaL_Reg reg[] = {
+  // ...
+  {"__gc", mt_account_delete},
+  // ...
+};</code></pre>
+<p>And now here's the place where we free the memory allocated for an account's
+name:</p>
+<pre><code class="language-c">int mt_account_delete(lua_State *L) {
+  Account *self = luaL_checkudata(L, 1, "mt_account");
+  free(self-&gt;name);
+}</code></pre>
+<p>We're done! Test it out in Lua to check that everything works</p>
+<pre><code class="language-lua">local acc = sys.Account.new("Jason", 1000)
+acc:withdraw(200)
+print(string.format("name: %s, balance: %d", acc:get_name(), acc:get_balance()))
+acc:deposit(100)
+print(string.format("name: %s, balance: %d", acc:get_name(), acc:get_balance()))
+
+--[[
+name: Jason, balance: 800
+name: Jason, balance: 900
+]]</code></pre>
+<h2>Full source code</h2>
+<pre><code class="language-c">#define MAKE_LIB
+#include "lua/onelua.c"
+
+typedef struct {
+  char *name;
+  int balance;
+} Account;
+
+int mt_account_new(lua_State *L) {
+  const char *name = luaL_checkstring(L, 1);
+  int balance = (int)luaL_checkinteger(L, 2);
+
+  Account *self = lua_newuserdata(L, sizeof(Account));
+
+  self-&gt;name = malloc(strlen(name) + 1);
+  strcpy(self-&gt;name, name);
+
+  self-&gt;balance = balance;
+
+  luaL_setmetatable(L, "mt_account");
+
+  return 1;
+}
+
+int mt_account_delete(lua_State *L) {
+  Account *self = luaL_checkudata(L, 1, "mt_account");
+  free(self-&gt;name);
+  return 0;
+}
+
+int mt_account_deposit(lua_State *L) {
+  Account *self = luaL_checkudata(L, 1, "mt_account");
+  int n = (int)luaL_checknumber(L, 2);
+  self-&gt;balance += n;
+  return 0;
+}
+
+int mt_account_withdraw(lua_State *L) {
+  Account *self = luaL_checkudata(L, 1, "mt_account");
+  int n = (int)luaL_checknumber(L, 2);
+  self-&gt;balance -= n;
+  return 0;
+}
+
+int mt_account_get_name(lua_State *L) {
+  Account *self = luaL_checkudata(L, 1, "mt_account");
+  lua_pushstring(L, self-&gt;name);
+  return 1;
+}
+
+int mt_account_get_balance(lua_State *L) {
+  Account *self = luaL_checkudata(L, 1, "mt_account");
+  lua_pushinteger(L, self-&gt;balance);
+  return 1;
+}
+
+int register_mt_account(lua_State *L) {
+  luaL_Reg reg[] = {
+    {"new", mt_account_new},
+    {"__gc", mt_account_delete},
+    {"deposit", mt_account_deposit},
+    {"withdraw", mt_account_withdraw},
+    {"get_name", mt_account_get_name},
+    {"get_balance", mt_account_get_balance},
+    {0, 0},
+  };
+
+  luaL_newmetatable(L, "mt_account");
+  luaL_setfuncs(L, reg, 0);
+  lua_pushvalue(L, -1);
+  lua_setfield(L, -2, "__index");
+
+  return 1;
+}
+
+int sys_say_hi(lua_State *L) {
+  printf("hi\n");
+  return 0;
+}
+
+int open_sys(lua_State *L) {
+  luaL_Reg reg[] = {
+    {"say_hi", sys_say_hi},
+    {0, 0},
+  };
+
+  luaL_newlib(L, reg);
+  register_mt_account(L);
+  lua_setfield(L, -2, "Account");
+
+  return 1;
+}
+
+int main(void) {
+  lua_State *L = luaL_newstate();
+
+  luaL_openlibs(L);
+  luaL_requiref(L, "sys", open_sys, 1);
+
+  const char *run = "xpcall(function ()\n"
+                    "  require 'main'\n"
+                    "end, function(err)\n"
+                    "  print(tostring(err))\n"
+                    "  print(debug.traceback(nil, 2))\n"
+                    "  os.exit(1)\n"
+                    "end)\n";
+  luaL_dostring(L, run);
+
+  lua_close(L);
+}</code></pre>  </div>
+</article>
+<script>hljs.highlightAll();</script>
+  </body>
+  </html>
+  <!-- be nice to people -->
+  

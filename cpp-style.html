@@ -1,0 +1,490 @@
+  <!doctype html>
+  <html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C++ Coding Style | Jason Liang</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@500;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-156434015-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-156434015-1');
+    </script>
+    <link rel="stylesheet" href="static/tachyons.min.css">
+    <link rel="stylesheet" href="static/default-dark.min.css">
+    <link rel="stylesheet" href="static/style.css">
+    <script src="static/highlight.min.js"></script>
+    <script>
+      const prefersDark = localStorage.theme !== undefined && window.matchMedia("(prefers-color-scheme: dark)").matches;
+      if (localStorage.theme === "dark" || prefersDark) {
+        document.documentElement.classList.add("dark-mode");
+      } else {
+        document.documentElement.classList.remove("dark-mode");
+      }
+
+      function toggleDark() {
+        if (document.documentElement.classList.contains("dark-mode")) {
+          document.documentElement.classList.remove("dark-mode");
+          localStorage.theme = "light";
+          if (window.changeTheme) {
+            window.changeTheme("light");
+          }
+        } else {
+          document.documentElement.classList.add("dark-mode");
+          localStorage.theme = "dark";
+          if (window.changeTheme) {
+            window.changeTheme("dark");
+          }
+        }
+      }
+    </script>
+  </head>
+  <body class="bg-near-white near-black dm-bg-near-black dm-near-white mb6">
+    <button
+      class="
+        bg-near-black near-white hover-bg-mid-gray
+        dm-bg-near-white dm-near-black dm-hover-bg-moon-gray
+        fixed top-0 right-0 z-999
+        flex justify-center items-center mr3 mt3
+        shadow bn br-pill
+      "
+      type="button"
+      style="width: 2.25rem; height: 2.25rem"
+      onclick="toggleDark()"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 20px; height: 20px">
+        <path fill-rule="evenodd" d="M7.455 2.004a.75.75 0 01.26.77 7 7 0 009.958 7.967.75.75 0 011.067.853A8.5 8.5 0 116.647 1.921a.75.75 0 01.808.083z" clip-rule="evenodd" />
+      </svg>
+    </button>
+    <nav class="tc pv4">
+  <a class="b link near-black dm-near-white dim f4" href="/">Jason Liang</a>
+</nav>
+<article class="prose">
+  <time class="gray flex items-center">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 20px; height: 20px">
+      <path fill-rule="evenodd" d="M5.75 2a.75.75 0 01.75.75V4h7V2.75a.75.75 0 011.5 0V4h.25A2.75 2.75 0 0118 6.75v8.5A2.75 2.75 0 0115.25 18H4.75A2.75 2.75 0 012 15.25v-8.5A2.75 2.75 0 014.75 4H5V2.75A.75.75 0 015.75 2zm-1 5.5c-.69 0-1.25.56-1.25 1.25v6.5c0 .69.56 1.25 1.25 1.25h10.5c.69 0 1.25-.56 1.25-1.25v-6.5c0-.69-.56-1.25-1.25-1.25H4.75z" clip-rule="evenodd" />
+    </svg>
+    <span class="ml1 f6 fw5">
+      January 6, 2023    </span>
+  </time>
+  <h1 class="mt1">C++ Coding Style | Jason Liang</h1>
+  <div class="lh-copy">
+    <p>C++ is a ridiculously complex language and practically everyone sticks to a
+subset of features. I've been using a lot of C++ for side projects that never
+see the light of day, and over time, I've developed a style that I like and I
+wanted to document it.</p>
+<h2>Code Format</h2>
+<p>Use Clang-Format for code formatting:</p>
+<pre><code class="language-text">BasedOnStyle: LLVM
+IndentWidth: 2
+AllowShortCaseLabelsOnASingleLine: true</code></pre>
+<h2>Naming</h2>
+<ul>
+<li>Types are PascalCase</li>
+<li>Preprocessor defines are UPPER_CASE, except for commonly used macros like:<ul>
+<li><code>#define array_size(a) (sizeof(a) / sizeof(a[0]))</code></li>
+<li><code>#define defer(code) /* stuff */</code> (see <a href="http://www.gingerbill.org/article/2015/08/19/defer-in-cpp/">A Defer Statement For C++11</a>)</li>
+</ul>
+</li>
+<li>Constants are UPPER_CASE</li>
+<li>Enums types are PascalCase.<ul>
+<li>Raw enum values are TypeName_PascalCase</li>
+<li>Enum class values are PascalCase</li>
+</ul>
+</li>
+<li>Functions are snake_case</li>
+<li>Variables are snake_case<ul>
+<li>Public member variables are snake_case</li>
+<li>Private member variables are m_snake_case</li>
+<li>Static variables are s_snake_case</li>
+<li>Global variables are g_snake_case</li>
+</ul>
+</li>
+<li>File names are either snake_case.cpp or snake_case.h</li>
+</ul>
+<p>Example:</p>
+<pre><code class="language-c++">constexpr const char *SETTINGS_FILE_PATH = "./data/settings.ini";
+
+struct String {
+  String() = default;
+  String(const char *);
+
+private:
+  char *m_buf = nullptr;
+  i32 m_size = 0;
+  i32 m_capacity = 0;
+};
+
+enum EntityKind : i32 {
+  EntityKind_None,
+  EntityKind_Player,
+  EntityKind_Bullet,
+  EntityKind_Enemy,
+};
+
+enum class Direction : i32 {
+  North,
+  East,
+  South,
+  West,
+};
+
+struct Entity {
+  EntityKind kind;
+  Direction direction;
+  String name;
+};
+
+String g_str;
+
+const char *some_function(i32 kind) {
+  static char s_str[2048];
+  return s_str;
+}</code></pre>
+<h2>Style</h2>
+<ul>
+<li>
+<p>When using single header libraries, create a file <code>impl.cpp</code> and add the
+implementation there.</p>
+<pre><code class="language-c++">// impl.cpp
+
+#define GLAD_GL_IMPLEMENTATION
+#include "glad2.h"
+
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+
+#define STB_TRUETYPE_IMPLEMENTATION
+#include "stb_truetype.h"</code></pre>
+</li>
+<li>
+<p>If there are brackets for a case statement, the <code>break</code> goes inside.</p>
+<pre><code class="language-c++">switch (val) {
+case Kind_Foo: {
+  i32 n = 0;
+  do_stuff(&amp;n);
+  printf("%d\n", n);
+  break; // &lt;-- here
+}
+}</code></pre>
+</li>
+<li>
+<p>Use lambdas to nest functions.</p>
+<blockquote>
+<p>Helps to understand where a function can be used. In the example below,
+<code>compile</code> can only be used in <code>make_shader</code></p>
+</blockquote>
+<pre><code class="language-c++">Shader make_shader(const char *vert, const char *frag) {
+  auto compile = [](GLuint type, const char *glsl) -&gt; GLuint {
+    // OpenGL stuff
+  };
+
+  GLuint vshd = compile(GL_VERTEX_SHADER, vert);
+  GLuint fshd = compile(GL_FRAGMENT_SHADER, frag);
+
+  // ...
+}</code></pre>
+</li>
+<li>
+<p>Prefer explicitly sized integers such as <code>int32_t</code>.</p>
+<blockquote>
+<p>Helps to reason with integer conversion. Use the following type aliases:</p>
+</blockquote>
+<pre><code class="language-c++">using i8 = int8_t;
+using i16 = int16_t;
+using i32 = int32_t;
+using i64 = int64_t;
+using u8 = uint8_t;
+using u16 = uint16_t;
+using u32 = uint32_t;
+using u64 = uint64_t;</code></pre>
+</li>
+<li>
+<p>Avoid exceptions. Never use <code>throw</code>.</p>
+<blockquote>
+<p>Read <a href="https://www.gingerbill.org/article/2018/09/05/exceptions-and-why-odin-will-never-have-them/">Exceptions — And Why Odin Will Never Have Them</a>.
+<strong>TL;DR</strong>: errors are not special, so treat error values like you would any
+other piece of data.</p>
+<p>There are several alternatives for error handling without catching exceptions
+such as using a function that returns:</p>
+<ul>
+<li>a boolean</li>
+<li>an error code/enum</li>
+<li><code>std::optional&lt;T&gt;</code></li>
+<li><code>std::pair&lt;T1, T2&gt;</code>, similar to languages that have mutliple return
+values (Go, Odin, Lua)</li>
+<li><code>std::expected&lt;T, E&gt;</code>, monadic type similar to Rust's <code>Result</code> or
+Haskell's <code>Either</code>, but I'd like to avoid it since it's too new</li>
+</ul>
+</blockquote>
+</li>
+<li>
+<p>If object creation can fail, use functions instead of constructors.</p>
+<pre><code class="language-c++">// bad
+// if this can fail. how do you let the user know?
+// is there a global error flag?
+// does it throw an exception?
+// remember that we're trying to avoid exceptions
+Bullet::Bullet(Entity *owner);
+
+// good
+std::optional&lt;Bullet&gt; make_bullet(Entity *owner);</code></pre>
+</li>
+<li>
+<p>Avoid writing destructors.</p>
+<blockquote>
+<p>When a destructor is introduced, you'll probably want a copy constructor
+and copy assignment operator to fix the double free problem when dealing
+with memory.</p>
+<p>But copies can be expensive so a move constructor and a move assignment
+operator should also be added. You better remember to use <code>std::move</code> in
+the right places! Oh wait, you might need functions that deal with data by
+value, by reference, and by r-value reference. So you'll also want to
+introduce perfect forwarding.</p>
+<p>If you have an object X that depends on object Y, then you'll have to
+make sure that Y stays alive before X is destroyed. And what if you have a
+cycle? If X depends on Y and Y depends on X, which object should be
+destroyed first? How would these object get initialized in the first
+place? Do you combine X and Y into a big mega-object called Z? Or do you
+use a raw pointer on one of the objects? Are you going to add smart
+pointers into the mix?</p>
+<p>Avoid writing destructors. It adds too much complexity. If dealing with
+RAII types (like the STL containers), use the Rule of Zero. For everything
+else, just use a function to destroy things.
+<a href="http://www.gingerbill.org/article/2015/08/19/defer-in-cpp/">Defer</a>
+can help with some of the friction that comes with explicit destruction.</p>
+</blockquote>
+</li>
+<li>
+<p>Prefer <code>std::string_view</code> over <code>std::string</code> and C strings.</p>
+<blockquote>
+<p>Unlike C strings, <code>std::string_view</code> stores the length. Unlike
+<code>std::string</code>, substring is constant time and does not require memory
+allocation. Also, copying a string view is very cheap.</p>
+<p>Unfortunate that string views can't be used a lot of the time because C
+libraries usually need null terminated strings.</p>
+</blockquote>
+</li>
+<li>
+<p>Avoid <code>std::array</code>.</p>
+<blockquote>
+<p>C style square bracket arrays work fine. It can be surprisingly delightful
+to use with this <code>array_size</code> macro:</p>
+</blockquote>
+<pre><code class="language-c++">#define array_size(a) (sizeof(a) / sizeof(a[0]))
+
+// for functions that need a buffer and the buffer size
+sscanf_s(str, "%d %s", &amp;n, buf, (u32)array_size(buf));</code></pre>
+</li>
+<li>
+<p>Avoid <code>&lt;iostream&gt;</code></p>
+<blockquote>
+<p><code>printf</code> and friends work very well.</p>
+</blockquote>
+</li>
+<li>
+<p>Use <code>&lt;stdio.h&gt;</code>, <code>&lt;math.h&gt;</code>, etc, over their C++ counterparts <code>&lt;cstdio&gt;</code>,
+<code>&lt;cmath&gt;</code>, etc.</p>
+<blockquote>
+<p>The idea with the C++ headers was probably to avoid polluting the global
+namespace, but they don't actually do that so there's no benefit.</p>
+</blockquote>
+</li>
+<li>
+<p>Avoid defining types with <code>class</code>.</p>
+<blockquote>
+<p>Public members should be listed first. It's common to see <code>class</code> followed
+by the <code>public</code> access specifier, but that's exactly what <code>struct</code> does.</p>
+</blockquote>
+<pre><code class="language-c++">// bad
+class Foo {
+public:
+  Foo();
+private:
+  i32 m_the_data;
+};
+
+// good
+struct Foo {
+  Foo();
+private:
+  i32 m_the_data;
+};</code></pre>
+</li>
+<li>
+<p>Public members go at the top.</p>
+<blockquote>
+<p>The public interface/API is the most important information to look for.
+The elements are sorted by importance.</p>
+</blockquote>
+<pre><code class="language-c++">// bad
+struct Foo {
+private:
+  i32 m_the_data;
+public:
+  Foo();
+};
+
+// also bad
+class Foo {
+  i32 m_the_data;
+public:
+  Foo();
+};</code></pre>
+</li>
+<li>
+<p>Prefer ZII (Zero Is Initialization).</p>
+<pre><code class="language-c++">template &lt;typename T&gt; struct Array {
+private:
+  T *m_buffer = nullptr;
+  i32 m_size = 0;
+  i32 m_capacity = 0;
+};</code></pre>
+<blockquote>
+<p>Easy to reason with struct data if most types are initialized the same
+way. It's also common to recieve zero initalized memory from custom
+memory allocators.</p>
+<p>The name of a boolean may be flipped to support ZII. For example, instead
+of <code>bool alive = true</code>, use <code>bool dead = false</code>.</p>
+</blockquote>
+</li>
+<li>
+<p>If any user constructor is provided, declare a default constructor.</p>
+<pre><code class="language-c++">struct Shader {
+  Shader() = default;
+  Shader(const char *filename);
+
+private:
+  u32 m_id = 0;
+};</code></pre>
+</li>
+<li>
+<p>Avoid <code>mutable</code>.</p>
+<blockquote>
+<p>Constant values should be constant.</p>
+</blockquote>
+</li>
+<li>
+<p>Avoid <code>friend</code>.</p>
+<blockquote>
+<p>Hidden data should be hidden.</p>
+</blockquote>
+</li>
+<li>
+<p>Prefer signed integers over unsigned.</p>
+<blockquote>
+<p>You can't write a for loop that walks an array backwards with unsigned
+integers:</p>
+</blockquote>
+<pre><code class="language-c++">for (u32 i = some_unsigned_int; i &gt;= 0; i--) {
+  // infinite loop!
+}</code></pre>
+</li>
+<li>
+<p>Zero initialize structs and C style arrays with <code>= {}</code>.</p>
+<pre><code class="language-c++">Image m_white = {};
+Value m_stack[STACK_MAX] = {};</code></pre>
+<blockquote>
+<p>If a struct has a default constructor, <code>= {}</code> can be omited.</p>
+</blockquote>
+</li>
+<li>
+<p>Header files should use <code>#pragma once</code>.</p>
+<blockquote>
+<p>Supported by commonly used compilers. Less typing compared to header
+guards.</p>
+</blockquote>
+</li>
+<li>
+<p>Use C style casts instead of <code>static_cast</code>, <code>dynamic_cast</code>, ...</p>
+<blockquote>
+<p>Most type casts involve casting between integers or from <code>void *</code>. For
+these cases, C++ casts just adds extra keystrokes for little benefit.</p>
+</blockquote>
+</li>
+<li>
+<p>Set an explicit size for enums.</p>
+<blockquote>
+<p>This is so that the enum type can be stored in a struct with a known
+size.</p>
+</blockquote>
+<pre><code class="language-c++">enum EnemyState : i32 {
+  EnemyState_Idle,
+  EnemyState_Alert,
+  EnemyState_Chase,
+  EnemyState_Dead,
+};</code></pre>
+</li>
+<li>
+<p>Prefer passing paremeters by pointer rather than by mutable reference.
+References are okay if its const.</p>
+<blockquote>
+<p>It's easier to see that something can be changed when <code>&amp;</code> is involved</p>
+</blockquote>
+<pre><code class="language-c++">// does do_stuff get the data as a copy? const reference?
+// mutable reference? who knows?
+do_stuff(the_data);
+
+// oh okay, the_data is likely mutated after calling do_stuff
+do_stuff(&amp;the_data);</code></pre>
+</li>
+<li>
+<p>When possible, use <code>auto</code> for defining variables unless the right hand side
+is of a primative type (<code>int</code>, <code>size_t</code>, <code>ptrdiff_t</code>, <code>bool</code>, <code>u8 *</code>, etc)
+and it's not a cast from <code>void *</code> (like the result from <code>malloc</code>).</p>
+<pre><code class="language-c++">struct Vec3 {
+  float x, y, z;
+};
+
+Vec3 v1 = Vec3{3, 4, 5}; // bad
+auto v2 = Vec3{3, 4, 5}; // good
+Vec3 v3 = {3, 4, 5}; // best
+
+Vec3 *ptr1 = (Vec3 *)malloc(sizeof(Vec3)); // bad
+auto ptr2 = (Vec3 *)malloc(sizeof(Vec3)); // good
+
+auto n = strlen("hello"); // bad
+size_t n = strlen("world"); // good
+
+u32 n = (u32)strlen(str); // good
+auto n = (u32)strlen(str); // bad</code></pre>
+</li>
+<li>
+<p>When include order matters, add an empty line in between the includes.</p>
+<blockquote>
+<p>The rationale is that Clang-Format will reorder includes if they're
+grouped together.</p>
+</blockquote>
+<pre><code class="language-c++">#include "glad2.h"
+#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+
+#include &lt;GLFW/glfw3.h&gt; // include glfw last</code></pre>
+</li>
+<li>
+<p>Avoid <code>void *</code>.</p>
+<blockquote>
+<p>There's usually some meaningful type that can be used with the pointer.
+When dealing with a raw memory block, then the type can be <code>u8 *</code>, for
+pointer arithmetic.</p>
+</blockquote>
+</li>
+<li>
+<p>Avoid operator overloading.</p>
+<blockquote>
+<p>Most of the time operator overloading makes it harder to understand code.</p>
+<p><strong>Exception</strong>: Vector and matrix types work very well with operator
+overloading.</p>
+</blockquote>
+</li>
+</ul>  </div>
+</article>
+<script>hljs.highlightAll();</script>
+  </body>
+  </html>
+  <!-- be nice to people -->
+  
