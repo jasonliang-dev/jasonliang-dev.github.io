@@ -177,7 +177,7 @@ const char *some_function(i32 kind) {
   > But copies can be expensive so a move constructor and a move assignment
   > operator should also be added. You better remember to use `std::move` in
   > the right places! Oh wait, you might need functions that deal with data by
-  > value, by reference, and by r-value reference. So you'll also want to
+  > value, by reference, and by r-value reference. So you might also want to
   > introduce perfect forwarding.
   >
   > If you have an object X that depends on object Y, then you'll have to
@@ -316,6 +316,10 @@ const char *some_function(i32 kind) {
   for (u32 i = some_unsigned_int; i >= 0; i--) {
     // infinite loop!
   }
+
+  for (i32 i = some_unsigned_int; i >= 0; i--) {
+    // signed/unsigned mismatch
+  }
   ```
 
 - Zero initialize structs and C style arrays with `= {}`.
@@ -354,7 +358,8 @@ const char *some_function(i32 kind) {
 - Prefer passing paremeters by pointer rather than by mutable reference.
   References are okay if its const.
 
-  > It's easier to see that something can be changed when `&` is involved
+  > It's easier to see that something can be changed when `&` is involved at
+    the call site.
 
   ```c++
   // does do_stuff get the data as a copy? const reference?
@@ -366,8 +371,8 @@ const char *some_function(i32 kind) {
   ```
 
 - When possible, use `auto` for defining variables unless the right hand side
-  is of a primative type (`int`, `size_t`, `ptrdiff_t`, `bool`, `u8 *`, etc)
-  and it's not a cast from `void *` (like the result from `malloc`).
+  is of a primative type (`int`, `size_t`, `ptrdiff_t`, `bool`, etc),
+  excluding pointers.
 
   ```c++
   struct Vec3 {
@@ -409,7 +414,7 @@ const char *some_function(i32 kind) {
 
 - Avoid operator overloading.
 
-  > Most of the time operator overloading makes it harder to understand code.
+  > Operator overloading can make programs harder to understand.
   >
   > **Exception**: Vector and matrix types work very well with operator
   > overloading.

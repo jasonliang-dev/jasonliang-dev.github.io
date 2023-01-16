@@ -23,7 +23,7 @@ $projects = [
   ],
   [
     "title" => "shooty-game",
-    "desc" => "A game where you shoot stuff. Made with C, C++, and Lua, without an engine.",
+    "desc" => "A game where you shoot stuff. Made with C++ and Lua, without an engine.",
     "img" => "static/images/shooty-game.png",
     "github" => "https://github.com/jasonliang-dev/shooty-game",
     "link" => "https://jasonliang.js.org/shooty-game/",
@@ -285,10 +285,7 @@ $projects = [
       });
     }
 
-    return {
-      text,
-      arr,
-    };
+    return { text, arr };
   }
 
   function drawFancyText(fancy, opts) {
@@ -426,7 +423,9 @@ $projects = [
     requestAnimationFrame(draw);
   }
 
-  onscroll();
-  onresize();
-  requestAnimationFrame(draw);
+  requestAnimationFrame(() => {
+    onscroll();
+    onresize();
+    draw();
+  });
 </script>

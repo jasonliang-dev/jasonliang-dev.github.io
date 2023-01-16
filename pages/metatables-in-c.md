@@ -29,10 +29,9 @@ language, as long as it's part of the host program), then you might want to
 implement the same pattern outside of Lua. This article describes how you can
 do that.
 
-## Calling C functions from Lua
+## Running Lua from C
 
-Just to get started off, we'll expose a C function that we can call on the Lua
-side. Let's start off with a host program:
+Let's start off with a host program:
 
 ```c
 #define MAKE_LIB
@@ -48,14 +47,14 @@ int main(void) {
 }
 ```
 
-The `lua` directory, which contains `onelua.c` comes from
-[Lua's GitHub repo](https://github.com/lua/lua).
+The `lua` directory (which contains `onelua.c`), comes from
+[Lua's GitHub repo](https://github.com/lua/lua). We're using Lua v5.4.4.
 
 Compile and run just to check everything's working and the `hello from lua`
 string is being printed. Now create a `main.lua` file to run from:
 
 ```lua
-print 'I am being printed from main.lua'
+print "I am being printed from main.lua"
 ```
 
 Back in the C program, you could use `luaL_dofile`, but I'll continue to use
@@ -76,9 +75,15 @@ So if there's any syntax or runtime errors raised by `main.lua`, we print the
 error and the backtrace. The same can be done with just the C API, but it
 takes a bit more work.
 
-We'll create a C function that only prints the string "hi". All C functions
-have the same signature. It takes a `lua_State *`, and returns an
-integer representing the number of return values:
+Compile and run. Check if "I am being printed from main.lua" is being printed
+to the console before continuing.
+
+## Calling C functions from Lua
+
+Before getting into metatables, we'll create a C function that only prints the
+string "hi" and expose it to our Lua script. All C functions have the same
+signature. It takes a `lua_State *`, and returns an integer representing the
+number of return values:
 
 ```c
 int sys_say_hi(lua_State *L) {
@@ -124,7 +129,8 @@ out "hi".
 
 ## Yeah I'd like to open a bank account
 
-We need an account type to play with:
+Now that the Lua script has a way to run C functions, we can start working on
+a bank account object using metatables. We need an account type to play with:
 
 ```c
 typedef struct {
@@ -208,58 +214,61 @@ int push_mt_account(lua_State *L) {
 }
 ```
 
-This function will push a new metatable on top of the Lua stack.
+The equivalent Lua code looks like this:
+
+```lua
+local reg = debug.getregistry();
+reg.mt_account = {}
+mt_account.new = function() --[[ mt_account_new c function ]] end
+mt_account.__index = mt_account
+```
+
+`push_mt_account` will push a new metatable on top of the Lua stack.
 `luaL_setfuncs` is similar to `luaL_newlib`, it'll attach the `new` method to
 the `mt_account` table. We'll be adding more methods later.
 
 `lua_setfield(L, -2, "__index")` is there to set the `__index` value of our
 metatable to itself. `lua_setfield` pops the value at the top of the stack,
-but we're going to need to keep it so we can access it under the `sys` table
-that we had created eariler. That's why `lua_pushvalue(L, -1)` is there.
+but we're going to need to keep the table on the stack so we can access it
+through the `sys` table that we had created eariler. That's why
+`lua_pushvalue(L, -1)` is there.
 
-The equivalent Lua code looks like this:
+Here's a visual of the Lua stack before calling `luaL_newmetatable`:
 
-```lua
-local mt_account = {}
-mt_account.new = function() { --[[ mt_account_new c function ]] }
-mt_account.__index = mt_account
-return mt_account
-```
+| index | value |
+|-------|-------|
+| 2     | ...   |
+| 1     | ...   |
 
-And here's a visual of the Lua stack before calling `luaL_newmetatable`:
+After calling `luaL_newmetatable` and `luaL_setfuncs`, the new table gets
+pushed to the top:
 
-| index  | value |
-|---|-----|
-| 2 | ... |
-| 1 | ... |
+| index | value      |
+|-------|------------|
+| 3     | mt_account |
+| 2     | ...        |
+| 1     | ...        |
 
-After calling `luaL_newmetatable` and `luaL_setfuncs`:
+Then `lua_pushvalue` pushes the same metatable:
 
-| index  | value |
-|---|-----|
-| 3 | mt_account |
-| 2 | ... |
-| 1 | ... |
+| index | value      |
+|-------|------------|
+| 4     | mt_account |
+| 3     | mt_account |
+| 2     | ...        |
+| 1     | ...        |
 
-Then after `lua_pushvalue`:
+Finally, calling `lua_setfield` sets the `__index` field and pops `mt_account`
+off the stack:
 
-| index  | value |
-|---|-----|
-| 4 | mt_account |
-| 3 | mt_account |
-| 2 | ... |
-| 1 | ... |
+| index | value      |
+|-------|------------|
+| 3     | mt_account |
+| 2     | ...        |
+| 1     | ...        |
 
-Finally, after `lua_setfield`:
-
-| index  | value |
-|---|-----|
-| 3 | mt_account |
-| 2 | ... |
-| 1 | ... |
-
-Our `push_mt_account` function returns one value, the metatable. We'll add it
-to the `sys` table:
+Our `push_mt_account` function returns one value, the metatable at the top of
+the stack. We'll add it to the `sys` table:
 
 ```c
 int open_sys(lua_State *L) {
@@ -356,7 +365,7 @@ int mt_account_delete(lua_State *L) {
 }
 ```
 
-We're done! Test it out in Lua to check that everything works
+Test it out in Lua to check that everything works:
 
 ```lua
 local acc = sys.Account.new("Jason", 1000)
@@ -369,6 +378,29 @@ print(string.format("name: %s, balance: %d", acc:get_name(), acc:get_balance()))
 name: Jason, balance: 800
 name: Jason, balance: 900
 ]]
+```
+
+We can use Valgrind to check for memory leaks:
+
+```
+$ valgrind ./a.out
+
+==52== Memcheck, a memory error detector
+==52== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==52== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
+==52== Command: ./a.out
+==52==
+name: Jason, balance: 800
+name: Jason, balance: 900
+==52==
+==52== HEAP SUMMARY:
+==52==     in use at exit: 0 bytes in 0 blocks
+==52==   total heap usage: 407 allocs, 407 frees, 35,953 bytes allocated
+==52==
+==52== All heap blocks were freed -- no leaks are possible
+==52==
+==52== For lists of detected and suppressed errors, rerun with: -s
+==52== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
 ```
 
 ## Full source code
@@ -438,7 +470,7 @@ int register_mt_account(lua_State *L) {
     {"withdraw", mt_account_withdraw},
     {"get_name", mt_account_get_name},
     {"get_balance", mt_account_get_balance},
-    {0, 0},
+    {NULL, NULL},
   };
 
   luaL_newmetatable(L, "mt_account");
@@ -457,7 +489,7 @@ int sys_say_hi(lua_State *L) {
 int open_sys(lua_State *L) {
   luaL_Reg reg[] = {
     {"say_hi", sys_say_hi},
-    {0, 0},
+    {NULL, NULL},
   };
 
   luaL_newlib(L, reg);
