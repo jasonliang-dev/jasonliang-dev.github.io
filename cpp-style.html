@@ -243,7 +243,7 @@ with memory.</p>
 <p>But copies can be expensive so a move constructor and a move assignment
 operator should also be added. You better remember to use <code>std::move</code> in
 the right places! Oh wait, you might need functions that deal with data by
-value, by reference, and by r-value reference. So you'll also want to
+value, by reference, and by r-value reference. So you might also want to
 introduce perfect forwarding.</p>
 <p>If you have an object X that depends on object Y, then you'll have to
 make sure that Y stays alive before X is destroyed. And what if you have a
@@ -382,6 +382,10 @@ integers:</p>
 </blockquote>
 <pre><code class="language-c++">for (u32 i = some_unsigned_int; i &gt;= 0; i--) {
   // infinite loop!
+}
+
+for (i32 i = some_unsigned_int; i &gt;= 0; i--) {
+  // signed/unsigned mismatch
 }</code></pre>
 </li>
 <li>
@@ -423,7 +427,8 @@ size.</p>
 <p>Prefer passing paremeters by pointer rather than by mutable reference.
 References are okay if its const.</p>
 <blockquote>
-<p>It's easier to see that something can be changed when <code>&amp;</code> is involved</p>
+<p>It's easier to see that something can be changed when <code>&amp;</code> is involved at
+the call site.</p>
 </blockquote>
 <pre><code class="language-c++">// does do_stuff get the data as a copy? const reference?
 // mutable reference? who knows?
@@ -434,8 +439,8 @@ do_stuff(&amp;the_data);</code></pre>
 </li>
 <li>
 <p>When possible, use <code>auto</code> for defining variables unless the right hand side
-is of a primative type (<code>int</code>, <code>size_t</code>, <code>ptrdiff_t</code>, <code>bool</code>, <code>u8 *</code>, etc)
-and it's not a cast from <code>void *</code> (like the result from <code>malloc</code>).</p>
+is of a primative type (<code>int</code>, <code>size_t</code>, <code>ptrdiff_t</code>, <code>bool</code>, etc),
+excluding pointers.</p>
 <pre><code class="language-c++">struct Vec3 {
   float x, y, z;
 };
@@ -476,7 +481,7 @@ pointer arithmetic.</p>
 <li>
 <p>Avoid operator overloading.</p>
 <blockquote>
-<p>Most of the time operator overloading makes it harder to understand code.</p>
+<p>Operator overloading can make programs harder to understand.</p>
 <p><strong>Exception</strong>: Vector and matrix types work very well with operator
 overloading.</p>
 </blockquote>

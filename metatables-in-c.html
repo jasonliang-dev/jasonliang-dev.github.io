@@ -99,9 +99,8 @@ print(acc.balance) -- prints 800</code></pre>
 language, as long as it's part of the host program), then you might want to
 implement the same pattern outside of Lua. This article describes how you can
 do that.</p>
-<h2>Calling C functions from Lua</h2>
-<p>Just to get started off, we'll expose a C function that we can call on the Lua
-side. Let's start off with a host program:</p>
+<h2>Running Lua from C</h2>
+<p>Let's start off with a host program:</p>
 <pre><code class="language-c">#define MAKE_LIB
 #include "lua/onelua.c"
 
@@ -113,11 +112,11 @@ int main(void) {
 
   lua_close(L);
 }</code></pre>
-<p>The <code>lua</code> directory, which contains <code>onelua.c</code> comes from
-<a href="https://github.com/lua/lua">Lua's GitHub repo</a>.</p>
+<p>The <code>lua</code> directory (which contains <code>onelua.c</code>), comes from
+<a href="https://github.com/lua/lua">Lua's GitHub repo</a>. We're using Lua v5.4.4.</p>
 <p>Compile and run just to check everything's working and the <code>hello from lua</code>
 string is being printed. Now create a <code>main.lua</code> file to run from:</p>
-<pre><code class="language-lua">print 'I am being printed from main.lua'</code></pre>
+<pre><code class="language-lua">print "I am being printed from main.lua"</code></pre>
 <p>Back in the C program, you could use <code>luaL_dofile</code>, but I'll continue to use
 <code>luaL_dostring</code> because it's easy to inspect errors with the follow snippet:</p>
 <pre><code class="language-c">const char *run = "xpcall(function ()\n"
@@ -131,9 +130,13 @@ luaL_dostring(L, run);</code></pre>
 <p>So if there's any syntax or runtime errors raised by <code>main.lua</code>, we print the
 error and the backtrace. The same can be done with just the C API, but it
 takes a bit more work.</p>
-<p>We'll create a C function that only prints the string "hi". All C functions
-have the same signature. It takes a <code>lua_State *</code>, and returns an
-integer representing the number of return values:</p>
+<p>Compile and run. Check if "I am being printed from main.lua" is being printed
+to the console before continuing.</p>
+<h2>Calling C functions from Lua</h2>
+<p>Before getting into metatables, we'll create a C function that only prints the
+string "hi" and expose it to our Lua script. All C functions have the same
+signature. It takes a <code>lua_State *</code>, and returns an integer representing the
+number of return values:</p>
 <pre><code class="language-c">int sys_say_hi(lua_State *L) {
   printf("hi\n");
   return 0;
@@ -164,7 +167,8 @@ int main(void) {
 <p>Now with all of this code in place, check if the program actually prints
 out "hi".</p>
 <h2>Yeah I'd like to open a bank account</h2>
-<p>We need an account type to play with:</p>
+<p>Now that the Lua script has a way to run C functions, we can start working on
+a bank account object using metatables. We need an account type to play with:</p>
 <pre><code class="language-c">typedef struct {
   char *name;
   int balance;
@@ -219,19 +223,20 @@ local acc = reg.mt_account.new("Jason", 1000)</code></pre>
 
   return 1;
 }</code></pre>
-<p>This function will push a new metatable on top of the Lua stack.
+<p>The equivalent Lua code looks like this:</p>
+<pre><code class="language-lua">local reg = debug.getregistry();
+reg.mt_account = {}
+mt_account.new = function() --[[ mt_account_new c function ]] end
+mt_account.__index = mt_account</code></pre>
+<p><code>push_mt_account</code> will push a new metatable on top of the Lua stack.
 <code>luaL_setfuncs</code> is similar to <code>luaL_newlib</code>, it'll attach the <code>new</code> method to
 the <code>mt_account</code> table. We'll be adding more methods later.</p>
 <p><code>lua_setfield(L, -2, "__index")</code> is there to set the <code>__index</code> value of our
 metatable to itself. <code>lua_setfield</code> pops the value at the top of the stack,
-but we're going to need to keep it so we can access it under the <code>sys</code> table
-that we had created eariler. That's why <code>lua_pushvalue(L, -1)</code> is there.</p>
-<p>The equivalent Lua code looks like this:</p>
-<pre><code class="language-lua">local mt_account = {}
-mt_account.new = function() { --[[ mt_account_new c function ]] }
-mt_account.__index = mt_account
-return mt_account</code></pre>
-<p>And here's a visual of the Lua stack before calling <code>luaL_newmetatable</code>:</p>
+but we're going to need to keep the table on the stack so we can access it
+through the <code>sys</code> table that we had created eariler. That's why
+<code>lua_pushvalue(L, -1)</code> is there.</p>
+<p>Here's a visual of the Lua stack before calling <code>luaL_newmetatable</code>:</p>
 <table>
 <thead>
 <tr>
@@ -250,7 +255,8 @@ return mt_account</code></pre>
 </tr>
 </tbody>
 </table>
-<p>After calling <code>luaL_newmetatable</code> and <code>luaL_setfuncs</code>:</p>
+<p>After calling <code>luaL_newmetatable</code> and <code>luaL_setfuncs</code>, the new table gets
+pushed to the top:</p>
 <table>
 <thead>
 <tr>
@@ -273,7 +279,7 @@ return mt_account</code></pre>
 </tr>
 </tbody>
 </table>
-<p>Then after <code>lua_pushvalue</code>:</p>
+<p>Then <code>lua_pushvalue</code> pushes the same metatable:</p>
 <table>
 <thead>
 <tr>
@@ -300,7 +306,8 @@ return mt_account</code></pre>
 </tr>
 </tbody>
 </table>
-<p>Finally, after <code>lua_setfield</code>:</p>
+<p>Finally, calling <code>lua_setfield</code> sets the <code>__index</code> field and pops <code>mt_account</code>
+off the stack:</p>
 <table>
 <thead>
 <tr>
@@ -323,8 +330,8 @@ return mt_account</code></pre>
 </tr>
 </tbody>
 </table>
-<p>Our <code>push_mt_account</code> function returns one value, the metatable. We'll add it
-to the <code>sys</code> table:</p>
+<p>Our <code>push_mt_account</code> function returns one value, the metatable at the top of
+the stack. We'll add it to the <code>sys</code> table:</p>
 <pre><code class="language-c">int open_sys(lua_State *L) {
   // ...
 
@@ -385,7 +392,7 @@ name:</p>
   Account *self = luaL_checkudata(L, 1, "mt_account");
   free(self-&gt;name);
 }</code></pre>
-<p>We're done! Test it out in Lua to check that everything works</p>
+<p>Test it out in Lua to check that everything works:</p>
 <pre><code class="language-lua">local acc = sys.Account.new("Jason", 1000)
 acc:withdraw(200)
 print(string.format("name: %s, balance: %d", acc:get_name(), acc:get_balance()))
@@ -396,6 +403,25 @@ print(string.format("name: %s, balance: %d", acc:get_name(), acc:get_balance()))
 name: Jason, balance: 800
 name: Jason, balance: 900
 ]]</code></pre>
+<p>We can use Valgrind to check for memory leaks:</p>
+<pre><code>$ valgrind ./a.out
+
+==52== Memcheck, a memory error detector
+==52== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==52== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
+==52== Command: ./a.out
+==52==
+name: Jason, balance: 800
+name: Jason, balance: 900
+==52==
+==52== HEAP SUMMARY:
+==52==     in use at exit: 0 bytes in 0 blocks
+==52==   total heap usage: 407 allocs, 407 frees, 35,953 bytes allocated
+==52==
+==52== All heap blocks were freed -- no leaks are possible
+==52==
+==52== For lists of detected and suppressed errors, rerun with: -s
+==52== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)</code></pre>
 <h2>Full source code</h2>
 <pre><code class="language-c">#define MAKE_LIB
 #include "lua/onelua.c"
@@ -461,7 +487,7 @@ int register_mt_account(lua_State *L) {
     {"withdraw", mt_account_withdraw},
     {"get_name", mt_account_get_name},
     {"get_balance", mt_account_get_balance},
-    {0, 0},
+    {NULL, NULL},
   };
 
   luaL_newmetatable(L, "mt_account");
@@ -480,7 +506,7 @@ int sys_say_hi(lua_State *L) {
 int open_sys(lua_State *L) {
   luaL_Reg reg[] = {
     {"say_hi", sys_say_hi},
-    {0, 0},
+    {NULL, NULL},
   };
 
   luaL_newlib(L, reg);

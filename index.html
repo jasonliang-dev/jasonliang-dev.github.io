@@ -587,10 +587,7 @@
       });
     }
 
-    return {
-      text,
-      arr,
-    };
+    return { text, arr };
   }
 
   function drawFancyText(fancy, opts) {
@@ -728,9 +725,11 @@
     requestAnimationFrame(draw);
   }
 
-  onscroll();
-  onresize();
-  requestAnimationFrame(draw);
+  requestAnimationFrame(() => {
+    onscroll();
+    onresize();
+    draw();
+  });
 </script>
   </body>
   </html>
