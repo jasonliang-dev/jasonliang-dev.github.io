@@ -66,10 +66,13 @@
   </div>
 </header>
 <main>
-  <div class="mw8 center mb5">
-    <h2 class="mb4 ph3">Posts</h2>
-    <ul class="pl0 list">
-              <li>
+  <section class="mw8 center mb5">
+    <h2 class="mb3 ph3">Posts</h2>
+    <ul id="post-list" class="pl0 list">
+              <li
+          class="slide-up pause-animation"
+          style="animation-duration: 300ms"
+        >
           <a
             href="cpp-style.html"
             class="
@@ -84,7 +87,10 @@
               C++ Coding Style            </span>
           </a>
         </li>
-              <li>
+              <li
+          class="slide-up pause-animation"
+          style="animation-duration: 424ms"
+        >
           <a
             href="metatables-in-c.html"
             class="
@@ -99,7 +105,10 @@
               Using Lua Metatables With The C API            </span>
           </a>
         </li>
-              <li>
+              <li
+          class="slide-up pause-animation"
+          style="animation-duration: 520ms"
+        >
           <a
             href="coroutines.html"
             class="
@@ -114,7 +123,10 @@
               Lua Coroutines By Example            </span>
           </a>
         </li>
-              <li>
+              <li
+          class="slide-up pause-animation"
+          style="animation-duration: 600ms"
+        >
           <a
             href="batch-renderer.html"
             class="
@@ -129,7 +141,10 @@
               A Tiny OpenGL 2D Batch Renderer            </span>
           </a>
         </li>
-              <li>
+              <li
+          class="slide-up pause-animation"
+          style="animation-duration: 671ms"
+        >
           <a
             href="unit-testing.html"
             class="
@@ -145,20 +160,73 @@
           </a>
         </li>
           </ul>
-  </div>
-  <div class="mw8 center mb5">
-    <h2 class="mb4 ph3">Projects</h2>
-    <div class="flex flex-wrap items-stretch">
+  </section>
+  <section class="mw8 center mb5">
+    <h2 class="mb3 ph3">Projects</h2>
+    <div id="project-list" class="flex flex-wrap items-stretch">
               <div class="pa3 w-100 w-50-m w-third-l">
           <div
-            class="project-card shadow br3 overflow-hidden h-100 flex flex-column"
+            class="project-card shadow br3 overflow-hidden h-100 flex flex-column slide-up pause-animation"
+            style="
+              --color: #86198f;
+              --dark-color: #701a75;
+              animation-duration: 500ms;
+            "
+          >
+            <a class="link db h-100" href="https://github.com/jasonliang-dev/shoppy-store">
+              <img
+                src="static/images/storefront.png"
+                alt="Homepage of an online store"
+                loading="lazy"
+                decoding="async"
+              >
+              <div class="ph3 flex flex-column ">
+                <div class="flex-auto">
+                  <h3 class="near-white mt0 mb2 f5 fw5">shoppy-store</h3>
+                  <p class="mv0 white-50 lh-copy">
+                    Custom storefront using Next.js and Shopify.                  </p>
+                </div>
+              </div>
+            </a>
+                          <div class="flex justify-between fw5 f6">
+                <a
+                  class="white-80 pv3 link dim flex justify-center items-center w-100"
+                  href="https://github.com/jasonliang-dev/shoppy-store"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 20px; height: 20px" class="white-60">
+                    <path fill-rule="evenodd" d="M6.28 5.22a.75.75 0 010 1.06L2.56 10l3.72 3.72a.75.75 0 01-1.06 1.06L.97 10.53a.75.75 0 010-1.06l4.25-4.25a.75.75 0 011.06 0zm7.44 0a.75.75 0 011.06 0l4.25 4.25a.75.75 0 010 1.06l-4.25 4.25a.75.75 0 01-1.06-1.06L17.44 10l-3.72-3.72a.75.75 0 010-1.06zM11.377 2.011a.75.75 0 01.612.867l-2.5 14.5a.75.75 0 01-1.478-.255l2.5-14.5a.75.75 0 01.866-.612z" clip-rule="evenodd" />
+                  </svg>
+                  <span class="ml2 mr2">Code</span>
+                </a>
+                  <a
+                    class="white-80 link dim flex justify-center items-center w-100"
+                    href="https://shoppy-store-chi.vercel.app/"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 20px; height: 20px" class="white-60">
+                      <path fill-rule="evenodd" d="M4.25 5.5a.75.75 0 00-.75.75v8.5c0 .414.336.75.75.75h8.5a.75.75 0 00.75-.75v-4a.75.75 0 011.5 0v4A2.25 2.25 0 0112.75 17h-8.5A2.25 2.25 0 012 14.75v-8.5A2.25 2.25 0 014.25 4h5a.75.75 0 010 1.5h-5z" clip-rule="evenodd" />
+                      <path fill-rule="evenodd" d="M6.194 12.753a.75.75 0 001.06.053L16.5 4.44v2.81a.75.75 0 001.5 0v-4.5a.75.75 0 00-.75-.75h-4.5a.75.75 0 000 1.5h2.553l-9.056 8.194a.75.75 0 00-.053 1.06z" clip-rule="evenodd" />
+                    </svg>
+                    <span class="ml2 mr2">Visit</span>
+                  </a>
+              </div>
+                      </div>
+        </div>
+              <div class="pa3 w-100 w-50-m w-third-l">
+          <div
+            class="project-card shadow br3 overflow-hidden h-100 flex flex-column slide-up pause-animation"
             style="
               --color: #334155;
               --dark-color: #1e293b;
+              animation-duration: 592ms;
             "
           >
             <a class="link db h-100" href="https://github.com/jasonliang-dev/file-sink">
-              <img class="w-100" src="static/images/sftp.png" alt="">
+              <img
+                src="static/images/sftp.png"
+                alt="A window displaying list of files"
+                loading="lazy"
+                decoding="async"
+              >
               <div class="ph3 flex flex-column pb3">
                 <div class="flex-auto">
                   <h3 class="near-white mt0 mb2 f5 fw5">file-sink</h3>
@@ -171,14 +239,20 @@
         </div>
               <div class="pa3 w-100 w-50-m w-third-l">
           <div
-            class="project-card shadow br3 overflow-hidden h-100 flex flex-column"
+            class="project-card shadow br3 overflow-hidden h-100 flex flex-column slide-up pause-animation"
             style="
               --color: #1e40af;
               --dark-color: #1e3a8a;
+              animation-duration: 671ms;
             "
           >
             <a class="link db h-100" href="https://github.com/jasonliang-dev/odin-lua">
-              <img class="w-100" src="static/images/odin-lua.png" alt="">
+              <img
+                src="static/images/odin-lua.png"
+                alt="odin-lua&#039;s source code"
+                loading="lazy"
+                decoding="async"
+              >
               <div class="ph3 flex flex-column pb3">
                 <div class="flex-auto">
                   <h3 class="near-white mt0 mb2 f5 fw5">odin-lua</h3>
@@ -191,14 +265,20 @@
         </div>
               <div class="pa3 w-100 w-50-m w-third-l">
           <div
-            class="project-card shadow br3 overflow-hidden h-100 flex flex-column"
+            class="project-card shadow br3 overflow-hidden h-100 flex flex-column slide-up pause-animation"
             style="
               --color: #3f6212;
               --dark-color: #365314;
+              animation-duration: 742ms;
             "
           >
             <a class="link db h-100" href="https://github.com/jasonliang-dev/shooty-game">
-              <img class="w-100" src="static/images/shooty-game.png" alt="">
+              <img
+                src="static/images/shooty-game.png"
+                alt="Screenshot of shooty-game"
+                loading="lazy"
+                decoding="async"
+              >
               <div class="ph3 flex flex-column ">
                 <div class="flex-auto">
                   <h3 class="near-white mt0 mb2 f5 fw5">shooty-game</h3>
@@ -232,14 +312,20 @@
         </div>
               <div class="pa3 w-100 w-50-m w-third-l">
           <div
-            class="project-card shadow br3 overflow-hidden h-100 flex flex-column"
+            class="project-card shadow br3 overflow-hidden h-100 flex flex-column slide-up pause-animation"
             style="
               --color: #6b21a8;
               --dark-color: #581c87;
+              animation-duration: 806ms;
             "
           >
             <a class="link db h-100" href="https://github.com/jasonliang-dev/heroicons-for-elm">
-              <img class="w-100" src="static/images/elm-heroicons.png" alt="">
+              <img
+                src="static/images/elm-heroicons.png"
+                alt="Gallery of icons in a grid"
+                loading="lazy"
+                decoding="async"
+              >
               <div class="ph3 flex flex-column ">
                 <div class="flex-auto">
                   <h3 class="near-white mt0 mb2 f5 fw5">Heroicons for Elm</h3>
@@ -273,14 +359,20 @@
         </div>
               <div class="pa3 w-100 w-50-m w-third-l">
           <div
-            class="project-card shadow br3 overflow-hidden h-100 flex flex-column"
+            class="project-card shadow br3 overflow-hidden h-100 flex flex-column slide-up pause-animation"
             style="
               --color: #166534;
               --dark-color: #14532d;
+              animation-duration: 866ms;
             "
           >
             <a class="link db h-100" href="https://github.com/jasonliang-dev/yet-another-chat-app">
-              <img class="w-100" src="static/images/chat-app.png" alt="">
+              <img
+                src="static/images/chat-app.png"
+                alt="A chat interface"
+                loading="lazy"
+                decoding="async"
+              >
               <div class="ph3 flex flex-column pb3">
                 <div class="flex-auto">
                   <h3 class="near-white mt0 mb2 f5 fw5">Yet Another Chat App</h3>
@@ -293,14 +385,20 @@
         </div>
               <div class="pa3 w-100 w-50-m w-third-l">
           <div
-            class="project-card shadow br3 overflow-hidden h-100 flex flex-column"
+            class="project-card shadow br3 overflow-hidden h-100 flex flex-column slide-up pause-animation"
             style="
               --color: #854d0e;
               --dark-color: #713f12;
+              animation-duration: 922ms;
             "
           >
             <a class="link db h-100" href="https://github.com/jasonliang-dev/temtem-type-calculator">
-              <img class="w-100" src="static/images/temtem.png" alt="">
+              <img
+                src="static/images/temtem.png"
+                alt="Temtem creatures in a list"
+                loading="lazy"
+                decoding="async"
+              >
               <div class="ph3 flex flex-column ">
                 <div class="flex-auto">
                   <h3 class="near-white mt0 mb2 f5 fw5">Temtem Type Calculator</h3>
@@ -334,14 +432,20 @@
         </div>
               <div class="pa3 w-100 w-50-m w-third-l">
           <div
-            class="project-card shadow br3 overflow-hidden h-100 flex flex-column"
+            class="project-card shadow br3 overflow-hidden h-100 flex flex-column slide-up pause-animation"
             style="
               --color: #115e59;
               --dark-color: #134e4a;
+              animation-duration: 975ms;
             "
           >
             <a class="link db h-100" href="https://github.com/jasonliang-dev/wildermaze">
-              <img class="w-100" src="static/images/maze.png" alt="">
+              <img
+                src="static/images/maze.png"
+                alt="Screenshot of Wildermaze"
+                loading="lazy"
+                decoding="async"
+              >
               <div class="ph3 flex flex-column ">
                 <div class="flex-auto">
                   <h3 class="near-white mt0 mb2 f5 fw5">Wildermaze</h3>
@@ -375,14 +479,20 @@
         </div>
               <div class="pa3 w-100 w-50-m w-third-l">
           <div
-            class="project-card shadow br3 overflow-hidden h-100 flex flex-column"
+            class="project-card shadow br3 overflow-hidden h-100 flex flex-column slide-up pause-animation"
             style="
               --color: #86198f;
               --dark-color: #701a75;
+              animation-duration: 1025ms;
             "
           >
             <a class="link db h-100" href="https://github.com/jasonliang-dev/space-shooter">
-              <img class="w-100" src="static/images/spaceshooter.png" alt="">
+              <img
+                src="static/images/spaceshooter.png"
+                alt="Screenshot of Space Shooter Game"
+                loading="lazy"
+                decoding="async"
+              >
               <div class="ph3 flex flex-column pb3">
                 <div class="flex-auto">
                   <h3 class="near-white mt0 mb2 f5 fw5">Space Shooter Game</h3>
@@ -395,14 +505,20 @@
         </div>
               <div class="pa3 w-100 w-50-m w-third-l">
           <div
-            class="project-card shadow br3 overflow-hidden h-100 flex flex-column"
+            class="project-card shadow br3 overflow-hidden h-100 flex flex-column slide-up pause-animation"
             style="
               --color: #334155;
               --dark-color: #1e293b;
+              animation-duration: 1072ms;
             "
           >
             <a class="link db h-100" href="https://github.com/jasonliang-dev/lite-vim">
-              <img class="w-100" src="static/images/lite-vim.png" alt="">
+              <img
+                src="static/images/lite-vim.png"
+                alt="lite-vim&#039;s source code"
+                loading="lazy"
+                decoding="async"
+              >
               <div class="ph3 flex flex-column pb3">
                 <div class="flex-auto">
                   <h3 class="near-white mt0 mb2 f5 fw5">lite-vim</h3>
@@ -415,14 +531,20 @@
         </div>
               <div class="pa3 w-100 w-50-m w-third-l">
           <div
-            class="project-card shadow br3 overflow-hidden h-100 flex flex-column"
+            class="project-card shadow br3 overflow-hidden h-100 flex flex-column slide-up pause-animation"
             style="
               --color: #9a3412;
               --dark-color: #7c2d12;
+              animation-duration: 1118ms;
             "
           >
             <a class="link db h-100" href="https://github.com/jasonliang-dev/entity-component-system">
-              <img class="w-100" src="static/images/ecs.png" alt="">
+              <img
+                src="static/images/ecs.png"
+                alt="A 2d game screenshot with many projectiles"
+                loading="lazy"
+                decoding="async"
+              >
               <div class="ph3 flex flex-column pb3">
                 <div class="flex-auto">
                   <h3 class="near-white mt0 mb2 f5 fw5">Entity Component System</h3>
@@ -435,14 +557,20 @@
         </div>
               <div class="pa3 w-100 w-50-m w-third-l">
           <div
-            class="project-card shadow br3 overflow-hidden h-100 flex flex-column"
+            class="project-card shadow br3 overflow-hidden h-100 flex flex-column slide-up pause-animation"
             style="
               --color: #3730a3;
               --dark-color: #312e81;
+              animation-duration: 1162ms;
             "
           >
             <a class="link db h-100" href="https://github.com/jasonliang-dev/costello">
-              <img class="w-100" src="static/images/discord-stickers.png" alt="">
+              <img
+                src="static/images/discord-stickers.png"
+                alt="Several images/stickers shown in a grid"
+                loading="lazy"
+                decoding="async"
+              >
               <div class="ph3 flex flex-column pb3">
                 <div class="flex-auto">
                   <h3 class="near-white mt0 mb2 f5 fw5">Costello</h3>
@@ -455,14 +583,20 @@
         </div>
               <div class="pa3 w-100 w-50-m w-third-l">
           <div
-            class="project-card shadow br3 overflow-hidden h-100 flex flex-column"
+            class="project-card shadow br3 overflow-hidden h-100 flex flex-column slide-up pause-animation"
             style="
               --color: #6b21a8;
               --dark-color: #581c87;
+              animation-duration: 1204ms;
             "
           >
             <a class="link db h-100" href="https://github.com/jasonliang-dev/dream-eater">
-              <img class="w-100" src="static/images/php.png" alt="">
+              <img
+                src="static/images/php.png"
+                alt="Some PHP source code"
+                loading="lazy"
+                decoding="async"
+              >
               <div class="ph3 flex flex-column pb3">
                 <div class="flex-auto">
                   <h3 class="near-white mt0 mb2 f5 fw5">dream-eater</h3>
@@ -475,14 +609,20 @@
         </div>
               <div class="pa3 w-100 w-50-m w-third-l">
           <div
-            class="project-card shadow br3 overflow-hidden h-100 flex flex-column"
+            class="project-card shadow br3 overflow-hidden h-100 flex flex-column slide-up pause-animation"
             style="
               --color: #9d174d;
               --dark-color: #831843;
+              animation-duration: 1245ms;
             "
           >
             <a class="link db h-100" href="https://github.com/jasonliang-dev/lulu">
-              <img class="w-100" src="static/images/lulu.png" alt="">
+              <img
+                src="static/images/lulu.png"
+                alt="Code showcasing the lulu programming language"
+                loading="lazy"
+                decoding="async"
+              >
               <div class="ph3 flex flex-column pb3">
                 <div class="flex-auto">
                   <h3 class="near-white mt0 mb2 f5 fw5">lulu</h3>
@@ -495,14 +635,20 @@
         </div>
               <div class="pa3 w-100 w-50-m w-third-l">
           <div
-            class="project-card shadow br3 overflow-hidden h-100 flex flex-column"
+            class="project-card shadow br3 overflow-hidden h-100 flex flex-column slide-up pause-animation"
             style="
               --color: #334155;
               --dark-color: #1e293b;
+              animation-duration: 1285ms;
             "
           >
             <a class="link db h-100" href="https://github.com/jasonliang-dev/game-of-life">
-              <img class="w-100" src="static/images/game-of-life.png" alt="">
+              <img
+                src="static/images/game-of-life.png"
+                alt="A grid of black/white squares"
+                loading="lazy"
+                decoding="async"
+              >
               <div class="ph3 flex flex-column pb3">
                 <div class="flex-auto">
                   <h3 class="near-white mt0 mb2 f5 fw5">Game of Life</h3>
@@ -514,7 +660,7 @@
                       </div>
         </div>
           </div>
-  </div>
+  </section>
 </main>
 <script type="module">
   const canvas = document.getElementById("canvas");
@@ -522,6 +668,7 @@
 
   const state = {
     theme: document.documentElement.classList.contains("dark-mode") ? "dark" : "light",
+    motionReduced: window.matchMedia("(prefers-reduced-motion)").matches,
     firstFrame: false,
     reservedWidth: 0,
     reservedHeight: 0,
@@ -529,7 +676,7 @@
     hue: 90,
     jason: makeFancyText("Jason", 2, 5),
     liang: makeFancyText("Liang", 3, 6),
-    about: makeFancyText("I make games and web stuff", 7, 10),
+    about: makeFancyText("I make interactive programs", 7, 10),
     points: [],
   }
 
@@ -543,6 +690,7 @@
   }
   document.addEventListener("scroll", onscroll);
 
+  let resizeTimeout = 0;
   function onresize() {
     canvas.width = canvas.parentNode.clientWidth;
     canvas.height = canvas.parentNode.clientHeight;
@@ -551,6 +699,11 @@
       state.reservedWidth = Math.max(state.reservedWidth, canvas.width);
       state.reservedHeight = Math.max(state.reservedHeight, canvas.height);
       makePoints();
+    } else if (state.motionReduced) {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        draw();
+      }, 150);
     }
   }
   window.addEventListener("resize", onresize);
@@ -573,6 +726,10 @@
         }
       }
       state.points = arr;
+
+      if (state.motionReduced) {
+        draw();
+      }
     }, 150);
   }
 
@@ -610,8 +767,13 @@
         item.y = y;
       }
 
-      item.x += (x - item.x) * 0.25;
-      item.y += (y - item.y) * 0.25;
+      if (state.motionReduced) {
+        item.x = x;
+        item.y = y;
+      } else {
+        item.x += (x - item.x) * 0.25;
+        item.y += (y - item.y) * 0.25;
+      }
 
       opts.draw(item.char, item.x, item.y);
 
@@ -620,6 +782,11 @@
   }
 
   function draw() {
+    console.log("draw");
+    if (state.motionReduced) {
+      state.scrollPos = 0;
+    }
+
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     if (state.hue >= 360) {
@@ -722,14 +889,33 @@
 
     state.firstFrame = true;
 
-    requestAnimationFrame(draw);
+    if (!state.motionReduced) {
+      requestAnimationFrame(draw);
+    }
   }
 
   requestAnimationFrame(() => {
     onscroll();
     onresize();
-    draw();
+    document.fonts.ready.then(() => {
+      draw();
+    });
   });
+
+  const observer = new IntersectionObserver(entries => {
+    for (const entry of entries) {
+      if (entry.isIntersecting) {
+        for (const item of entry.target.querySelectorAll(".slide-up")) {
+          item.classList.remove("pause-animation");
+        }
+      }
+    }
+  }, { rootMargin: "0px 0px -200px 0px" });
+
+  observer.observe(document.getElementById("post-list"));
+  observer.observe(document.getElementById("project-list"));
+
+
 </script>
   </body>
   </html>

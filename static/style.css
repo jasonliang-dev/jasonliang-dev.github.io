@@ -6,6 +6,42 @@ body {
   box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
 }
 
+/* animations when scrolling */
+
+@keyframes slide-up {
+  from {
+    transform: translate3d(0, 4rem, 0);
+    opacity: 0;
+  }
+
+  to {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+  }
+}
+
+.slide-up {
+  animation-name: slide-up;
+}
+
+@media (prefers-reduced-motion) {
+  .slide-up {
+    animation: none;
+  }
+}
+
+.pause-animation {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion) {
+  .link {
+    transition: unset !important;
+  }
+}
+
+/* homepage project card */
+
 .project-card {
   background-color: var(--color);
 }
@@ -15,11 +51,13 @@ body {
 }
 
 .project-card img {
+  width: 100%;
   opacity: 0.8;
-  transition: opacity 150ms, clip-path 300ms;
+  transition: opacity 150ms, clip-path 300ms, transform 150ms;
   object-fit: cover;
   aspect-ratio: 16 / 9;
-  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 88%);
+  clip-path: polygon(0 0, 100% 0, 100% 93%, 0 87%);
+  transform: scale(1);
 }
 
 .dark-mode .project-card img {
@@ -29,14 +67,31 @@ body {
 .project-card:hover img,
 .project-card a:focus img {
   opacity: 1;
-  clip-path: polygon(0 0, 100% 0, 100% 92%, 0 85%);
+  clip-path: polygon(0 0, 100% 0, 100% 94%, 0 90%);
+  transform: scale(1.0125);
 }
+
+@media (prefers-reduced-motion) {
+  .project-card img {
+    transition: unset;
+  }
+
+  .project-card:hover img,
+  .project-card a:focus img {
+    clip-path: polygon(0 0, 100% 0, 100% 93%, 0 87%);
+    transform: scale(1);
+  }
+}
+
+/* highlightjs */
 
 .hljs-meta,
 .hljs-meta .hljs-keyword,
 .hljs-meta .hljs-string {
   color: #d8d8d8;
 }
+
+/* article style */
 
 .prose {
   color: #333333;
