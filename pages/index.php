@@ -1,136 +1,5 @@
 <?php
-
 use function htmlspecialchars as h;
-
-$projects = [
-  [
-    "title" => "file-sink",
-    "desc" => "Tiny SFTP client with automatic file synchronization.",
-    "img" => "static/images/sftp.png",
-    "github" => "https://github.com/jasonliang-dev/file-sink",
-    "link" => false,
-    "color" => "#334155",
-    "dark_color" => "#1e293b",
-  ],
-  [
-    "title" => "odin-lua",
-    "desc" => "Lua 5.4.4 and LuaJIT support for the Odin programming language.",
-    "img" => "static/images/odin-lua.png",
-    "github" => "https://github.com/jasonliang-dev/odin-lua",
-    "link" => false,
-    "color" => "#1e40af",
-    "dark_color" => "#1e3a8a",
-  ],
-  [
-    "title" => "shooty-game",
-    "desc" => "A game where you shoot stuff. Made with C++ and Lua, without an engine.",
-    "img" => "static/images/shooty-game.png",
-    "github" => "https://github.com/jasonliang-dev/shooty-game",
-    "link" => "https://jasonliang.js.org/shooty-game/",
-    "color" => "#3f6212",
-    "dark_color" => "#365314",
-  ],
-  [
-    "title" => "Heroicons for Elm",
-    "desc" => "Web app that provides SVG icons for the Elm programming language.",
-    "img" => "static/images/elm-heroicons.png",
-    "github" => "https://github.com/jasonliang-dev/heroicons-for-elm",
-    "link" => "https://jasonliang.js.org/heroicons-for-elm/",
-    "color" => "#6b21a8",
-    "dark_color" => "#581c87",
-  ],
-  [
-    "title" => "Yet Another Chat App",
-    "desc" => "Chat application that uses the MERN stack. Messages are sent in real time using Socket.IO.",
-    "img" => "static/images/chat-app.png",
-    "github" => "https://github.com/jasonliang-dev/yet-another-chat-app",
-    "link" => false,
-    "color" => "#166534",
-    "dark_color" => "#14532d",
-  ],
-  [
-    "title" => "Temtem Type Calculator",
-    "desc" => "For the game Temtem, view matchups between different creature types.",
-    "img" => "static/images/temtem.png",
-    "github" => "https://github.com/jasonliang-dev/temtem-type-calculator",
-    "link" => "https://temtypecalc.netlify.app/",
-    "color" => "#854d0e",
-    "dark_color" => "#713f12",
-  ],
-  [
-    "title" => "Wildermaze",
-    "desc" => "A game where you escape a maze while avoiding wolves. Created during BC Game Jam 2020.",
-    "img" => "static/images/maze.png",
-    "github" => "https://github.com/jasonliang-dev/wildermaze",
-    "link" => "https://jasonliang.js.org/wildermaze/",
-    "color" => "#115e59",
-    "dark_color" => "#134e4a",
-  ],
-  [
-    "title" => "Space Shooter Game",
-    "desc" => "Avoid asteroids and enemy fire in a fast paced arcade romp.",
-    "img" => "static/images/spaceshooter.png",
-    "github" => "https://github.com/jasonliang-dev/space-shooter",
-    "link" => false,
-    "color" => "#86198f",
-    "dark_color" => "#701a75",
-  ],
-  [
-    "title" => "lite-vim",
-    "desc" => "A plugin for the Lite text editor that emulates a subset of Vim.",
-    "img" => "static/images/lite-vim.png",
-    "github" => "https://github.com/jasonliang-dev/lite-vim",
-    "link" => false,
-    "color" => "#334155",
-    "dark_color" => "#1e293b",
-  ],
-  [
-    "title" => "Entity Component System",
-    "desc" => "Archetype entity component system library for C.",
-    "img" => "static/images/ecs.png",
-    "github" => "https://github.com/jasonliang-dev/entity-component-system",
-    "link" => false,
-    "color" => "#9a3412",
-    "dark_color" => "#7c2d12",
-  ],
-  [
-    "title" => "Costello",
-    "desc" => "BetterDiscord plugin that lets you save and rapidly send a collection of images.",
-    "img" => "static/images/discord-stickers.png",
-    "github" => "https://github.com/jasonliang-dev/costello",
-    "link" => false,
-    "color" => "#3730a3",
-    "dark_color" => "#312e81",
-  ],
-  [
-    "title" => "dream-eater",
-    "desc" => "Emacs minor mode that respects Dreamweaver's check in/out system.",
-    "img" => "static/images/php.png",
-    "github" => "https://github.com/jasonliang-dev/dream-eater",
-    "link" => false,
-    "color" => "#6b21a8",
-    "dark_color" => "#581c87",
-  ],
-  [
-    "title" => "lulu",
-    "desc" => "Tiny lispy toy programming language. Written in Haskell under 300 SLOC.",
-    "img" => "static/images/lulu.png",
-    "github" => "https://github.com/jasonliang-dev/lulu",
-    "link" => false,
-    "color" => "#9d174d",
-    "dark_color" => "#831843",
-  ],
-  [
-    "title" => "Game of Life",
-    "desc" => "Conway's Game of Life written in C with SDL2.",
-    "img" => "static/images/game-of-life.png",
-    "github" => "https://github.com/jasonliang-dev/game-of-life",
-    "link" => false,
-    "color" => "#334155",
-    "dark_color" => "#1e293b",
-  ],
-];
-
 ?>
 <header>
   <div class="vh-100 overflow-hidden">
@@ -138,11 +7,14 @@ $projects = [
   </div>
 </header>
 <main>
-  <div class="mw8 center mb5">
-    <h2 class="mb4 ph3">Posts</h2>
-    <ul class="pl0 list">
-      <?php foreach ($posts as $post): ?>
-        <li>
+  <section class="mw8 center mb5">
+    <h2 class="mb3 ph3">Posts</h2>
+    <ul id="post-list" class="pl0 list">
+      <?php foreach (SiteData::Posts as $i => $post): ?>
+        <li
+          class="slide-up pause-animation"
+          style="animation-duration: <?= round(sqrt($i + 1) * 300) ?>ms"
+        >
           <a
             href="<?= url($post["name"]) ?>"
             class="
@@ -161,21 +33,27 @@ $projects = [
         </li>
       <?php endforeach ?>
     </ul>
-  </div>
-  <div class="mw8 center mb5">
-    <h2 class="mb4 ph3">Projects</h2>
-    <div class="flex flex-wrap items-stretch">
-      <?php foreach ($projects as $proj): ?>
+  </section>
+  <section class="mw8 center mb5">
+    <h2 class="mb3 ph3">Projects</h2>
+    <div id="project-list" class="flex flex-wrap items-stretch">
+      <?php foreach (SiteData::Projects as $i => $proj): ?>
         <div class="pa3 w-100 w-50-m w-third-l">
           <div
-            class="project-card shadow br3 overflow-hidden h-100 flex flex-column"
+            class="project-card shadow br3 overflow-hidden h-100 flex flex-column slide-up pause-animation"
             style="
               --color: <?= h($proj["color"]) ?>;
               --dark-color: <?= h($proj["dark_color"]) ?>;
+              animation-duration: <?= round(sqrt(($i * 0.4) + 1) * 500) ?>ms;
             "
           >
             <a class="link db h-100" href="<?= h($proj["github"]) ?>">
-              <img class="w-100" src="<?= h($proj["img"]) ?>" alt="">
+              <img
+                src="<?= h($proj["img"]) ?>"
+                alt="<?= h($proj["alt"]) ?>"
+                loading="lazy"
+                decoding="async"
+              >
               <div class="ph3 flex flex-column <?= $proj["link"] ? "" : "pb3" ?>">
                 <div class="flex-auto">
                   <h3 class="near-white mt0 mb2 f5 fw5"><?= h($proj["title"]) ?></h3>
@@ -212,35 +90,37 @@ $projects = [
         </div>
       <?php endforeach ?>
     </div>
-  </div>
+  </section>
 </main>
-<script type="module">
+<script>
   const canvas = document.getElementById("canvas");
   const ctx = canvas.getContext("2d");
 
   const state = {
     theme: document.documentElement.classList.contains("dark-mode") ? "dark" : "light",
-    firstFrame: false,
+    motionReduced: window.matchMedia("(prefers-reduced-motion)").matches,
+    fontsLoaded: false,
+    fancyTextDrawn: false,
     reservedWidth: 0,
     reservedHeight: 0,
     scrollPos: 0,
     hue: 90,
     jason: makeFancyText("Jason", 2, 5),
     liang: makeFancyText("Liang", 3, 6),
-    about: makeFancyText("I make games and web stuff", 7, 10),
+    about: makeFancyText("I make interactive programs", 7, 10),
     points: [],
-  }
+  };
 
-  function changeTheme(theme) {
+  window.onToggleDark = theme => {
     state.theme = theme;
-  }
-  window.changeTheme = changeTheme;
+  };
 
   function onscroll() {
     state.scrollPos = window.scrollY;
   }
   document.addEventListener("scroll", onscroll);
 
+  let resizeTimeout = 0;
   function onresize() {
     canvas.width = canvas.parentNode.clientWidth;
     canvas.height = canvas.parentNode.clientHeight;
@@ -249,6 +129,11 @@ $projects = [
       state.reservedWidth = Math.max(state.reservedWidth, canvas.width);
       state.reservedHeight = Math.max(state.reservedHeight, canvas.height);
       makePoints();
+    } else if (state.motionReduced) {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        draw();
+      }, 150);
     }
   }
   window.addEventListener("resize", onresize);
@@ -271,6 +156,10 @@ $projects = [
         }
       }
       state.points = arr;
+
+      if (state.motionReduced) {
+        draw();
+      }
     }, 150);
   }
 
@@ -289,6 +178,10 @@ $projects = [
   }
 
   function drawFancyText(fancy, opts) {
+    if (!state.fontsLoaded) {
+      return;
+    }
+
     const widths = [];
     for (const item of fancy.arr) {
       widths.push(ctx.measureText(item.char).width);
@@ -303,13 +196,13 @@ $projects = [
       const x = left + advance + xGap;
       const y = opts.y - item.scrollOff * state.scrollPos * opts.scrollFactor;
 
-      if (!state.firstFrame) {
+      if (!state.fancyTextDrawn || state.motionReduced) {
         item.x = x;
         item.y = y;
+      } else {
+        item.x += (x - item.x) * 0.25;
+        item.y += (y - item.y) * 0.25;
       }
-
-      item.x += (x - item.x) * 0.25;
-      item.y += (y - item.y) * 0.25;
 
       opts.draw(item.char, item.x, item.y);
 
@@ -318,6 +211,10 @@ $projects = [
   }
 
   function draw() {
+    if (state.motionReduced) {
+      state.scrollPos = 0;
+    }
+
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     if (state.hue >= 360) {
@@ -418,9 +315,13 @@ $projects = [
       draw: ctx.strokeText.bind(ctx),
     });
 
-    state.firstFrame = true;
+    if (state.fontsLoaded) {
+      state.fancyTextDrawn = true;
+    }
 
-    requestAnimationFrame(draw);
+    if (!state.motionReduced) {
+      requestAnimationFrame(draw);
+    }
   }
 
   requestAnimationFrame(() => {
@@ -428,4 +329,21 @@ $projects = [
     onresize();
     draw();
   });
+
+  document.fonts.ready.then(() => {
+    state.fontsLoaded = true;
+  });
+
+  const observer = new IntersectionObserver(entries => {
+    for (const entry of entries) {
+      if (entry.isIntersecting) {
+        for (const item of entry.target.querySelectorAll(".pause-animation")) {
+          item.classList.remove("pause-animation");
+        }
+      }
+    }
+  }, { rootMargin: "0px 0px -100px 0px" });
+
+  observer.observe(document.getElementById("post-list"));
+  observer.observe(document.getElementById("project-list"));
 </script>

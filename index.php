@@ -1,8 +1,9 @@
 <?php
 
 require "Parsedown.php";
+require "SiteData.php";
 
-function render(string $page, array $vars) {
+function render(string $page, array $vars = []) {
   extract($vars);
 
   if (isset($title)) {
@@ -30,7 +31,7 @@ function render(string $page, array $vars) {
     </script>
     <link rel="stylesheet" href="static/tachyons.min.css">
     <link rel="stylesheet" href="static/default-dark.min.css">
-    <link rel="stylesheet" href="static/style.css">
+    <link rel="stylesheet" href="static/style.css?v=<?= time() ?>">
     <script src="static/highlight.min.js"></script>
     <script>
       const prefersDark = localStorage.theme === undefined && window.matchMedia("(prefers-color-scheme: dark)").matches;
@@ -44,14 +45,14 @@ function render(string $page, array $vars) {
         if (document.documentElement.classList.contains("dark-mode")) {
           document.documentElement.classList.remove("dark-mode");
           localStorage.theme = "light";
-          if (window.changeTheme) {
-            window.changeTheme("light");
+          if (window.onToggleDark) {
+            window.onToggleDark("light");
           }
         } else {
           document.documentElement.classList.add("dark-mode");
           localStorage.theme = "dark";
-          if (window.changeTheme) {
-            window.changeTheme("dark");
+          if (window.onToggleDark) {
+            window.onToggleDark("dark");
           }
         }
       }
@@ -86,53 +87,23 @@ function url(string $url) {
   return php_sapi_name() === "cli" ? "$url.html" : "/$url";
 }
 
-$posts = [
-  [
-    "title" => "C++ Coding Style",
-    "date" => "2023-01-06",
-    "name" => "cpp-style",
-  ],
-  [
-    "title" => "Using Lua Metatables With The C API",
-    "date" => "2022-11-30",
-    "name" => "metatables-in-c",
-  ],
-  [
-    "title" => "Lua Coroutines By Example",
-    "date" => "2022-04-06",
-    "name" => "coroutines",
-  ],
-  [
-    "title" => "A Tiny OpenGL 2D Batch Renderer",
-    "date" => "2022-01-04",
-    "name" => "batch-renderer",
-  ],
-  [
-    "title" => "Write Your Own C++ Unit Testing Library",
-    "date" => "2022-01-03",
-    "name" => "unit-testing",
-  ],
-];
+function render_to_file(string $page, string $file, array $vars = []) {
+  ob_start();
+  render($page, $vars);
+  file_put_contents($file, ob_get_clean());
+  echo "$page -> $file\n";
+}
 
 if (php_sapi_name() === "cli") {
   if (file_exists("dist")) {
     system(PHP_OS_FAMILY === "Windows" ? "rmdir /s /q dist" : "rm -rf dist");
   }
-
   mkdir("dist");
-  ob_start();
 
-  render("index", ["posts" => $posts]);
-  file_put_contents("dist/index.html", ob_get_contents());
-  ob_clean();
-
-  foreach ($posts as $post) {
-    render("article", $post);
-    file_put_contents("dist/{$post["name"]}.html", ob_get_contents());
-    ob_clean();
+  render_to_file("index", "dist/index.html");
+  foreach (SiteData::Posts as $post) {
+    render_to_file("article", "dist/{$post["name"]}.html", $post);
   }
-
-  ob_end_clean();
 
   if (PHP_OS_FAMILY === "Windows") {
     system("xcopy static dist\\static /s /e /I");
@@ -147,10 +118,10 @@ if (php_sapi_name() === "cli") {
   $uri = parse_url($_SERVER["REQUEST_URI"])["path"];
   switch ($uri) {
   case "/":
-    render("index", ["posts" => $posts]) and die();
+    render("index") and die();
 
   default:
-    foreach ($posts as $post) {
+    foreach (SiteData::Posts as $post) {
       if ($uri === "/{$post["name"]}") {
         render("article", $post) and die();
       }
