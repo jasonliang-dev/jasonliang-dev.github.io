@@ -16,7 +16,7 @@
     </script>
     <link rel="stylesheet" href="static/tachyons.min.css">
     <link rel="stylesheet" href="static/default-dark.min.css">
-    <link rel="stylesheet" href="static/style.css?v=1675293212">
+    <link rel="stylesheet" href="static/style.css?v=1675363936">
     <script src="static/highlight.min.js"></script>
     <script>
       const prefersDark = localStorage.theme === undefined && window.matchMedia("(prefers-color-scheme: dark)").matches;
@@ -30,14 +30,14 @@
         if (document.documentElement.classList.contains("dark-mode")) {
           document.documentElement.classList.remove("dark-mode");
           localStorage.theme = "light";
-          if (window.changeTheme) {
-            window.changeTheme("light");
+          if (window.onToggleDark) {
+            window.onToggleDark("light");
           }
         } else {
           document.documentElement.classList.add("dark-mode");
           localStorage.theme = "dark";
-          if (window.changeTheme) {
-            window.changeTheme("dark");
+          if (window.onToggleDark) {
+            window.onToggleDark("dark");
           }
         }
       }

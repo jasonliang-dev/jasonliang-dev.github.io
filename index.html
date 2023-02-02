@@ -16,7 +16,7 @@
     </script>
     <link rel="stylesheet" href="static/tachyons.min.css">
     <link rel="stylesheet" href="static/default-dark.min.css">
-    <link rel="stylesheet" href="static/style.css?v=1675293212">
+    <link rel="stylesheet" href="static/style.css?v=1675363936">
     <script src="static/highlight.min.js"></script>
     <script>
       const prefersDark = localStorage.theme === undefined && window.matchMedia("(prefers-color-scheme: dark)").matches;
@@ -30,14 +30,14 @@
         if (document.documentElement.classList.contains("dark-mode")) {
           document.documentElement.classList.remove("dark-mode");
           localStorage.theme = "light";
-          if (window.changeTheme) {
-            window.changeTheme("light");
+          if (window.onToggleDark) {
+            window.onToggleDark("light");
           }
         } else {
           document.documentElement.classList.add("dark-mode");
           localStorage.theme = "dark";
-          if (window.changeTheme) {
-            window.changeTheme("dark");
+          if (window.onToggleDark) {
+            window.onToggleDark("dark");
           }
         }
       }
@@ -662,14 +662,15 @@
           </div>
   </section>
 </main>
-<script type="module">
+<script>
   const canvas = document.getElementById("canvas");
   const ctx = canvas.getContext("2d");
 
   const state = {
     theme: document.documentElement.classList.contains("dark-mode") ? "dark" : "light",
     motionReduced: window.matchMedia("(prefers-reduced-motion)").matches,
-    firstFrame: false,
+    fontsLoaded: false,
+    fancyTextDrawn: false,
     reservedWidth: 0,
     reservedHeight: 0,
     scrollPos: 0,
@@ -678,12 +679,11 @@
     liang: makeFancyText("Liang", 3, 6),
     about: makeFancyText("I make interactive programs", 7, 10),
     points: [],
-  }
+  };
 
-  function changeTheme(theme) {
+  window.onToggleDark = theme => {
     state.theme = theme;
-  }
-  window.changeTheme = changeTheme;
+  };
 
   function onscroll() {
     state.scrollPos = window.scrollY;
@@ -748,6 +748,10 @@
   }
 
   function drawFancyText(fancy, opts) {
+    if (!state.fontsLoaded) {
+      return;
+    }
+
     const widths = [];
     for (const item of fancy.arr) {
       widths.push(ctx.measureText(item.char).width);
@@ -762,12 +766,7 @@
       const x = left + advance + xGap;
       const y = opts.y - item.scrollOff * state.scrollPos * opts.scrollFactor;
 
-      if (!state.firstFrame) {
-        item.x = x;
-        item.y = y;
-      }
-
-      if (state.motionReduced) {
+      if (!state.fancyTextDrawn || state.motionReduced) {
         item.x = x;
         item.y = y;
       } else {
@@ -886,7 +885,9 @@
       draw: ctx.strokeText.bind(ctx),
     });
 
-    state.firstFrame = true;
+    if (state.fontsLoaded) {
+      state.fancyTextDrawn = true;
+    }
 
     if (!state.motionReduced) {
       requestAnimationFrame(draw);
@@ -896,25 +897,25 @@
   requestAnimationFrame(() => {
     onscroll();
     onresize();
-    document.fonts.ready.then(() => {
-      draw();
-    });
+    draw();
+  });
+
+  document.fonts.ready.then(() => {
+    state.fontsLoaded = true;
   });
 
   const observer = new IntersectionObserver(entries => {
     for (const entry of entries) {
       if (entry.isIntersecting) {
-        for (const item of entry.target.querySelectorAll(".slide-up")) {
+        for (const item of entry.target.querySelectorAll(".pause-animation")) {
           item.classList.remove("pause-animation");
         }
       }
     }
-  }, { rootMargin: "0px 0px -200px 0px" });
+  }, { rootMargin: "0px 0px -100px 0px" });
 
   observer.observe(document.getElementById("post-list"));
   observer.observe(document.getElementById("project-list"));
-
-
 </script>
   </body>
   </html>
