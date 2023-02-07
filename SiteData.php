@@ -31,8 +31,18 @@ class SiteData {
 
   const Projects = [
     [
+      "title" => "Rootie the Mouse",
+      "desc" => "You play as Rootie, a mouse that has the power to control water, air, and fire.",
+      "img" => "static/images/rootie-the-mouse.png",
+      "alt" => "2D game title screen with a mouse",
+      "github" => "https://github.com/jasonliang-dev/rootie-the-mouse",
+      "link" => "https://jasonliang.js.org/rootie-the-mouse/",
+      "color" => "#9a3412",
+      "dark_color" => "#7c2d12",
+    ],
+    [
       "title" => "shoppy-store",
-      "desc" => "Custom storefront using Next.js and Shopify.",
+      "desc" => "Custom ecommerce storefront using Next.js and Shopify.",
       "img" => "static/images/storefront.png",
       "alt" => "Homepage of an online store",
       "github" => "https://github.com/jasonliang-dev/shoppy-store",
@@ -42,7 +52,7 @@ class SiteData {
     ],
     [
       "title" => "file-sink",
-      "desc" => "Tiny SFTP client with automatic file synchronization.",
+      "desc" => "Tiny SFTP client with automatic file synchronization using C++.",
       "img" => "static/images/sftp.png",
       "alt" => "A window displaying list of files",
       "github" => "https://github.com/jasonliang-dev/file-sink",
@@ -92,7 +102,7 @@ class SiteData {
     ],
     [
       "title" => "Temtem Type Calculator",
-      "desc" => "For the game Temtem, view matchups between different creature types.",
+      "desc" => "For the game Temtem, view matchups between different creature types. Made with Gatsby.",
       "img" => "static/images/temtem.png",
       "alt" => "Temtem creatures in a list",
       "github" => "https://github.com/jasonliang-dev/temtem-type-calculator",

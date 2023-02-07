@@ -69,10 +69,8 @@ use function htmlspecialchars as h;
                   class="white-80 pv3 link dim flex justify-center items-center w-100"
                   href="<?= h($proj["github"]) ?>"
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 20px; height: 20px" class="white-60">
-                    <path fill-rule="evenodd" d="M6.28 5.22a.75.75 0 010 1.06L2.56 10l3.72 3.72a.75.75 0 01-1.06 1.06L.97 10.53a.75.75 0 010-1.06l4.25-4.25a.75.75 0 011.06 0zm7.44 0a.75.75 0 011.06 0l4.25 4.25a.75.75 0 010 1.06l-4.25 4.25a.75.75 0 01-1.06-1.06L17.44 10l-3.72-3.72a.75.75 0 010-1.06zM11.377 2.011a.75.75 0 01.612.867l-2.5 14.5a.75.75 0 01-1.478-.255l2.5-14.5a.75.75 0 01.866-.612z" clip-rule="evenodd" />
-                  </svg>
-                  <span class="ml2 mr2">Code</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="white-60" width="20" height="20" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                  <span class="ml2 mr2">GitHub</span>
                 </a>
                   <a
                     class="white-80 link dim flex justify-center items-center w-100"
@@ -82,7 +80,7 @@ use function htmlspecialchars as h;
                       <path fill-rule="evenodd" d="M4.25 5.5a.75.75 0 00-.75.75v8.5c0 .414.336.75.75.75h8.5a.75.75 0 00.75-.75v-4a.75.75 0 011.5 0v4A2.25 2.25 0 0112.75 17h-8.5A2.25 2.25 0 012 14.75v-8.5A2.25 2.25 0 014.25 4h5a.75.75 0 010 1.5h-5z" clip-rule="evenodd" />
                       <path fill-rule="evenodd" d="M6.194 12.753a.75.75 0 001.06.053L16.5 4.44v2.81a.75.75 0 001.5 0v-4.5a.75.75 0 00-.75-.75h-4.5a.75.75 0 000 1.5h2.553l-9.056 8.194a.75.75 0 00-.053 1.06z" clip-rule="evenodd" />
                     </svg>
-                    <span class="ml2 mr2">Visit</span>
+                    <span class="ml2 mr2">View</span>
                   </a>
               </div>
             <?php endif ?>
@@ -108,6 +106,7 @@ use function htmlspecialchars as h;
     jason: makeFancyText("Jason", 2, 5),
     liang: makeFancyText("Liang", 3, 6),
     about: makeFancyText("I make interactive programs", 7, 10),
+    lineAlpha: 0,
     points: [],
   };
 
@@ -140,6 +139,7 @@ use function htmlspecialchars as h;
 
   let makePointsTimeout = 0;
   function makePoints() {
+    state.lineAlpha = 0;
     clearTimeout(makePointsTimeout);
     makePointsTimeout = setTimeout(() => {
       const PI2 = Math.PI * 2;
@@ -165,13 +165,17 @@ use function htmlspecialchars as h;
 
   function makeFancyText(text, min, max) {
     const arr = [];
+    let i = text.length;
     for (const c of text) {
       arr.push({
         char: c,
         x: 0,
         y: 0,
         scrollOff: Math.random() * (max - min) + min,
+        alpha: 0,
+        alphaVel: 0.02 * i,
       });
+      i--;
     }
 
     return { text, arr };
@@ -203,6 +207,9 @@ use function htmlspecialchars as h;
         item.x += (x - item.x) * 0.25;
         item.y += (y - item.y) * 0.25;
       }
+
+      item.alpha = Math.min(item.alpha + item.alphaVel, 1);
+      ctx.globalAlpha = item.alpha;
 
       opts.draw(item.char, item.x, item.y);
 
@@ -240,6 +247,9 @@ use function htmlspecialchars as h;
     const top = window.innerHeight * 0.4;
 
     ctx.lineWidth = 1;
+
+    state.lineAlpha = Math.min(state.lineAlpha + 0.01, 1);
+    ctx.globalAlpha = state.lineAlpha;
 
     if (state.theme === "dark") {
       ctx.strokeStyle = "rgb(255 255 255 / 0.08)";
