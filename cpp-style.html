@@ -16,7 +16,7 @@
     </script>
     <link rel="stylesheet" href="static/tachyons.min.css">
     <link rel="stylesheet" href="static/default-dark.min.css">
-    <link rel="stylesheet" href="static/style.css?v=1675802494">
+    <link rel="stylesheet" href="static/style.css?v=1677576209">
     <script src="static/highlight.min.js"></script>
     <script>
       const prefersDark = localStorage.theme === undefined && window.matchMedia("(prefers-color-scheme: dark)").matches;
@@ -214,11 +214,11 @@ such as using a function that returns:</p>
 <ul>
 <li>a boolean</li>
 <li>an error code/enum</li>
-<li><code>std::optional&lt;T&gt;</code></li>
-<li><code>std::pair&lt;T1, T2&gt;</code>, similar to languages that have mutliple return
-values (Go, Odin, Lua)</li>
-<li><code>std::expected&lt;T, E&gt;</code>, monadic type similar to Rust's <code>Result</code> or
-Haskell's <code>Either</code>, but I'd like to avoid it since it's too new</li>
+<li>a "maybe" type (like <code>std::optional&lt;T&gt;</code>)</li>
+<li>multiple values (like <code>std::pair&lt;T1, T2&gt;</code>), similar to languages like Go,
+Odin, and Lua</li>
+<li>a "result" type (like <code>std::expected&lt;T, E&gt;</code>), monadic type similar to
+Rust's <code>Result</code> or Haskell's <code>Either</code></li>
 </ul>
 </blockquote>
 </li>
@@ -232,7 +232,7 @@ Haskell's <code>Either</code>, but I'd like to avoid it since it's too new</li>
 Bullet::Bullet(Entity *owner);
 
 // good
-std::optional&lt;Bullet&gt; make_bullet(Entity *owner);</code></pre>
+Maybe&lt;Bullet&gt; make_bullet(Entity *owner);</code></pre>
 </li>
 <li>
 <p>Avoid writing destructors.</p>
@@ -252,38 +252,19 @@ destroyed first? How would these object get initialized in the first
 place? Do you combine X and Y into a big mega-object called Z? Or do you
 use a raw pointer on one of the objects? Are you going to add smart
 pointers into the mix?</p>
-<p>Avoid writing destructors. It adds too much complexity. If dealing with
-RAII types (like the STL containers), use the Rule of Zero. For everything
-else, just use a function to destroy things.
-<a href="http://www.gingerbill.org/article/2015/08/19/defer-in-cpp/">Defer</a>
+<p>Avoid writing destructors. It adds too much complexity. Just use a function
+to destroy things. <a href="http://www.gingerbill.org/article/2015/08/19/defer-in-cpp/">Defer</a>
 can help with some of the friction that comes with explicit destruction.</p>
 </blockquote>
 </li>
 <li>
-<p>Prefer <code>std::string_view</code> over <code>std::string</code> and C strings.</p>
+<p>Prefer string views over C strings.</p>
 <blockquote>
-<p>Unlike C strings, <code>std::string_view</code> stores the length. Unlike
-<code>std::string</code>, substring is constant time and does not require memory
-allocation. Also, copying a string view is very cheap.</p>
+<p>Unlike C strings, string views stores the length. Unlike string buffers
+(like <code>std::string</code>), substring is constant time and does not require
+memory allocation. Also, copying a string view is very cheap.</p>
 <p>Unfortunate that string views can't be used a lot of the time because C
 libraries usually need null terminated strings.</p>
-</blockquote>
-</li>
-<li>
-<p>Avoid <code>std::array</code>.</p>
-<blockquote>
-<p>C style square bracket arrays work fine. It can be surprisingly delightful
-to use with this <code>array_size</code> macro:</p>
-</blockquote>
-<pre><code class="language-c++">#define array_size(a) (sizeof(a) / sizeof(a[0]))
-
-// for functions that need a buffer and the buffer size
-sscanf_s(str, "%d %s", &amp;n, buf, (u32)array_size(buf));</code></pre>
-</li>
-<li>
-<p>Avoid <code>&lt;iostream&gt;</code></p>
-<blockquote>
-<p><code>printf</code> and friends work very well.</p>
 </blockquote>
 </li>
 <li>
@@ -292,6 +273,12 @@ sscanf_s(str, "%d %s", &amp;n, buf, (u32)array_size(buf));</code></pre>
 <blockquote>
 <p>The idea with the C++ headers was probably to avoid polluting the global
 namespace, but they don't actually do that so there's no benefit.</p>
+</blockquote>
+</li>
+<li>
+<p>Avoid the STL.</p>
+<blockquote>
+<p>Compile times will soar sky high.</p>
 </blockquote>
 </li>
 <li>
@@ -411,6 +398,11 @@ these cases, C++ casts just adds extra keystrokes for little benefit.</p>
 </blockquote>
 </li>
 <li>
+<p>Use <code>typename</code> for declaring template types.</p>
+<pre><code class="language-c++">template &lt;class T&gt; struct Array; // bad
+template &lt;typename T&gt; struct Array; // good</code></pre>
+</li>
+<li>
 <p>Set an explicit size for enums.</p>
 <blockquote>
 <p>This is so that the enum type can be stored in a struct with a known
@@ -447,16 +439,14 @@ excluding pointers.</p>
 
 Vec3 v1 = Vec3{3, 4, 5}; // bad
 auto v2 = Vec3{3, 4, 5}; // good
-Vec3 v3 = {3, 4, 5}; // best
+Vec3 v3 = {3, 4, 5}; // shortest is bestest
 
-Vec3 *ptr1 = (Vec3 *)malloc(sizeof(Vec3)); // bad
-auto ptr2 = (Vec3 *)malloc(sizeof(Vec3)); // good
+Vec3 *ptr1 = (Vec3 *)operator new(sizeof(Vec3)); // bad
+auto ptr2 = (Vec3 *)operator new(sizeof(Vec3)); // good
+auto ptr3 = new Vec3; // also good
 
 auto n = strlen("hello"); // bad
-size_t n = strlen("world"); // good
-
-u32 n = (u32)strlen(str); // good
-auto n = (u32)strlen(str); // bad</code></pre>
+size_t n = strlen("world"); // good</code></pre>
 </li>
 <li>
 <p>When include order matters, add an empty line in between the includes.</p>
@@ -465,10 +455,9 @@ auto n = (u32)strlen(str); // bad</code></pre>
 grouped together.</p>
 </blockquote>
 <pre><code class="language-c++">#include "glad2.h"
-#include &lt;stdlib.h&gt;
-#include &lt;stdio.h&gt;
+#include &lt;windows.h&gt;
 
-#include &lt;GLFW/glfw3.h&gt; // include glfw last</code></pre>
+#include &lt;GLFW/glfw3.h&gt; // empty line above forces glfw to be included last</code></pre>
 </li>
 <li>
 <p>Avoid <code>void *</code>.</p>
@@ -479,12 +468,30 @@ pointer arithmetic.</p>
 </blockquote>
 </li>
 <li>
-<p>Avoid operator overloading.</p>
+<p>The condition in an if statement should be a boolean type. No truthy/falsy
+expressions.</p>
+<pre><code class="language-c++">char *buf = nullptr;
+get_buf_data(&amp;buf);
+if (buf) {} // bad
+if (buf != nullptr) {} // good</code></pre>
+</li>
+<li>
+<p>Use <code>operator new/delete</code> instead of <code>malloc/free</code>.</p>
 <blockquote>
-<p>Operator overloading can make programs harder to understand.</p>
-<p><strong>Exception</strong>: Vector and matrix types work very well with operator
-overloading.</p>
+<p>This avoids the inclusion of <code>&lt;stdlib.h&gt;</code>.</p>
 </blockquote>
+</li>
+<li>
+<p>Use raw string literals for multi-line strings.</p>
+<pre><code class="language-c++">auto fragment = R"(
+  #version 330 core
+  in vec2 v_texindex;
+  out vec4 f_color;
+  uniform sampler2D u_texture;
+  void main() {
+    f_color = texture(u_texture, v_texindex);
+  }
+)";</code></pre>
 </li>
 </ul>  </div>
 </article>
