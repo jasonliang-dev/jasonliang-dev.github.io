@@ -16,7 +16,7 @@
     </script>
     <link rel="stylesheet" href="static/tachyons.min.css">
     <link rel="stylesheet" href="static/default-dark.min.css">
-    <link rel="stylesheet" href="static/style.css?v=1677606926">
+    <link rel="stylesheet" href="static/style.css?v=1677609701">
     <script src="static/highlight.min.js"></script>
     <script>
       const prefersDark = localStorage.theme === undefined && window.matchMedia("(prefers-color-scheme: dark)").matches;
@@ -99,7 +99,7 @@ the extra zip file data doesn't change how the OS executes the program.</p>
 <p>Even with this arrangement, 7-Zip is perfectly happy to read the zip contents
 from this file. However, Windows Explorer isn't as happy. We'll get to why
 that might be the case later.</p>
-<h2>How you can fuse your own program</h2>
+<h2>Implementation</h2>
 <p>It's pretty easy to implement LÖVE's fusing behaviour yourself. You just need
 to know a bit about how zip files are structured.</p>
 <p>Let's start by creating a C program using <a href="https://github.com/richgel999/miniz">miniz</a>.
@@ -126,9 +126,19 @@ location where the executable stops, and where the zip file starts.</p>
 <p><img src="/static/fusing/zip_format.png" alt="" /></p>
 <p>From the diagram, you might be able to see why miniz fails to read the zip
 file. It's trying to look at a file entry at the start, but instead finds the
-start of <code>.exe</code> file data. By finding the end of the executable, we can give
-miniz the proper zip file data that it expects.</p>
-<p>Start by getting the EOCD record.</p>
+start of the executable data. By finding the end of the executable, we can
+give miniz the proper zip file data that it expects.</p>
+<p>Assuming the zip file doesn't have any comments, the EOCD record is 22 bytes.
+It contains the size of the central directory and the offset of the central
+directory relative to the start of the zip archive.</p>
+<p><img src="/static/fusing/eocd.png" alt="" /></p>
+<blockquote>
+<p>If you're wondering where these offsets and byte sizes are coming from, I
+took them off of Wikipedia's
+<a href="https://en.wikipedia.org/wiki/ZIP_(file_format)">Zip file format</a> article.</p>
+</blockquote>
+<p>We'll use this info to get the central directory. Start by getting the EOCD
+record from the back of the file.</p>
 <pre><code class="language-c">// read myself
 char *contents;
 size_t read = read_entire_file(&amp;contents, get_executable_path());
@@ -140,14 +150,10 @@ if (memcmp(eocd, &amp;eocd_sig, 4) != 0) {
   fprintf(stderr, "this is not the EOCD record\n");
   exit(1);
 }</code></pre>
-<p>Now we can read the size and location of the central directory.</p>
+<p>Now we can find the location of the central directory from the back.</p>
 <pre><code class="language-c">// size of central directory (offset 12, 4 bytes)
 uint32_t central_size;
 memcpy(&amp;central_size, &amp;eocd[12], 4);
-
-// location of central directory relative to start of zip (offset 16, 4 bytes)
-uint32_t central_offset;
-memcpy(&amp;central_offset, &amp;eocd[16], 4);
 
 // find the central directory
 uint32_t central_sig = 0x02014b50; // central directory header signature (4 bytes)
@@ -156,14 +162,13 @@ if (memcmp(central_dir, &amp;central_sig, 4) != 0) {
   fprintf(stderr, "this is not the central directory\n");
   exit(1);
 }</code></pre>
-<blockquote>
-<p>By the way, if you're wondering where these offsets, byte sizes, and header signatures are
-coming from, I took them off of Wikipedia's
-<a href="https://en.wikipedia.org/wiki/ZIP_(file_format)">Zip file format</a> article.</p>
-</blockquote>
-<p>Once we've found the central directory, we can use <code>central_offset</code> to jump to
-the start of the archive.</p>
-<pre><code class="language-c">char *zip_contents = central_dir - central_offset;
+<p>Once we've found the central directory, we can use the offset of the central
+directory to jump to the start of the archive.</p>
+<pre><code class="language-c">// central directory location (offset 16, 4 bytes)
+uint32_t central_offset;
+memcpy(&amp;central_offset, &amp;eocd[16], 4);
+
+char *zip_contents = central_dir - central_offset;
 size_t zip_size = contents + read - zip_contents;</code></pre>
 <p>Pass <code>zip_contents</code> to <code>mz_zip_reader_init_mem</code> to read the zip file.</p>
 <pre><code class="language-c">mz_bool ok = mz_zip_reader_init_mem(&amp;zip, zip_contents, zip_size, 0);</code></pre>
