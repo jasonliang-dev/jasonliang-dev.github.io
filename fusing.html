@@ -16,7 +16,7 @@
     </script>
     <link rel="stylesheet" href="static/tachyons.min.css">
     <link rel="stylesheet" href="static/default-dark.min.css">
-    <link rel="stylesheet" href="static/style.css?v=1677576209">
+    <link rel="stylesheet" href="static/style.css?v=1677577263">
     <script src="static/highlight.min.js"></script>
     <script>
       const prefersDark = localStorage.theme === undefined && window.matchMedia("(prefers-color-scheme: dark)").matches;
@@ -78,12 +78,11 @@ you to attach a zip file to the end of the program, "fusing" all of your
 game's assets and the game's executable into a single file.</p>
 <p>You can create a fused LÖVE program on Windows like this:</p>
 <pre><code class="language-plaintext">copy /b love.exe+MyGame.zip MyGame.exe</code></pre>
-<p>Now what the heck did we create? What kind of file is <code>MyGame.exe</code>? Sure, with
-the <code>.exe</code> extension it looks like an executable. Assuming <code>MyGame.zip</code>
-contains a working LÖVE project, opening <code>MyGame.exe</code> actually runs the
-game. So yeah, it's an honest Windows program. But how does it read the game
-data?</p>
-<p>The answer: <code>MyGame.exe</code> is both a valid Windows executable, and a valid zip
+<p>Now, what the heck did we create? What kind of file is <code>MyGame.exe</code>? Sure,
+with the <code>.exe</code> extension, it looks like an executable. Assuming <code>MyGame.zip</code>
+contains a working LÖVE project, opening <code>MyGame.exe</code> runs the game. So yeah,
+it's an honest Windows program. But how does it read the game data?</p>
+<p>The answer: <code>MyGame.exe</code> is both a valid Windows executable and a valid zip
 file! To get the game data, the program simply reads itself. To confirm that
 this file is a zip file, you can open <code>MyGame.exe</code> in an archive manager,
 such as 7Zip.</p>
@@ -92,9 +91,9 @@ such as 7Zip.</p>
 For example, if you rename <code>MyGame.exe</code> to <code>MyGame.zip</code>, and then open it
 with Windows Explorer, you'll get a complaint that the file isn't a proper
 zip file.</p>
-<p>The <code>copy</code> command that produced <code>MyGame.exe</code> isn't witchcraft. It's really as
-primative as slamming <code>love.exe</code> and <code>MyGame.zip</code> next to each other. Windows
-is perfectly happy to run <code>love.exe</code> with extra data added to to back, and
+<p>The <code>copy</code> command that produced <code>MyGame.exe</code> isn't witchcraft. It's as
+primitive as slamming <code>love.exe</code> and <code>MyGame.zip</code> next to each other. Windows
+is perfectly happy to run <code>love.exe</code> with extra data added to the back, and
 the extra zip file data doesn't change how the OS executes the program.</p>
 <p><img src="/static/fusing/mygame_exe.png" alt="" /></p>
 <h2>You can do this too!</h2>
@@ -116,9 +115,9 @@ if (!ok) {
 isn't a valid zip file. What we can do is find the offset where the
 executable stops, and where the zip file begins. From there, we can give
 miniz the proper zip file content that it expects.</p>
-<p>Unlike a lot of other file formats, you can start reading a zip from the end
-instead of the beginning. The back of a zip file contains the end of central
-directory record (or EOCD). The record contains information to locate the
+<p>Unlike a lot of other file formats, you can start reading a zip from the back
+instead of the front. The back of a zip file contains the "end of central
+directory" record (or EOCD). The record contains information to locate the
 central directory, which is a listing of file entries in the zip archive.
 Once the central directory is located, there's enough information to get the
 start of the zip archive.</p>
@@ -152,9 +151,9 @@ if (memcmp(central_dir, &amp;central_sig, 4) != 0) {
   exit(1);
 }</code></pre>
 <blockquote>
-<p>By the way, if you're wondering where these offsets and byte sizes are
-coming from, I took them off of Wikipedia's article about the
-<a href="https://en.wikipedia.org/wiki/ZIP_(file_format)">Zip file format</a>.</p>
+<p>By the way, if you're wondering where these offsets, byte sizes, and header signatures are
+coming from, I took them off of Wikipedia's
+<a href="https://en.wikipedia.org/wiki/ZIP_(file_format)">Zip file format</a> article.</p>
 </blockquote>
 <p>Once we've found the central directory, we can use <code>central_offset</code> to jump to
 the start of the archive.</p>
@@ -162,7 +161,7 @@ the start of the archive.</p>
 size_t zip_size = contents + read - zip_contents;</code></pre>
 <p>Pass <code>zip_contents</code> to <code>mz_zip_reader_init_mem</code> to read the zip file.</p>
 <pre><code class="language-c">mz_bool ok = mz_zip_reader_init_mem(&amp;zip, zip_contents, zip_size, 0);</code></pre>
-<p>And that's how you can read zip data from a fused executable à laLÖVE. For
+<p>And that's how you can read zip data from a fused executable à la LÖVE. For
 further reading, search for "self-extracting zip file" online.</p>  </div>
 </article>
 <script>hljs.highlightAll();</script>
