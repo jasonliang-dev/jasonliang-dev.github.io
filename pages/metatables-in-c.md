@@ -382,7 +382,7 @@ name: Jason, balance: 900
 
 We can use Valgrind to check for memory leaks:
 
-```
+```plaintext
 $ valgrind ./a.out
 
 ==52== Memcheck, a memory error detector
