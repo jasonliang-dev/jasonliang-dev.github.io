@@ -3,7 +3,10 @@
 require "Parsedown.php";
 require "SiteData.php";
 
+$g_time_now = time();
+
 function render(string $page, array $vars = []) {
+  global $g_time_now;
   extract($vars);
 
   if (isset($title)) {
@@ -31,7 +34,7 @@ function render(string $page, array $vars = []) {
     </script>
     <link rel="stylesheet" href="static/tachyons.min.css">
     <link rel="stylesheet" href="static/default-dark.min.css">
-    <link rel="stylesheet" href="static/style.css?v=<?= time() ?>">
+    <link rel="stylesheet" href="static/style.css?v=<?= $g_time_now ?>">
     <script src="static/highlight.min.js"></script>
     <script>
       const prefersDark = localStorage.theme === undefined && window.matchMedia("(prefers-color-scheme: dark)").matches;
