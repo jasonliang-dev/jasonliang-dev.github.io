@@ -148,11 +148,11 @@ const char *some_function(i32 kind) {
   > such as using a function that returns:
   > - a boolean
   > - an error code/enum
-  > - `std::optional<T>`
-  > - `std::pair<T1, T2>`, similar to languages that have mutliple return
-  >   values (Go, Odin, Lua)
-  > - `std::expected<T, E>`, monadic type similar to Rust's `Result` or
-  >   Haskell's `Either`, but I'd like to avoid it since it's too new
+  > - a "maybe" type (like `std::optional<T>`)
+  > - multiple values (like `std::pair<T1, T2>`), similar to languages like Go,
+  >   Odin, and Lua
+  > - a "result" type (like `std::expected<T, E>`), monadic type similar to
+  >   Rust's `Result` or Haskell's `Either`
 
 - If object creation can fail, use functions instead of constructors.
 
@@ -165,7 +165,7 @@ const char *some_function(i32 kind) {
   Bullet::Bullet(Entity *owner);
 
   // good
-  std::optional<Bullet> make_bullet(Entity *owner);
+  Maybe<Bullet> make_bullet(Entity *owner);
   ```
 
 - Avoid writing destructors.
@@ -188,42 +188,28 @@ const char *some_function(i32 kind) {
   > use a raw pointer on one of the objects? Are you going to add smart
   > pointers into the mix?
   >
-  > Avoid writing destructors. It adds too much complexity. If dealing with
-  > RAII types (like the STL containers), use the Rule of Zero. For everything
-  > else, just use a function to destroy things.
-  > [Defer](http://www.gingerbill.org/article/2015/08/19/defer-in-cpp/)
+  > Avoid writing destructors. It adds too much complexity. Just use a function
+  > to destroy things. [Defer](http://www.gingerbill.org/article/2015/08/19/defer-in-cpp/)
   > can help with some of the friction that comes with explicit destruction.
 
-- Prefer `std::string_view` over `std::string` and C strings.
+- Prefer string views over C strings.
 
-  > Unlike C strings, `std::string_view` stores the length. Unlike
-  > `std::string`, substring is constant time and does not require memory
-  > allocation. Also, copying a string view is very cheap.
+  > Unlike C strings, string views stores the length. Unlike string buffers
+  > (like `std::string`), substring is constant time and does not require
+  > memory allocation. Also, copying a string view is very cheap.
   >
   > Unfortunate that string views can't be used a lot of the time because C
   > libraries usually need null terminated strings.
-
-- Avoid `std::array`.
-
-  > C style square bracket arrays work fine. It can be surprisingly delightful
-    to use with this `array_size` macro:
-
-  ```c++
-  #define array_size(a) (sizeof(a) / sizeof(a[0]))
-
-  // for functions that need a buffer and the buffer size
-  sscanf_s(str, "%d %s", &n, buf, (u32)array_size(buf));
-  ```
-
-- Avoid `<iostream>`
-
-  > `printf` and friends work very well.
 
 - Use `<stdio.h>`, `<math.h>`, etc, over their C++ counterparts `<cstdio>`,
   `<cmath>`, etc.
 
   > The idea with the C++ headers was probably to avoid polluting the global
     namespace, but they don't actually do that so there's no benefit.
+
+- Avoid the STL.
+
+  > Compile times will soar sky high.
 
 - Avoid defining types with `class`.
 
@@ -341,6 +327,13 @@ const char *some_function(i32 kind) {
   > Most type casts involve casting between integers or from `void *`. For
     these cases, C++ casts just adds extra keystrokes for little benefit.
 
+- Use `typename` for declaring template types.
+
+  ```c++
+  template <class T> struct Array; // bad
+  template <typename T> struct Array; // good
+  ```
+
 - Set an explicit size for enums.
 
   > This is so that the enum type can be stored in a struct with a known
@@ -381,16 +374,14 @@ const char *some_function(i32 kind) {
 
   Vec3 v1 = Vec3{3, 4, 5}; // bad
   auto v2 = Vec3{3, 4, 5}; // good
-  Vec3 v3 = {3, 4, 5}; // best
+  Vec3 v3 = {3, 4, 5}; // shortest is bestest
 
-  Vec3 *ptr1 = (Vec3 *)malloc(sizeof(Vec3)); // bad
-  auto ptr2 = (Vec3 *)malloc(sizeof(Vec3)); // good
+  Vec3 *ptr1 = (Vec3 *)operator new(sizeof(Vec3)); // bad
+  auto ptr2 = (Vec3 *)operator new(sizeof(Vec3)); // good
+  auto ptr3 = new Vec3; // also good
 
   auto n = strlen("hello"); // bad
   size_t n = strlen("world"); // good
-
-  u32 n = (u32)strlen(str); // good
-  auto n = (u32)strlen(str); // bad
   ```
 
 - When include order matters, add an empty line in between the includes.
@@ -400,10 +391,9 @@ const char *some_function(i32 kind) {
 
   ```c++
   #include "glad2.h"
-  #include <stdlib.h>
-  #include <stdio.h>
+  #include <windows.h>
 
-  #include <GLFW/glfw3.h> // include glfw last
+  #include <GLFW/glfw3.h> // empty line above forces glfw to be included last
   ```
 
 - Avoid `void *`.
@@ -412,9 +402,30 @@ const char *some_function(i32 kind) {
     When dealing with a raw memory block, then the type can be `u8 *`, for
     pointer arithmetic.
 
-- Avoid operator overloading.
+- The condition in an if statement should be a boolean type. No truthy/falsy
+  expressions.
 
-  > Operator overloading can make programs harder to understand.
-  >
-  > **Exception**: Vector and matrix types work very well with operator
-  > overloading.
+  ```c++
+  char *buf = nullptr;
+  get_buf_data(&buf);
+  if (buf) {} // bad
+  if (buf != nullptr) {} // good
+  ```
+
+- Use `operator new/delete` instead of `malloc/free`.
+
+  > This avoids the inclusion of `<stdlib.h>`.
+
+- Use raw string literals for multi-line strings.
+
+  ```c++
+  auto fragment = R"(
+    #version 330 core
+    in vec2 v_texindex;
+    out vec4 f_color;
+    uniform sampler2D u_texture;
+    void main() {
+      f_color = texture(u_texture, v_texindex);
+    }
+  )";
+  ```
