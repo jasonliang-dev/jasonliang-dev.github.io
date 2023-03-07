@@ -10,7 +10,7 @@ copy /b love.exe+MyGame.zip MyGame.exe
 
 Now, what the heck did we create? What kind of file is `MyGame.exe`? Sure,
 with the `.exe` extension, it looks like an executable. Assuming `MyGame.zip`
-contains a working LÖVE project, opening `MyGame.exe` runs the game. So yeah,
+contains a working LÖVE project, opening `MyGame.exe` runs the game. So yes,
 it's an honest Windows program. But how does it read the game data?
 
 The answer: `MyGame.exe` is both a valid Windows executable and a valid zip
@@ -38,8 +38,21 @@ that might be the case later.
 
 ## Implementation
 
+
 It's pretty easy to implement LÖVE's fusing behaviour yourself. You just need
-to know a bit about how zip files are structured.
+to know a bit about how zip files are structured. Before going any further,
+I'll pull out some functions out of thin air to make the examples shorter:
+
+```c
+// loads an entire file to `contents`, returns file size
+size_t read_entire_file(char **contents, char *filepath);
+
+// get the absolute path of this program
+char *get_executable_path(void);
+
+// print error message and abort
+void panic(const char *fmt, ...);
+```
 
 Let's start by creating a C program using [miniz](https://github.com/richgel999/miniz).
 Miniz is a library that helps us read zip archives. We'll let the program read
@@ -50,30 +63,31 @@ mz_zip_archive zip = {0};
 mz_bool ok = mz_zip_reader_init_file(&zip, get_executable_path(), 0);
 if (!ok) {
   mz_zip_error err = mz_zip_get_last_error(&zip);
-  fprintf(stderr, "failed to read zip: %s\n", mz_zip_get_error_string(err));
-  exit(1);
+  panic("failed to read zip: %s", mz_zip_get_error_string(err));
 }
+```
 
-// failed to read zip: invalid header or archive is corrupted
+The program outputs:
+
+```plaintext
+failed to read zip: invalid header or archive is corrupted
 ```
 
 Okay, so like Windows Explorer, there's a complaint that our executable file
 isn't a valid zip file. This is because miniz is reading the file from the
 start, looking for a file entry header that isn't there.
 
-Unlike a lot of other file formats, you start reading a zip from the back
-instead of the front. The back of a zip file contains the "end of central
-directory" record (or EOCD). The record contains information to locate the
-central directory, which is a listing of file entries in the zip archive.
-Once the central directory is located, there's enough information to get the
-location where the executable stops, and where the zip file starts.
+Unlike a lot of other file formats, we're able to read a zip file from the
+back instead of the front. The back of a zip file contains the "end of
+central directory" record (or EOCD). The record contains information to
+locate the central directory, which is a listing of file entries in the zip
+archive. Once the central directory is located, there's enough information to
+get the location where the executable stops, and where the zip file starts.
 
 ![](/static/fusing/zip_format.png)
 
-From the diagram, you might be able to see why miniz fails to read the zip
-file. It's trying to look at a file entry at the start, but instead finds the
-start of the executable data. By finding the end of the executable, we can
-give miniz the proper zip file data that it expects.
+By finding the end of the executable, we can give miniz the proper zip file
+data that it expects.
 
 Assuming the zip file doesn't have any comments, the EOCD record is 22 bytes.
 It contains the size of the central directory and the offset of the central
@@ -97,8 +111,7 @@ size_t read = read_entire_file(&contents, get_executable_path());
 uint32_t eocd_sig = 0x06054b50; // EOCD header signature (4 bytes)
 char *eocd = &contents[read - 22]; // EOCD header (22 bytes)
 if (memcmp(eocd, &eocd_sig, 4) != 0) {
-  fprintf(stderr, "this is not the EOCD record\n");
-  exit(1);
+  panic("this is not the EOCD record");
 }
 ```
 
@@ -113,8 +126,7 @@ memcpy(&central_size, &eocd[12], 4);
 uint32_t central_sig = 0x02014b50; // central directory header signature (4 bytes)
 char *central_dir = eocd - central_size;
 if (memcmp(central_dir, &central_sig, 4) != 0) {
-  fprintf(stderr, "this is not the central directory\n");
-  exit(1);
+  panic("this is not the central directory");
 }
 ```
 

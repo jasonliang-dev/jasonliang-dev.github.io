@@ -1,7 +1,7 @@
-C++ is a ridiculously complex language and practically everyone sticks to a
-subset of features. I've been using a lot of C++ for side projects that never
-see the light of day, and over time, I've developed a style that I like and I
-wanted to document it.
+C++ is a ridiculously complex language. Most people stick to a subset of its
+features. I've been using a lot of C++ for side projects that never see the
+light of day, and over time, I've developed a style that I like and I wanted
+to document it.
 
 ## Code Format
 
@@ -144,15 +144,16 @@ const char *some_function(i32 kind) {
   > **TL;DR**: errors are not special, so treat error values like you would any
   > other piece of data.
   >
-  > There are several alternatives for error handling without catching exceptions
-  > such as using a function that returns:
+  > There are several alternatives for error handling without catching
+  > exceptions such as using a function that returns:
+  >
   > - a boolean
   > - an error code/enum
   > - a "maybe" type (like `std::optional<T>`)
   > - multiple values (like `std::pair<T1, T2>`), similar to languages like Go,
   >   Odin, and Lua
-  > - a "result" type (like `std::expected<T, E>`), monadic type similar to
-  >   Rust's `Result` or Haskell's `Either`
+  > - a "result" type (like `std::expected<T, E>`), similar to Rust's `Result`
+  >   or Haskell's `Either`
 
 - If object creation can fail, use functions instead of constructors.
 
@@ -192,7 +193,7 @@ const char *some_function(i32 kind) {
   > to destroy things. [Defer](http://www.gingerbill.org/article/2015/08/19/defer-in-cpp/)
   > can help with some of the friction that comes with explicit destruction.
 
-- Prefer string views over C strings.
+- Prefer string views.
 
   > Unlike C strings, string views stores the length. Unlike string buffers
   > (like `std::string`), substring is constant time and does not require
@@ -206,10 +207,6 @@ const char *some_function(i32 kind) {
 
   > The idea with the C++ headers was probably to avoid polluting the global
     namespace, but they don't actually do that so there's no benefit.
-
-- Avoid the STL.
-
-  > Compile times will soar sky high.
 
 - Avoid defining types with `class`.
 
@@ -322,7 +319,7 @@ const char *some_function(i32 kind) {
   > Supported by commonly used compilers. Less typing compared to header
     guards.
 
-- Use C style casts instead of `static_cast`, `dynamic_cast`, ...
+- Prefer C style casts instead of `static_cast`, `dynamic_cast`, ...
 
   > Most type casts involve casting between integers or from `void *`. For
     these cases, C++ casts just adds extra keystrokes for little benefit.
@@ -406,8 +403,7 @@ const char *some_function(i32 kind) {
   expressions.
 
   ```c++
-  char *buf = nullptr;
-  get_buf_data(&buf);
+  char *buf = get_buf_data();
   if (buf) {} // bad
   if (buf != nullptr) {} // good
   ```
