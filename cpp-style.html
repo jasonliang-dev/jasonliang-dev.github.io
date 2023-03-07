@@ -16,7 +16,7 @@
     </script>
     <link rel="stylesheet" href="static/tachyons.min.css">
     <link rel="stylesheet" href="static/default-dark.min.css">
-    <link rel="stylesheet" href="static/style.css?v=1677609701">
+    <link rel="stylesheet" href="static/style.css?v=1678181785">
     <script src="static/highlight.min.js"></script>
     <script>
       const prefersDark = localStorage.theme === undefined && window.matchMedia("(prefers-color-scheme: dark)").matches;
@@ -73,10 +73,10 @@
   </time>
   <h1 class="mt1">C++ Coding Style</h1>
   <div class="lh-copy">
-    <p>C++ is a ridiculously complex language and practically everyone sticks to a
-subset of features. I've been using a lot of C++ for side projects that never
-see the light of day, and over time, I've developed a style that I like and I
-wanted to document it.</p>
+    <p>C++ is a ridiculously complex language. Most people stick to a subset of its
+features. I've been using a lot of C++ for side projects that never see the
+light of day, and over time, I've developed a style that I like and I wanted
+to document it.</p>
 <h2>Code Format</h2>
 <p>Use Clang-Format for code formatting:</p>
 <pre><code class="language-text">BasedOnStyle: LLVM
@@ -209,16 +209,16 @@ using u64 = uint64_t;</code></pre>
 <p>Read <a href="https://www.gingerbill.org/article/2018/09/05/exceptions-and-why-odin-will-never-have-them/">Exceptions — And Why Odin Will Never Have Them</a>.
 <strong>TL;DR</strong>: errors are not special, so treat error values like you would any
 other piece of data.</p>
-<p>There are several alternatives for error handling without catching exceptions
-such as using a function that returns:</p>
+<p>There are several alternatives for error handling without catching
+exceptions such as using a function that returns:</p>
 <ul>
 <li>a boolean</li>
 <li>an error code/enum</li>
 <li>a "maybe" type (like <code>std::optional&lt;T&gt;</code>)</li>
 <li>multiple values (like <code>std::pair&lt;T1, T2&gt;</code>), similar to languages like Go,
 Odin, and Lua</li>
-<li>a "result" type (like <code>std::expected&lt;T, E&gt;</code>), monadic type similar to
-Rust's <code>Result</code> or Haskell's <code>Either</code></li>
+<li>a "result" type (like <code>std::expected&lt;T, E&gt;</code>), similar to Rust's <code>Result</code>
+or Haskell's <code>Either</code></li>
 </ul>
 </blockquote>
 </li>
@@ -258,7 +258,7 @@ can help with some of the friction that comes with explicit destruction.</p>
 </blockquote>
 </li>
 <li>
-<p>Prefer string views over C strings.</p>
+<p>Prefer string views.</p>
 <blockquote>
 <p>Unlike C strings, string views stores the length. Unlike string buffers
 (like <code>std::string</code>), substring is constant time and does not require
@@ -273,12 +273,6 @@ libraries usually need null terminated strings.</p>
 <blockquote>
 <p>The idea with the C++ headers was probably to avoid polluting the global
 namespace, but they don't actually do that so there's no benefit.</p>
-</blockquote>
-</li>
-<li>
-<p>Avoid the STL.</p>
-<blockquote>
-<p>Compile times will soar sky high.</p>
 </blockquote>
 </li>
 <li>
@@ -391,7 +385,7 @@ guards.</p>
 </blockquote>
 </li>
 <li>
-<p>Use C style casts instead of <code>static_cast</code>, <code>dynamic_cast</code>, ...</p>
+<p>Prefer C style casts instead of <code>static_cast</code>, <code>dynamic_cast</code>, ...</p>
 <blockquote>
 <p>Most type casts involve casting between integers or from <code>void *</code>. For
 these cases, C++ casts just adds extra keystrokes for little benefit.</p>
@@ -470,8 +464,7 @@ pointer arithmetic.</p>
 <li>
 <p>The condition in an if statement should be a boolean type. No truthy/falsy
 expressions.</p>
-<pre><code class="language-c++">char *buf = nullptr;
-get_buf_data(&amp;buf);
+<pre><code class="language-c++">char *buf = get_buf_data();
 if (buf) {} // bad
 if (buf != nullptr) {} // good</code></pre>
 </li>

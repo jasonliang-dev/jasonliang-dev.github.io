@@ -16,7 +16,7 @@
     </script>
     <link rel="stylesheet" href="static/tachyons.min.css">
     <link rel="stylesheet" href="static/default-dark.min.css">
-    <link rel="stylesheet" href="static/style.css?v=1677609701">
+    <link rel="stylesheet" href="static/style.css?v=1678181785">
     <script src="static/highlight.min.js"></script>
     <script>
       const prefersDark = localStorage.theme === undefined && window.matchMedia("(prefers-color-scheme: dark)").matches;
@@ -80,7 +80,7 @@ game's assets and the game's executable into a single file.</p>
 <pre><code class="language-plaintext">copy /b love.exe+MyGame.zip MyGame.exe</code></pre>
 <p>Now, what the heck did we create? What kind of file is <code>MyGame.exe</code>? Sure,
 with the <code>.exe</code> extension, it looks like an executable. Assuming <code>MyGame.zip</code>
-contains a working LÖVE project, opening <code>MyGame.exe</code> runs the game. So yeah,
+contains a working LÖVE project, opening <code>MyGame.exe</code> runs the game. So yes,
 it's an honest Windows program. But how does it read the game data?</p>
 <p>The answer: <code>MyGame.exe</code> is both a valid Windows executable and a valid zip
 file! To get the game data, the program simply reads itself. To confirm that
@@ -101,7 +101,16 @@ from this file. However, Windows Explorer isn't as happy. We'll get to why
 that might be the case later.</p>
 <h2>Implementation</h2>
 <p>It's pretty easy to implement LÖVE's fusing behaviour yourself. You just need
-to know a bit about how zip files are structured.</p>
+to know a bit about how zip files are structured. Before going any further,
+I'll pull out some functions out of thin air to make the examples shorter:</p>
+<pre><code class="language-c">// loads an entire file to `contents`, returns file size
+size_t read_entire_file(char **contents, char *filepath);
+
+// get the absolute path of this program
+char *get_executable_path(void);
+
+// print error message and abort
+void panic(const char *fmt, ...);</code></pre>
 <p>Let's start by creating a C program using <a href="https://github.com/richgel999/miniz">miniz</a>.
 Miniz is a library that helps us read zip archives. We'll let the program read
 itself as a zip file.</p>
@@ -109,25 +118,22 @@ itself as a zip file.</p>
 mz_bool ok = mz_zip_reader_init_file(&amp;zip, get_executable_path(), 0);
 if (!ok) {
   mz_zip_error err = mz_zip_get_last_error(&amp;zip);
-  fprintf(stderr, "failed to read zip: %s\n", mz_zip_get_error_string(err));
-  exit(1);
-}
-
-// failed to read zip: invalid header or archive is corrupted</code></pre>
+  panic("failed to read zip: %s", mz_zip_get_error_string(err));
+}</code></pre>
+<p>The program outputs:</p>
+<pre><code class="language-plaintext">failed to read zip: invalid header or archive is corrupted</code></pre>
 <p>Okay, so like Windows Explorer, there's a complaint that our executable file
 isn't a valid zip file. This is because miniz is reading the file from the
 start, looking for a file entry header that isn't there.</p>
-<p>Unlike a lot of other file formats, you start reading a zip from the back
-instead of the front. The back of a zip file contains the "end of central
-directory" record (or EOCD). The record contains information to locate the
-central directory, which is a listing of file entries in the zip archive.
-Once the central directory is located, there's enough information to get the
-location where the executable stops, and where the zip file starts.</p>
+<p>Unlike a lot of other file formats, we're able to read a zip file from the
+back instead of the front. The back of a zip file contains the "end of
+central directory" record (or EOCD). The record contains information to
+locate the central directory, which is a listing of file entries in the zip
+archive. Once the central directory is located, there's enough information to
+get the location where the executable stops, and where the zip file starts.</p>
 <p><img src="/static/fusing/zip_format.png" alt="" /></p>
-<p>From the diagram, you might be able to see why miniz fails to read the zip
-file. It's trying to look at a file entry at the start, but instead finds the
-start of the executable data. By finding the end of the executable, we can
-give miniz the proper zip file data that it expects.</p>
+<p>By finding the end of the executable, we can give miniz the proper zip file
+data that it expects.</p>
 <p>Assuming the zip file doesn't have any comments, the EOCD record is 22 bytes.
 It contains the size of the central directory and the offset of the central
 directory relative to the start of the zip archive.</p>
@@ -147,8 +153,7 @@ size_t read = read_entire_file(&amp;contents, get_executable_path());
 uint32_t eocd_sig = 0x06054b50; // EOCD header signature (4 bytes)
 char *eocd = &amp;contents[read - 22]; // EOCD header (22 bytes)
 if (memcmp(eocd, &amp;eocd_sig, 4) != 0) {
-  fprintf(stderr, "this is not the EOCD record\n");
-  exit(1);
+  panic("this is not the EOCD record");
 }</code></pre>
 <p>Now we can find the location of the central directory from the back.</p>
 <pre><code class="language-c">// size of central directory (offset 12, 4 bytes)
@@ -159,8 +164,7 @@ memcpy(&amp;central_size, &amp;eocd[12], 4);
 uint32_t central_sig = 0x02014b50; // central directory header signature (4 bytes)
 char *central_dir = eocd - central_size;
 if (memcmp(central_dir, &amp;central_sig, 4) != 0) {
-  fprintf(stderr, "this is not the central directory\n");
-  exit(1);
+  panic("this is not the central directory");
 }</code></pre>
 <p>Once we've found the central directory, we can use the offset of the central
 directory to jump to the start of the archive.</p>
