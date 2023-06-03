@@ -16,7 +16,7 @@
     </script>
     <link rel="stylesheet" href="static/tachyons.min.css">
     <link rel="stylesheet" href="static/default-dark.min.css">
-    <link rel="stylesheet" href="static/style.css?v=1678181785">
+    <link rel="stylesheet" href="static/style.css?v=1685762744">
     <script src="static/highlight.min.js"></script>
     <script>
       const prefersDark = localStorage.theme === undefined && window.matchMedia("(prefers-color-scheme: dark)").matches;
@@ -148,20 +148,6 @@ const char *some_function(i32 kind) {
 <h2>Style</h2>
 <ul>
 <li>
-<p>When using single header libraries, create a file <code>impl.cpp</code> and add the
-implementation there.</p>
-<pre><code class="language-c++">// impl.cpp
-
-#define GLAD_GL_IMPLEMENTATION
-#include "glad2.h"
-
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
-
-#define STB_TRUETYPE_IMPLEMENTATION
-#include "stb_truetype.h"</code></pre>
-</li>
-<li>
 <p>If there are brackets for a case statement, the <code>break</code> goes inside.</p>
 <pre><code class="language-c++">switch (val) {
 case Kind_Foo: {
@@ -173,27 +159,8 @@ case Kind_Foo: {
 }</code></pre>
 </li>
 <li>
-<p>Use lambdas to nest functions.</p>
-<blockquote>
-<p>Helps to understand where a function can be used. In the example below,
-<code>compile</code> can only be used in <code>make_shader</code></p>
-</blockquote>
-<pre><code class="language-c++">Shader make_shader(const char *vert, const char *frag) {
-  auto compile = [](GLuint type, const char *glsl) -&gt; GLuint {
-    // OpenGL stuff
-  };
-
-  GLuint vshd = compile(GL_VERTEX_SHADER, vert);
-  GLuint fshd = compile(GL_FRAGMENT_SHADER, frag);
-
-  // ...
-}</code></pre>
-</li>
-<li>
-<p>Prefer explicitly sized integers such as <code>int32_t</code>.</p>
-<blockquote>
-<p>Helps to reason with integer conversion. Use the following type aliases:</p>
-</blockquote>
+<p>Prefer explicitly sized integers such as <code>int32_t</code>. Use the following type
+aliases:</p>
 <pre><code class="language-c++">using i8 = int8_t;
 using i16 = int16_t;
 using i32 = int32_t;
@@ -204,67 +171,44 @@ using u32 = uint32_t;
 using u64 = uint64_t;</code></pre>
 </li>
 <li>
-<p>Avoid exceptions. Never use <code>throw</code>.</p>
+<p>Never use <code>throw</code>. Never catch exceptions.</p>
 <blockquote>
 <p>Read <a href="https://www.gingerbill.org/article/2018/09/05/exceptions-and-why-odin-will-never-have-them/">Exceptions — And Why Odin Will Never Have Them</a>.
-<strong>TL;DR</strong>: errors are not special, so treat error values like you would any
-other piece of data.</p>
-<p>There are several alternatives for error handling without catching
-exceptions such as using a function that returns:</p>
-<ul>
-<li>a boolean</li>
-<li>an error code/enum</li>
-<li>a "maybe" type (like <code>std::optional&lt;T&gt;</code>)</li>
-<li>multiple values (like <code>std::pair&lt;T1, T2&gt;</code>), similar to languages like Go,
-Odin, and Lua</li>
-<li>a "result" type (like <code>std::expected&lt;T, E&gt;</code>), similar to Rust's <code>Result</code>
-or Haskell's <code>Either</code></li>
-</ul>
+<strong>TL;DR</strong>: Errors are not special. Treat errors as values.</p>
 </blockquote>
+</li>
+<li>
+<p>Custom memory allocator comes first, then output parameters, then the rest
+of the function parameters.</p>
+<pre><code class="language-c++">bool make_texture(Allocator *a, Texture *out, u8 *data, i32 w, i32 h);</code></pre>
 </li>
 <li>
 <p>If object creation can fail, use functions instead of constructors.</p>
 <pre><code class="language-c++">// bad
 // if this can fail. how do you let the user know?
-// is there a global error flag?
-// does it throw an exception?
+// is there a global error flag? or does it throw an exception?
 // remember that we're trying to avoid exceptions
 Bullet::Bullet(Entity *owner);
 
 // good
-Maybe&lt;Bullet&gt; make_bullet(Entity *owner);</code></pre>
+Maybe&lt;Bullet&gt; make_bullet(Entity *owner);
+
+// also good
+bool make_bullet(Bullet *out, Entity *owner);</code></pre>
 </li>
 <li>
-<p>Avoid writing destructors.</p>
+<p>Avoid writing destructors. No RAII.</p>
 <blockquote>
-<p>When a destructor is introduced, you'll probably want a copy constructor
-and copy assignment operator to fix the double free problem when dealing
-with memory.</p>
-<p>But copies can be expensive so a move constructor and a move assignment
-operator should also be added. You better remember to use <code>std::move</code> in
-the right places! Oh wait, you might need functions that deal with data by
-value, by reference, and by r-value reference. So you might also want to
-introduce perfect forwarding.</p>
-<p>If you have an object X that depends on object Y, then you'll have to
-make sure that Y stays alive before X is destroyed. And what if you have a
-cycle? If X depends on Y and Y depends on X, which object should be
-destroyed first? How would these object get initialized in the first
-place? Do you combine X and Y into a big mega-object called Z? Or do you
-use a raw pointer on one of the objects? Are you going to add smart
-pointers into the mix?</p>
-<p>Avoid writing destructors. It adds too much complexity. Just use a function
-to destroy things. <a href="http://www.gingerbill.org/article/2015/08/19/defer-in-cpp/">Defer</a>
+<p><a href="http://www.gingerbill.org/article/2015/08/19/defer-in-cpp/">Defer</a>
 can help with some of the friction that comes with explicit destruction.</p>
 </blockquote>
 </li>
 <li>
-<p>Prefer string views.</p>
+<p>Prefer string views over C-style strings or <code>std::string</code>.</p>
 <blockquote>
 <p>Unlike C strings, string views stores the length. Unlike string buffers
 (like <code>std::string</code>), substring is constant time and does not require
 memory allocation. Also, copying a string view is very cheap.</p>
-<p>Unfortunate that string views can't be used a lot of the time because C
-libraries usually need null terminated strings.</p>
 </blockquote>
 </li>
 <li>
@@ -373,9 +317,6 @@ for (i32 i = some_unsigned_int; i &gt;= 0; i--) {
 <p>Zero initialize structs and C style arrays with <code>= {}</code>.</p>
 <pre><code class="language-c++">Image m_white = {};
 Value m_stack[STACK_MAX] = {};</code></pre>
-<blockquote>
-<p>If a struct has a default constructor, <code>= {}</code> can be omited.</p>
-</blockquote>
 </li>
 <li>
 <p>Header files should use <code>#pragma once</code>.</p>
@@ -424,34 +365,15 @@ do_stuff(the_data);
 do_stuff(&amp;the_data);</code></pre>
 </li>
 <li>
-<p>When possible, use <code>auto</code> for defining variables unless the right hand side
-is of a primative type (<code>int</code>, <code>size_t</code>, <code>ptrdiff_t</code>, <code>bool</code>, etc),
-excluding pointers.</p>
-<pre><code class="language-c++">struct Vec3 {
-  float x, y, z;
-};
-
-Vec3 v1 = Vec3{3, 4, 5}; // bad
-auto v2 = Vec3{3, 4, 5}; // good
-Vec3 v3 = {3, 4, 5}; // shortest is bestest
-
-Vec3 *ptr1 = (Vec3 *)operator new(sizeof(Vec3)); // bad
-auto ptr2 = (Vec3 *)operator new(sizeof(Vec3)); // good
-auto ptr3 = new Vec3; // also good
-
-auto n = strlen("hello"); // bad
-size_t n = strlen("world"); // good</code></pre>
-</li>
-<li>
 <p>When include order matters, add an empty line in between the includes.</p>
 <blockquote>
 <p>The rationale is that Clang-Format will reorder includes if they're
 grouped together.</p>
 </blockquote>
-<pre><code class="language-c++">#include "glad2.h"
-#include &lt;windows.h&gt;
+<pre><code class="language-c++">#include "texture.h"
 
-#include &lt;GLFW/glfw3.h&gt; // empty line above forces glfw to be included last</code></pre>
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"</code></pre>
 </li>
 <li>
 <p>Avoid <code>void *</code>.</p>
@@ -469,18 +391,14 @@ if (buf) {} // bad
 if (buf != nullptr) {} // good</code></pre>
 </li>
 <li>
-<p>Use <code>operator new/delete</code> instead of <code>malloc/free</code>.</p>
-<blockquote>
-<p>This avoids the inclusion of <code>&lt;stdlib.h&gt;</code>.</p>
-</blockquote>
-</li>
-<li>
 <p>Use raw string literals for multi-line strings.</p>
 <pre><code class="language-c++">auto fragment = R"(
   #version 330 core
+
   in vec2 v_texindex;
   out vec4 f_color;
   uniform sampler2D u_texture;
+
   void main() {
     f_color = texture(u_texture, v_texindex);
   }
