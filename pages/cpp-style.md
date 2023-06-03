@@ -76,22 +76,6 @@ const char *some_function(i32 kind) {
 
 ## Style
 
-- When using single header libraries, create a file `impl.cpp` and add the
-  implementation there.
-
-  ```c++
-  // impl.cpp
-
-  #define GLAD_GL_IMPLEMENTATION
-  #include "glad2.h"
-
-  #define STB_IMAGE_IMPLEMENTATION
-  #include "stb_image.h"
-
-  #define STB_TRUETYPE_IMPLEMENTATION
-  #include "stb_truetype.h"
-  ```
-
 - If there are brackets for a case statement, the `break` goes inside.
 
   ```c++
@@ -105,27 +89,8 @@ const char *some_function(i32 kind) {
   }
   ```
 
-- Use lambdas to nest functions.
-
-  > Helps to understand where a function can be used. In the example below,
-    `compile` can only be used in `make_shader`
-
-  ```c++
-  Shader make_shader(const char *vert, const char *frag) {
-    auto compile = [](GLuint type, const char *glsl) -> GLuint {
-      // OpenGL stuff
-    };
-
-    GLuint vshd = compile(GL_VERTEX_SHADER, vert);
-    GLuint fshd = compile(GL_FRAGMENT_SHADER, frag);
-
-    // ...
-  }
-  ```
-
-- Prefer explicitly sized integers such as `int32_t`.
-
-  > Helps to reason with integer conversion. Use the following type aliases:
+- Prefer explicitly sized integers such as `int32_t`. Use the following type
+  aliases:
 
   ```c++
   using i8 = int8_t;
@@ -138,69 +103,44 @@ const char *some_function(i32 kind) {
   using u64 = uint64_t;
   ```
 
-- Avoid exceptions. Never use `throw`.
+- Never use `throw`. Never catch exceptions.
 
   > Read [Exceptions — And Why Odin Will Never Have Them](https://www.gingerbill.org/article/2018/09/05/exceptions-and-why-odin-will-never-have-them/).
-  > **TL;DR**: errors are not special, so treat error values like you would any
-  > other piece of data.
-  >
-  > There are several alternatives for error handling without catching
-  > exceptions such as using a function that returns:
-  >
-  > - a boolean
-  > - an error code/enum
-  > - a "maybe" type (like `std::optional<T>`)
-  > - multiple values (like `std::pair<T1, T2>`), similar to languages like Go,
-  >   Odin, and Lua
-  > - a "result" type (like `std::expected<T, E>`), similar to Rust's `Result`
-  >   or Haskell's `Either`
+  > **TL;DR**: Errors are not special. Treat errors as values.
+
+- Custom memory allocator comes first, then output parameters, then the rest
+  of the function parameters.
+
+  ```c++
+  bool make_texture(Allocator *a, Texture *out, u8 *data, i32 w, i32 h);
+  ```
 
 - If object creation can fail, use functions instead of constructors.
 
   ```c++
   // bad
   // if this can fail. how do you let the user know?
-  // is there a global error flag?
-  // does it throw an exception?
+  // is there a global error flag? or does it throw an exception?
   // remember that we're trying to avoid exceptions
   Bullet::Bullet(Entity *owner);
 
   // good
   Maybe<Bullet> make_bullet(Entity *owner);
+
+  // also good
+  bool make_bullet(Bullet *out, Entity *owner);
   ```
 
-- Avoid writing destructors.
+- Avoid writing destructors. No RAII.
 
-  > When a destructor is introduced, you'll probably want a copy constructor
-  > and copy assignment operator to fix the double free problem when dealing
-  > with memory.
-  >
-  > But copies can be expensive so a move constructor and a move assignment
-  > operator should also be added. You better remember to use `std::move` in
-  > the right places! Oh wait, you might need functions that deal with data by
-  > value, by reference, and by r-value reference. So you might also want to
-  > introduce perfect forwarding.
-  >
-  > If you have an object X that depends on object Y, then you'll have to
-  > make sure that Y stays alive before X is destroyed. And what if you have a
-  > cycle? If X depends on Y and Y depends on X, which object should be
-  > destroyed first? How would these object get initialized in the first
-  > place? Do you combine X and Y into a big mega-object called Z? Or do you
-  > use a raw pointer on one of the objects? Are you going to add smart
-  > pointers into the mix?
-  >
-  > Avoid writing destructors. It adds too much complexity. Just use a function
-  > to destroy things. [Defer](http://www.gingerbill.org/article/2015/08/19/defer-in-cpp/)
+  > [Defer](http://www.gingerbill.org/article/2015/08/19/defer-in-cpp/)
   > can help with some of the friction that comes with explicit destruction.
 
-- Prefer string views.
+- Prefer string views over C-style strings or `std::string`.
 
   > Unlike C strings, string views stores the length. Unlike string buffers
   > (like `std::string`), substring is constant time and does not require
   > memory allocation. Also, copying a string view is very cheap.
-  >
-  > Unfortunate that string views can't be used a lot of the time because C
-  > libraries usually need null terminated strings.
 
 - Use `<stdio.h>`, `<math.h>`, etc, over their C++ counterparts `<cstdio>`,
   `<cmath>`, etc.
@@ -312,8 +252,6 @@ const char *some_function(i32 kind) {
   Value m_stack[STACK_MAX] = {};
   ```
 
-  > If a struct has a default constructor, `= {}` can be omited.
-
 - Header files should use `#pragma once`.
 
   > Supported by commonly used compilers. Less typing compared to header
@@ -360,37 +298,16 @@ const char *some_function(i32 kind) {
   do_stuff(&the_data);
   ```
 
-- When possible, use `auto` for defining variables unless the right hand side
-  is of a primative type (`int`, `size_t`, `ptrdiff_t`, `bool`, etc),
-  excluding pointers.
-
-  ```c++
-  struct Vec3 {
-    float x, y, z;
-  };
-
-  Vec3 v1 = Vec3{3, 4, 5}; // bad
-  auto v2 = Vec3{3, 4, 5}; // good
-  Vec3 v3 = {3, 4, 5}; // shortest is bestest
-
-  Vec3 *ptr1 = (Vec3 *)operator new(sizeof(Vec3)); // bad
-  auto ptr2 = (Vec3 *)operator new(sizeof(Vec3)); // good
-  auto ptr3 = new Vec3; // also good
-
-  auto n = strlen("hello"); // bad
-  size_t n = strlen("world"); // good
-  ```
-
 - When include order matters, add an empty line in between the includes.
 
   > The rationale is that Clang-Format will reorder includes if they're
     grouped together.
 
   ```c++
-  #include "glad2.h"
-  #include <windows.h>
+  #include "texture.h"
 
-  #include <GLFW/glfw3.h> // empty line above forces glfw to be included last
+  #define STB_IMAGE_IMPLEMENTATION
+  #include "stb_image.h"
   ```
 
 - Avoid `void *`.
@@ -408,18 +325,16 @@ const char *some_function(i32 kind) {
   if (buf != nullptr) {} // good
   ```
 
-- Use `operator new/delete` instead of `malloc/free`.
-
-  > This avoids the inclusion of `<stdlib.h>`.
-
 - Use raw string literals for multi-line strings.
 
   ```c++
   auto fragment = R"(
     #version 330 core
+
     in vec2 v_texindex;
     out vec4 f_color;
     uniform sampler2D u_texture;
+
     void main() {
       f_color = texture(u_texture, v_texindex);
     }

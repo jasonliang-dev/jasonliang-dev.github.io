@@ -36,6 +36,26 @@ class SiteData {
 
   const Projects = [
     [
+      "title" => "Spry",
+      "desc" => "A 2D game framework for rapid prototyping and game jams.",
+      "img" => "static/images/spry.png",
+      "alt" => "Screenshot of a 2D game with planes",
+      "github" => "https://github.com/jasonliang-dev/spry",
+      "link" => "https://jasonliang.js.org/spry/",
+      "color" => "#115e59",
+      "dark_color" => "#134e4a",
+    ],
+    [
+      "title" => "Tiny Hypertext Preprocessor",
+      "desc" => "A program that helps generate static websites using Lua.",
+      "img" => "static/images/thp.png",
+      "alt" => "",
+      "github" => "https://github.com/jasonliang-dev/thp",
+      "link" => false,
+      "color" => "#3730a3",
+      "dark_color" => "#312e81",
+    ],
+    [
       "title" => "Rootie the Mouse",
       "desc" => "You play as Rootie, a mouse that has the power to control water, air, and fire.",
       "img" => "static/images/rootie-the-mouse.png",
