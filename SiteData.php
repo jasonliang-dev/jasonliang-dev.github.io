@@ -3,6 +3,11 @@
 class SiteData {
   const Posts = [
     [
+      "title" => "Drawing A Triangle 7 Ways",
+      "date" => "2023-06-06",
+      "name" => "triangles",
+    ],
+    [
       "title" => "How LÖVE's Fused Mode Works",
       "date" => "2023-02-27",
       "name" => "fusing",

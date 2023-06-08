@@ -88,15 +88,15 @@ body {
 .hljs-meta,
 .hljs-meta .hljs-keyword,
 .hljs-meta .hljs-string {
-  color: #d8d8d8;
+  color: #888888;
 }
 
 /* article style */
 
 .prose {
   color: #333333;
-  font-size: 1.1em;
-  max-width: 60ch;
+  font-size: 1.1rem;
+  max-width: 65ch;
   margin: 0 auto;
   padding-left: 1rem;
   padding-right: 1rem;
@@ -118,13 +118,19 @@ body {
 }
 
 .prose code {
+  font-size: 1rem;
   font-family: Inconsolata, monospace;
   font-weight: 500;
 }
 
 .prose pre > code {
+  border: 1px solid rgba(0 0 0 / 0.1);
   border-radius: 0.5rem;
   box-shadow: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
+}
+
+.dark-mode .prose pre > code {
+  border: 1px solid rgba(255 255 255 / 0.05);
 }
 
 .prose pre + p,
@@ -208,8 +214,8 @@ body {
 }
 
 .prose li {
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
+  margin-top: 0.3rem;
+  margin-bottom: 0.3rem;
 }
 
 .prose li > p {

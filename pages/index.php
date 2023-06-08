@@ -16,12 +16,12 @@
             href="<?= url($post["name"]) ?>"
             class="
               link br2
-              hover-bg-black-10 dm-hover-bg-black-40
-              flex flex-wrap flex-nowrap-ns ph3 pv3
+              hover-bg-black-10 dm-hover-bg-black-50
+              flex flex-wrap flex-nowrap-ns ph3 pv2 mb1
             "
           >
             <time class="gray dib f6 f5-ns" style="min-width: 12rem">
-              <?= date("F j, Y", strtotime($post["date"])) ?>
+              <?= date("Y F j", strtotime($post["date"])) ?>
             </time>
             <span class="fw5 dark-gray dm-moon-gray w-100">
               <?= $post["title"] ?>

@@ -15,4 +15,30 @@
     <?= Parsedown::instance()->text(file_get_contents("pages/$name.md")) ?>
   </div>
 </article>
-<script>hljs.highlightAll();</script>
+<script>
+  hljs.registerLanguage("wgsl", hljs => {
+    return {
+      name: "WGSL",
+      aliases: ["wgsl", "language-wgsl"],
+      keywords: {
+        keyword: "alias break case const const_assert continue continuing default diagnostic discard else enable false fn for if let loop override requires return struct switch true var while",
+        type: "vec2f vec3f vec4f",
+      },
+      contains: [
+        hljs.C_LINE_COMMENT_MODE,
+        hljs.C_BLOCK_COMMENT_MODE,
+        {
+          className: "built_in",
+          begin: /@\w+/,
+        },
+        {
+          beginKeywords: "struct",
+          end: /{/,
+          contains: [hljs.TITLE_MODE],
+        },
+      ]
+    }
+  });
+
+  hljs.highlightAll();
+</script>

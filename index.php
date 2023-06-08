@@ -33,27 +33,34 @@ function render(string $page, array $vars = []) {
       gtag('config', 'G-1691VYRF8G');
     </script>
     <link rel="stylesheet" href="static/tachyons.min.css">
-    <link rel="stylesheet" href="static/default-dark.min.css">
+    <link id="hljs-light" rel="stylesheet" href="static/atom-one-light.min.css" disabled>
+    <link id="hljs-dark" rel="stylesheet" href="static/default-dark.min.css" disabled>
     <link rel="stylesheet" href="static/style.css?v=<?= $g_time_now ?>">
     <script src="static/highlight.min.js"></script>
     <script>
       const prefersDark = localStorage.theme === undefined && window.matchMedia("(prefers-color-scheme: dark)").matches;
       if (localStorage.theme === "dark" || prefersDark) {
         document.documentElement.classList.add("dark-mode");
+        document.getElementById("hljs-dark").removeAttribute("disabled");
       } else {
         document.documentElement.classList.remove("dark-mode");
+        document.getElementById("hljs-light").removeAttribute("disabled");
       }
 
       function toggleDark() {
         if (document.documentElement.classList.contains("dark-mode")) {
           document.documentElement.classList.remove("dark-mode");
           localStorage.theme = "light";
+          document.getElementById("hljs-light").removeAttribute("disabled");
+          document.getElementById("hljs-dark").setAttribute("disabled", "disabled");
           if (window.onToggleDark) {
             window.onToggleDark("light");
           }
         } else {
           document.documentElement.classList.add("dark-mode");
           localStorage.theme = "dark";
+          document.getElementById("hljs-dark").removeAttribute("disabled");
+          document.getElementById("hljs-light").setAttribute("disabled", "disabled");
           if (window.onToggleDark) {
             window.onToggleDark("dark");
           }
