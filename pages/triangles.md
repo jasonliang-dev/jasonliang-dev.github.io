@@ -1,4 +1,4 @@
-The "Hello, World" of graphics programming is a program that display a
+The "Hello, World" of graphics programming is a program that displays a
 triangle to the screen. It looks like this:
 
 ![A colored triangle](/static/triangles/triangle.png)
@@ -10,22 +10,31 @@ comparing their similarities and differences:
 - SDL2 + WebGPU
 - SDL2 + Vulkan
 - Win32 + Direct3D 11
-- HTML + WebGL2
+- HTML + WebGL 2
 - [Sokol](https://github.com/floooh/sokol)
-- [Raylib](https://www.raylib.com/)
+- [raylib](https://www.raylib.com/)
+
+All of the programs handle window resizing, stretching the triangle when the
+window size increases, and squishing the triangle when the window size
+decreases. All programs involve a vertex buffer with position and color
+information. No vertex information is stored in shader code. That's cheating.
+The programs don't perform a "proper" teardown since most of the resources,
+like window handles and pipelines, lives for the entire lifetime of the
+program.
 
 ## SDL2 + OpenGL
 
-[Source code (121 lines)](#)
+[Source code (121 lines)](https://github.com/jasonliang-dev/7-triangles/blob/master/sdl2-opengl.cpp)
 
 I think most people who get into graphics programming today are introduced to
 it through OpenGL, thanks in no small part to
 [Learn OpenGL](https://learnopengl.com/). Despite its age and deprecated
 status on macOS, it's still a decent API for learning graphics and remains
-popular to this day.
+popular to this day. The code example uses OpenGL 3.3, the same version used
+in Learn OpenGL.
 
 OpenGL either hides/abstracts things that other APIs freely expose, or it
-makes the windowing API responsible for the graphics behaviour. With SDL2 and
+makes the windowing API responsible for the graphics behavior. With SDL2 and
 OpenGL, swapping the back/front buffers happens through `SDL_GL_SwapWindow`.
 In other APIs like D3D11, The swap chain object is responsible for presenting
 and swapping the image buffers.
@@ -45,10 +54,10 @@ few examples also uses SDL2 for the same reason.
 
 ## SDL2 + WebGPU
 
-[Source code (234 lines)](#)
+[Source code (234 lines)](https://github.com/jasonliang-dev/7-triangles/blob/master/sdl2-webgpu.cpp)
 
 As of writing this, the only browser that supports WebGPU out of the box is
-Chrome. But the WebGPU API is also accessable on desktop through
+Chrome. But the WebGPU API is also accessible on desktop through
 [Dawn](https://dawn.googlesource.com/dawn) or [wgpu](https://wgpu.rs/).
 
 Again, I'm using SDL2 for window creation because of its cross platform
@@ -85,9 +94,8 @@ struct VertexOut {
 
 Compared to OpenGL, you'll need to perform more housekeeping with WebGPU.
 You'll work with swap chains, render pipelines, command buffers, and queues.
-Even though there's more control with the hardware, it's still a high level
-abstraction. High level enough for people who just want to jump into gameplay
-code.
+Even though there's more control with the hardware, the abstraction level is
+high level enough to be used by mortals such as myself.
 
 You'll need a `WGPUSurface` window surface to draw on, which depends on an OS
 specific window handle (`HWND` on Windows, `Display *` and `Window` for X11
@@ -104,32 +112,31 @@ to both the web and on desktop.
 
 ## SDL2 + Vulkan
 
-[Source code (846 lines)](#)
+[Source code (846 lines)](https://github.com/jasonliang-dev/7-triangles/blob/master/sdl2-vulkan.cpp)
 
 Vulkan is known for being difficult to learn, especially for beginners.
-Writing over 800 lines of C++ just to draw a triangle on the screen just does
-not spark joy to some people.
+Writing over 800 lines of C++ to draw a triangle on the screen just does not
+spark joy to some people.
 
-A lot of learning material for Vulkan involves downloading the Vulkan SDK. The
-development setup is more involved than I would like, but there exists a
-Vulkan loader that doesn't need the offical SDK to build your program. It's
-called [vkbind](https://github.com/mackron/vkbind) and it's made by the same
-author behind [miniaudio](https://github.com/mackron/miniaudio).
+Learning materials such as [Vulkan Tutorial](https://vulkan-tutorial.com/)
+mention downloading the Vulkan SDK when setting up a development environment.
+The setup is more involved than I would like, but there exists a Vulkan
+loader that doesn't need the official SDK to build your program. It's called
+[vkbind](https://github.com/mackron/vkbind) and it's made by the same person
+behind [miniaudio](https://github.com/mackron/miniaudio).
 
-Vulkan uses a bytecode format called SPIR-V when creating shaders programs.
-Even with vkbind, you still might want to install the SDK anyways, since the
-SDK provides `glslangValidator`, a program that converts human readable GLSL
-to machine readable SPIR-V. Installing the Vulkan SDK is the easiest way I
-found to get a GLSL to SPIR-V compiler. This means building a Vulkan
-application is at least a two step process. Build the shaders first, then the
-actual program. There are ways to compile to SPIR-V at runtime but it's
-typical to compile offline so you don't distribute GLSL as part of your
-program.
+Even with vkbind, you might want to install the SDK anyways. Vulkan uses a
+bytecode format called SPIR-V when creating shaders programs and the SDK
+provides `glslangValidator`, a program that converts human readable GLSL to
+SPIR-V. This means building a Vulkan application is at least a two step
+process. Build the shaders first, then the actual program. There are ways to
+compile to SPIR-V at runtime but it's typical to compile offline so you don't
+distribute GLSL as part of your application.
 
 For all of the code examples, I tried to keep the C++ features to a minimum,
 making it easier to translate to C if needed. The Vulkan example is the only
-example that uses the STL (`std::vector`). Many of the functions involve
-calling it once for an item count, and other time to actually fill up a
+example that uses the STL (`std::vector`). Some of the Vulkan functions
+involve calling it once for an item count, and again to actually fill up a
 buffer of items. Doing this without `std::vector` just adds friction to what
 is already a lot of code for drawing a triangle.
 
@@ -165,33 +172,30 @@ Just like WebGPU, the only platform specific code path to draw a triangle is
 to get the OS window handle for `VkSurfaceKHR` window surface creation.
 
 Handing window resize requires more work compared to OpenGL and WebGPU. In
-OpenGL you just call `glViewport`. In WebGPU, you recreate a swap chain. In
-Vulkan, you have to recreate a swap chain, as well as a collection of frame
-buffers and image views.
+OpenGL you just call `glViewport`. In WebGPU, you recreate the swap chain. In
+Vulkan, you have to recreate the swap chain, as well as a collection of frame
+buffers and image views associated with the swap chain.
 
 Vulkan also provides synchronization primitives since the GPU is doing work
 asynchronously. Getting an image from the swap chain needs to be synchronized
-with semaphores and waiting on the GPU to finsish commands is done with
+with semaphores and waiting on the GPU to finish commands is done with
 fences.
-
-I love learning about graphics programming, but I think Vulkan is just too
-much for me.
 
 ## Win32 + Direct3D 11
 
-[Source code (213 lines)](#)
+[Source code (213 lines)](https://github.com/jasonliang-dev/7-triangles/blob/master/win32-d3d11.cpp)
 
 I really wish there was a Learn OpenGL equivalent for D3D11. It's a very
 pleasant API to use, and I would work with it more if it weren't for the fact
 that D3D11 is made for Windows only. Although, people joke that Direct3D is
 the best cross platform API since Windows users can run it natively, Linux
-users can run it through Proton, and Mac users run Windows through Boot
+users can run it through Proton, and Mac users run can Windows through Boot
 Camp.
 
 I'm using Win32 for window creation. Since D3D11 is only native to Windows, it
-only makes sense to use the native windowing API as well. Some OpenGL and
-Vulkan tutorials describe how horrible the Win32 API is, but the code doesn't
-look too different compared to a cross platform library like SDL2.
+makes sense to use the native windowing API as well. Some OpenGL and Vulkan
+tutorials describe how horrible the Win32 API is, but the code doesn't look
+too different compared to a cross platform library like SDL2.
 
 Here is a minimal SDL2 application:
 
@@ -222,11 +226,21 @@ And here is Win32:
 ```c++
 #include <windows.h>
 
+LRESULT CALLBACK wnd_proc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
+  switch (msg) {
+  case WM_DESTROY:
+    PostQuitMessage(0);
+    return 0;
+  default:
+    return DefWindowProc(hwnd, msg, wparam, lparam);
+  }
+}
+
 int main() {
   const char *title = "Window Title";
 
   WNDCLASSA wc = {};
-  wc.lpfnWndProc = DefWindowProcA;
+  wc.lpfnWndProc = wnd_proc;
   wc.hCursor = LoadCursor(nullptr, IDC_ARROW);
   wc.lpszClassName = title;
   RegisterClassA(&wc);
@@ -250,56 +264,68 @@ int main() {
 }
 ```
 
-If you squint a bit, they look the same.
+They both look similar, but only if you squint. Both Win32 and SDL2 use a
+function to create a window, and a loop to poll for events. If you get rid of
+the window procedure callback and the call to `RegisterClassA`, the remaining
+differences aren't too far from SDL2.
 
 Direct3D's shader language is HLSL (High-level shader language). One of the
 advantages of HLSL is that you can write your vertex and pixel shader code in
 the same file. The same is also true for WGSL. You'll often see that the
-vertex shader code and fragment shader code are separate in OpenGL and
-Vulkan.
+vertex shader code and fragment shader code are separated into multiple files
+for OpenGL and Vulkan programs.
 
-You can compile HLSL by calling `D3DCompile`. The function is accessable by
-linking the application to `d3dcompiler.lib`, but I previously had problems
+You can compile HLSL by calling `D3DCompile`. The function is accessible by
+linking the application with `d3dcompiler.lib`, but I previously had problems
 compiling my program with Clang with that approach. Instead, I dynamically
 loaded `d3dcompiler_47.dll`, and got the function pointer for `D3DCompile`
 from the DLL.
 
 When describing vertex attribute layouts, there's the option to use
-`D3D11_APPEND_ALIGNED_ELEMENT` to describe that the attribute begins right
-after the previous one. This is pretty convenient, since the vertex attribute
-offset don't need to be calculated. Unfortunately, some of the convenience is
-lost since you need a HLSL semantic name for each vertex attribute.
+`D3D11_APPEND_ALIGNED_ELEMENT` to say that the attribute begins right after
+the previous one. This is pretty convenient, since the vertex attribute
+offset doesn't need to be calculated. Unfortunately, some of the convenience
+is lost since you need a HLSL semantic name for each vertex attribute.
 
-## HTML + WebGL2
+## HTML + WebGL 2
 
-[Source code (102 lines)](#)
+[Source code (102 lines)](https://github.com/jasonliang-dev/7-triangles/blob/master/webgl2.html)
 
-WebGL uses ANGLE to translate WebGL's API to a platform specific API like
-Direct3D, OpenGL, or Metal. The big drawback is that WebGL's tooling is poor
-(good luck trying to get RenderDoc working with WebGL). You also won't see
-demanding graphics very often on the web. If high fidelity is the goal,
-running in the browser might not be a good fit.
+WebGL 2 lets you write graphics applications right in the browser using an API
+that's close to OpenGL ES 3.0. The benefit of writing for the web is that
+it's readily available on practically every modern device. WebGL uses ANGLE
+to translate its API to a platform specific API like Direct3D, OpenGL, or
+Metal. Deploying your application for the web is a great way to make it reach
+more people, since users don't have to install an executable to run it
+natively. Also, if you're learning OpenGL, but you're in an environment where
+you don't have a compiler, you can still do some graphics programming right
+in the browser.
 
-The benefit of writing for the web is that it's readily available on
-practically every modern device. Deploying your application for the web is a
-great way to make it reach more people, since users don't have to install an
-executable to run it natively. Also, if you're learning OpenGL, but you're in
-an environment where you don't have a C/C++ compiler, you can still do some
-graphics programming right in the browser.
+The big drawback of WebGL is that the tooling is poor. You won't be running
+RenderDoc on your WebGL application. You also won't see demanding graphics
+very often on the web. If high fidelity is the goal, running in the browser
+might not be a good fit.
 
-The code looks very close to the SDL2 + OpenGL example, which kind of makes
+The other code examples define a struct for a single vertex, but WebGL expects
+a `Float32Array` when filling in vertex buffer data. Since JavaScript really
+doesn't have a way to trivially convert objects to a flat array of numbers,
+the vertex attributes aren't neatly grouped up. There's no `offsetof`, so the
+attribute offsets need to be calculated by hand, and since there's no vertex
+struct, the vertex stride is hard-coded.
+
+Also, the code looks similar to the SDL2 + OpenGL example, which kind of makes
 sense I guess.
 
 ## Sokol
 
-[Source code (110 lines)](#)
+[Source code (110 lines)](https://github.com/jasonliang-dev/7-triangles/blob/master/sokol.cpp)
 
 [Sokol](https://github.com/floooh/sokol) is a collection of single header
-files for C and C++. `sokol_gfx.h` unifies OpenGL 3.3, WebGL2, Direct3D 11,
+files for C and C++. `sokol_gfx.h` unifies OpenGL 3.3, WebGL 2, Direct3D 11,
 and Metal into a single 3D API. `sokol_app.h` is a cross platform library
 that provides a window to draw onto. The Sokol libraries are dependency free
-and are easy to build with. They make heavy use of structs as parameters.
-This is fantastic when using C99's designated initializers.
+and are easy to build with. They make heavy use of structs as parameters to
+functions. This is fantastic when paired with C99's designated initializers.
 
 sokol_gfx only has five resources that you keep track of: buffers, shaders,
 pipeline state objects, images, and render passes. It also has good error
@@ -309,8 +335,8 @@ changes are cached which improves performance.
 sokol_gfx doesn't have a cross compatible shader language, but there is a
 tool called
 [sokol-shdc](https://github.com/floooh/sokol-tools/blob/master/docs/sokol-shdc.md)
-that translates a GLSL-like file to platform specific shader code which can be
-outputed into a C header file. Just like with Vulkan, you'll be doing this
+that translates a GLSL-like file into a C header file that contains shader
+code for multiple backends. Just like with Vulkan, you'll be doing this
 offline.
 
 sokol_app makes it incredibly easy to port a C/C++ desktop application to the
@@ -324,11 +350,11 @@ learn Sokol. You'll find examples for offscreen rendering, model loading with
 cgltf, and ImGui support. There are also language bindings for Zig, Odin,
 Nim, and Rust.
 
-## Raylib
+## raylib
 
-Raylib is a library that helps you make games in C. It uses OpenGL for
-rendering and has a provides an immediate mode API on top with `rlgl.h`. The
-Raylib code is so short that I can just paste it here:
+[raylib](https://www.raylib.com/) is a library for making games in C. It
+provides an immediate mode rendering API with `rlgl.h` which uses OpenGL
+under the hood. The raylib code is so short that I can just paste it here:
 
 ```c++
 #include <raylib.h>
@@ -359,27 +385,42 @@ int main() {
 Isn't it nice to have a library that just needs two functions for windowing?
 `InitWindow` and `WindowShouldClose` is all you need.
 
-Raylib's rendering API is the same style as OpenGL 1.1. This doesn't mean
-Raylib is using a version of OpenGL back in 1997. Instead, it wraps multiple
+raylib's rendering API is the same style as OpenGL 1.1. This doesn't mean
+raylib is using a version of OpenGL back in 1997. Instead, it wraps multiple
 versions of OpenGL, using version 3.3 as the default. Internally, it creates
 dynamic vertex buffers that lives on the GPU and arrays of position and color
 data that gets written to every time `rlVertex3f` is called. At the end of
-the frame, the buffer is "flushed", transfering the data from memory to the
-vertex buffers that live on the GPU.
+the frame, the buffers are "flushed", transferring the data from memory to
+the vertex buffers that live on the GPU.
 
-Raylib is at a much higher level of abstraction compared to the previously
+raylib is at a much higher level of abstraction compared to the previously
 explored options. It assumes you'll be drawing things like images and text,
-so Raylib starts the program with an orthograph projection that matches the
+so Raylib starts the program with an orthographic projection that matches the
 size of the window. `rlMatrixMode(RL_PROJECTION)` and `rlLoadIdentity()` is
 called to reset the projection matrix so that the vertex positions will be in
-their proper place on the screen when drawn.
+their proper place when its time to draw on the screen.
 
-Because of the way Raylib's renderer works, it uses the same shader to draw
-colored rectangles and images. This can only be done by always having at
-least one texture bound. When the user draws something with no texture, such
-as a filled rectangle, it uses an internal 1x1 white texture to sample from.
+Because of the way raylib's renderer works, it uses the same shader to draw
+color filled rectangles and textures that you load from image files. This is
+only achievable by always having at least one texture bound. When the user
+draws something with no texture, such as a filled rectangle, it uses an
+internal 1x1 white texture to sample from.
 
-Raylib is very enjoyable to use as a video game library. I can definitely
+raylib is very enjoyable to use as a video game library. I can definitely
 recommend it for beginner programmers who want to make their first few 2D
-games. The source code is also on GitHub and you can read it to learn more
-about OpenGL and game framework architecture in C.
+games. The raylib source code is also on GitHub so you can read it to learn
+more about OpenGL and game framework architecture in C.
+
+## Closing Thoughts
+
+Depending on the library/API that you choose, the path to drawing a triangle
+can either be an easy one (raylib), or a lengthy and difficult one
+(Vulkan). You have the option for your program run on multiple devices with
+SDL2, or on specific platforms like Windows, or the browser.
+
+The "Hello, Triangle" program doesn't paint the whole picture of what these
+APIs give you, and what they need from you when your program increases in
+complexity. Multisampling is easy with OpenGL, but is a little more involved
+with Direct3D 11. You probably won't work with uniforms in a library like
+raylib, but with Vulkan, you'll need to deal with descriptor pools,
+descriptor sets, and how they interact with shaders.

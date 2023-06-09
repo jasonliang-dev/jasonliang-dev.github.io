@@ -17,7 +17,7 @@
             class="
               link br2
               hover-bg-black-10 dm-hover-bg-black-50
-              flex flex-wrap flex-nowrap-ns ph3 pv2 mb1
+              flex flex-wrap flex-nowrap-ns ph3 pv3 nt1 nb1
             "
           >
             <time class="gray dib f6 f5-ns" style="min-width: 12rem">
