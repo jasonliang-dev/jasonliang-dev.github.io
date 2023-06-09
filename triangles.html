@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="static/tachyons.min.css">
     <link id="hljs-light" rel="stylesheet" href="static/atom-one-light.min.css" disabled>
     <link id="hljs-dark" rel="stylesheet" href="static/default-dark.min.css" disabled>
-    <link rel="stylesheet" href="static/style.css?v=1686278584">
+    <link rel="stylesheet" href="static/style.css?v=1686281868">
     <script src="static/highlight.min.js"></script>
     <script>
       const prefersDark = localStorage.theme === undefined && window.matchMedia("(prefers-color-scheme: dark)").matches;
@@ -420,16 +420,16 @@ recommend it for beginner programmers who want to make their first few 2D
 games. The raylib source code is also on GitHub so you can read it to learn
 more about OpenGL and game framework architecture in C.</p>
 <h2>Closing Thoughts</h2>
-<p>Depending on the library/API that you choose, the path to the first triangle
+<p>Depending on the library/API that you choose, the path to drawing a triangle
 can either be an easy one (raylib), or a lengthy and difficult one
 (Vulkan). You have the option for your program run on multiple devices with
 SDL2, or on specific platforms like Windows, or the browser.</p>
 <p>The "Hello, Triangle" program doesn't paint the whole picture of what these
-APIs give you, and what they need when your program increases in complexity.
-Multisampling is easy with OpenGL, but is a little more involved with
-Direct3D 11. You probably won't work with uniforms in a library like raylib,
-but with Vulkan, you'll need to deal with descriptor pools, descriptor sets,
-and how they interact with shaders.</p>  </div>
+APIs give you, and what they need from you when your program increases in
+complexity. Multisampling is easy with OpenGL, but is a little more involved
+with Direct3D 11. You probably won't work with uniforms in a library like
+raylib, but with Vulkan, you'll need to deal with descriptor pools,
+descriptor sets, and how they interact with shaders.</p>  </div>
 </article>
 <script>
   hljs.registerLanguage("wgsl", hljs => {
