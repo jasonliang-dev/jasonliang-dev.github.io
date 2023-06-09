@@ -15,27 +15,34 @@
       gtag('config', 'G-1691VYRF8G');
     </script>
     <link rel="stylesheet" href="static/tachyons.min.css">
-    <link rel="stylesheet" href="static/default-dark.min.css">
-    <link rel="stylesheet" href="static/style.css?v=1685762744">
+    <link id="hljs-light" rel="stylesheet" href="static/atom-one-light.min.css" disabled>
+    <link id="hljs-dark" rel="stylesheet" href="static/default-dark.min.css" disabled>
+    <link rel="stylesheet" href="static/style.css?v=1686276831">
     <script src="static/highlight.min.js"></script>
     <script>
       const prefersDark = localStorage.theme === undefined && window.matchMedia("(prefers-color-scheme: dark)").matches;
       if (localStorage.theme === "dark" || prefersDark) {
         document.documentElement.classList.add("dark-mode");
+        document.getElementById("hljs-dark").removeAttribute("disabled");
       } else {
         document.documentElement.classList.remove("dark-mode");
+        document.getElementById("hljs-light").removeAttribute("disabled");
       }
 
       function toggleDark() {
         if (document.documentElement.classList.contains("dark-mode")) {
           document.documentElement.classList.remove("dark-mode");
           localStorage.theme = "light";
+          document.getElementById("hljs-light").removeAttribute("disabled");
+          document.getElementById("hljs-dark").setAttribute("disabled", "disabled");
           if (window.onToggleDark) {
             window.onToggleDark("light");
           }
         } else {
           document.documentElement.classList.add("dark-mode");
           localStorage.theme = "dark";
+          document.getElementById("hljs-dark").removeAttribute("disabled");
+          document.getElementById("hljs-light").setAttribute("disabled", "disabled");
           if (window.onToggleDark) {
             window.onToggleDark("dark");
           }
@@ -74,17 +81,17 @@
           style="animation-duration: 300ms"
         >
           <a
-            href="fusing.html"
+            href="triangles.html"
             class="
               link br2
-              hover-bg-black-10 dm-hover-bg-black-40
-              flex flex-wrap flex-nowrap-ns ph3 pv3
+              hover-bg-black-10 dm-hover-bg-black-50
+              flex flex-wrap flex-nowrap-ns ph3 pv3 nt1 nb1
             "
           >
             <time class="gray dib f6 f5-ns" style="min-width: 12rem">
-              February 27, 2023            </time>
+              2023 June 6            </time>
             <span class="fw5 dark-gray dm-moon-gray w-100">
-              How LÖVE's Fused Mode Works            </span>
+              Drawing A Triangle 7 Ways            </span>
           </a>
         </li>
               <li
@@ -92,17 +99,17 @@
           style="animation-duration: 424ms"
         >
           <a
-            href="cpp-style.html"
+            href="fusing.html"
             class="
               link br2
-              hover-bg-black-10 dm-hover-bg-black-40
-              flex flex-wrap flex-nowrap-ns ph3 pv3
+              hover-bg-black-10 dm-hover-bg-black-50
+              flex flex-wrap flex-nowrap-ns ph3 pv3 nt1 nb1
             "
           >
             <time class="gray dib f6 f5-ns" style="min-width: 12rem">
-              January 6, 2023            </time>
+              2023 February 27            </time>
             <span class="fw5 dark-gray dm-moon-gray w-100">
-              C++ Coding Style            </span>
+              How LÖVE's Fused Mode Works            </span>
           </a>
         </li>
               <li
@@ -110,17 +117,17 @@
           style="animation-duration: 520ms"
         >
           <a
-            href="metatables-in-c.html"
+            href="cpp-style.html"
             class="
               link br2
-              hover-bg-black-10 dm-hover-bg-black-40
-              flex flex-wrap flex-nowrap-ns ph3 pv3
+              hover-bg-black-10 dm-hover-bg-black-50
+              flex flex-wrap flex-nowrap-ns ph3 pv3 nt1 nb1
             "
           >
             <time class="gray dib f6 f5-ns" style="min-width: 12rem">
-              November 30, 2022            </time>
+              2023 January 6            </time>
             <span class="fw5 dark-gray dm-moon-gray w-100">
-              Using Lua Metatables With The C API            </span>
+              C++ Coding Style            </span>
           </a>
         </li>
               <li
@@ -128,17 +135,17 @@
           style="animation-duration: 600ms"
         >
           <a
-            href="coroutines.html"
+            href="metatables-in-c.html"
             class="
               link br2
-              hover-bg-black-10 dm-hover-bg-black-40
-              flex flex-wrap flex-nowrap-ns ph3 pv3
+              hover-bg-black-10 dm-hover-bg-black-50
+              flex flex-wrap flex-nowrap-ns ph3 pv3 nt1 nb1
             "
           >
             <time class="gray dib f6 f5-ns" style="min-width: 12rem">
-              April 6, 2022            </time>
+              2022 November 30            </time>
             <span class="fw5 dark-gray dm-moon-gray w-100">
-              Lua Coroutines By Example            </span>
+              Using Lua Metatables With The C API            </span>
           </a>
         </li>
               <li
@@ -146,17 +153,17 @@
           style="animation-duration: 671ms"
         >
           <a
-            href="batch-renderer.html"
+            href="coroutines.html"
             class="
               link br2
-              hover-bg-black-10 dm-hover-bg-black-40
-              flex flex-wrap flex-nowrap-ns ph3 pv3
+              hover-bg-black-10 dm-hover-bg-black-50
+              flex flex-wrap flex-nowrap-ns ph3 pv3 nt1 nb1
             "
           >
             <time class="gray dib f6 f5-ns" style="min-width: 12rem">
-              January 4, 2022            </time>
+              2022 April 6            </time>
             <span class="fw5 dark-gray dm-moon-gray w-100">
-              A Tiny OpenGL 2D Batch Renderer            </span>
+              Lua Coroutines By Example            </span>
           </a>
         </li>
               <li
@@ -164,15 +171,33 @@
           style="animation-duration: 735ms"
         >
           <a
-            href="unit-testing.html"
+            href="batch-renderer.html"
             class="
               link br2
-              hover-bg-black-10 dm-hover-bg-black-40
-              flex flex-wrap flex-nowrap-ns ph3 pv3
+              hover-bg-black-10 dm-hover-bg-black-50
+              flex flex-wrap flex-nowrap-ns ph3 pv3 nt1 nb1
             "
           >
             <time class="gray dib f6 f5-ns" style="min-width: 12rem">
-              January 3, 2022            </time>
+              2022 January 4            </time>
+            <span class="fw5 dark-gray dm-moon-gray w-100">
+              A Tiny OpenGL 2D Batch Renderer            </span>
+          </a>
+        </li>
+              <li
+          class="slide-up pause-animation"
+          style="animation-duration: 794ms"
+        >
+          <a
+            href="unit-testing.html"
+            class="
+              link br2
+              hover-bg-black-10 dm-hover-bg-black-50
+              flex flex-wrap flex-nowrap-ns ph3 pv3 nt1 nb1
+            "
+          >
+            <time class="gray dib f6 f5-ns" style="min-width: 12rem">
+              2022 January 3            </time>
             <span class="fw5 dark-gray dm-moon-gray w-100">
               Write Your Own C++ Unit Testing Library            </span>
           </a>

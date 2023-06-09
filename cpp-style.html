@@ -15,27 +15,34 @@
       gtag('config', 'G-1691VYRF8G');
     </script>
     <link rel="stylesheet" href="static/tachyons.min.css">
-    <link rel="stylesheet" href="static/default-dark.min.css">
-    <link rel="stylesheet" href="static/style.css?v=1685762744">
+    <link id="hljs-light" rel="stylesheet" href="static/atom-one-light.min.css" disabled>
+    <link id="hljs-dark" rel="stylesheet" href="static/default-dark.min.css" disabled>
+    <link rel="stylesheet" href="static/style.css?v=1686276831">
     <script src="static/highlight.min.js"></script>
     <script>
       const prefersDark = localStorage.theme === undefined && window.matchMedia("(prefers-color-scheme: dark)").matches;
       if (localStorage.theme === "dark" || prefersDark) {
         document.documentElement.classList.add("dark-mode");
+        document.getElementById("hljs-dark").removeAttribute("disabled");
       } else {
         document.documentElement.classList.remove("dark-mode");
+        document.getElementById("hljs-light").removeAttribute("disabled");
       }
 
       function toggleDark() {
         if (document.documentElement.classList.contains("dark-mode")) {
           document.documentElement.classList.remove("dark-mode");
           localStorage.theme = "light";
+          document.getElementById("hljs-light").removeAttribute("disabled");
+          document.getElementById("hljs-dark").setAttribute("disabled", "disabled");
           if (window.onToggleDark) {
             window.onToggleDark("light");
           }
         } else {
           document.documentElement.classList.add("dark-mode");
           localStorage.theme = "dark";
+          document.getElementById("hljs-dark").removeAttribute("disabled");
+          document.getElementById("hljs-light").setAttribute("disabled", "disabled");
           if (window.onToggleDark) {
             window.onToggleDark("dark");
           }
@@ -406,7 +413,33 @@ if (buf != nullptr) {} // good</code></pre>
 </li>
 </ul>  </div>
 </article>
-<script>hljs.highlightAll();</script>
+<script>
+  hljs.registerLanguage("wgsl", hljs => {
+    return {
+      name: "WGSL",
+      aliases: ["wgsl", "language-wgsl"],
+      keywords: {
+        keyword: "alias break case const const_assert continue continuing default diagnostic discard else enable false fn for if let loop override requires return struct switch true var while",
+        type: "vec2f vec3f vec4f",
+      },
+      contains: [
+        hljs.C_LINE_COMMENT_MODE,
+        hljs.C_BLOCK_COMMENT_MODE,
+        {
+          className: "built_in",
+          begin: /@\w+/,
+        },
+        {
+          beginKeywords: "struct",
+          end: /{/,
+          contains: [hljs.TITLE_MODE],
+        },
+      ]
+    }
+  });
+
+  hljs.highlightAll();
+</script>
   </body>
   </html>
   <!-- be nice to people -->
