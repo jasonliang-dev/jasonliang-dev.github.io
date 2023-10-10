@@ -1,1138 +1,725 @@
-  <!doctype html>
-  <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jason Liang</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@500;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-1691VYRF8G"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-1691VYRF8G');
-    </script>
-    <link rel="stylesheet" href="static/tachyons.min.css">
-    <link id="hljs-light" rel="stylesheet" href="static/atom-one-light.min.css" disabled>
-    <link id="hljs-dark" rel="stylesheet" href="static/default-dark.min.css" disabled>
-    <link rel="stylesheet" href="static/style.css?v=1686281868">
-    <script src="static/highlight.min.js"></script>
-    <script>
-      const prefersDark = localStorage.theme === undefined && window.matchMedia("(prefers-color-scheme: dark)").matches;
-      if (localStorage.theme === "dark" || prefersDark) {
-        document.documentElement.classList.add("dark-mode");
-        document.getElementById("hljs-dark").removeAttribute("disabled");
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/public/style.css">
+  <link rel="stylesheet" href="/public/tachyons.min.css">
+  
+  <script>
+    function updateTheme() {
+      const doc = document.documentElement
+
+      let dark
+      if ('theme' in localStorage) {
+        dark = localStorage.theme === 'dark'
       } else {
-        document.documentElement.classList.remove("dark-mode");
-        document.getElementById("hljs-light").removeAttribute("disabled");
+        dark = window.matchMedia('(prefers-color-scheme: dark)').matches
       }
 
-      function toggleDark() {
-        if (document.documentElement.classList.contains("dark-mode")) {
-          document.documentElement.classList.remove("dark-mode");
-          localStorage.theme = "light";
-          document.getElementById("hljs-light").removeAttribute("disabled");
-          document.getElementById("hljs-dark").setAttribute("disabled", "disabled");
-          if (window.onToggleDark) {
-            window.onToggleDark("light");
-          }
-        } else {
-          document.documentElement.classList.add("dark-mode");
-          localStorage.theme = "dark";
-          document.getElementById("hljs-dark").removeAttribute("disabled");
-          document.getElementById("hljs-light").setAttribute("disabled", "disabled");
-          if (window.onToggleDark) {
-            window.onToggleDark("dark");
-          }
-        }
+      if (dark) {
+        doc.classList.add('dark')
+      } else {
+        doc.classList.remove('dark')
       }
-    </script>
-  </head>
-  <body class="bg-near-white near-black dm-bg-near-black dm-near-white mb6">
-    <button
-      class="
-        bg-near-black near-white hover-bg-mid-gray
-        dm-bg-near-white dm-near-black dm-hover-bg-moon-gray
-        fixed top-0 right-0 z-999
-        flex justify-center items-center mr3 mt3
-        shadow bn br-pill
-      "
-      type="button"
-      style="width: 2.25rem; height: 2.25rem"
-      onclick="toggleDark()"
-    >
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 20px; height: 20px">
-        <path fill-rule="evenodd" d="M7.455 2.004a.75.75 0 01.26.77 7 7 0 009.958 7.967.75.75 0 011.067.853A8.5 8.5 0 116.647 1.921a.75.75 0 01.808.083z" clip-rule="evenodd" />
-      </svg>
-    </button>
-    <header>
-  <div class="vh-100 overflow-hidden">
+
+      if (typeof onUpdateTheme === 'function') {
+        onUpdateTheme()
+      }
+    }
+
+    function toggleTheme() {
+      const doc = document.documentElement
+      localStorage.theme = doc.classList.contains('dark') ? 'light' : 'dark'
+      updateTheme()
+    }
+
+    updateTheme()
+  </script>
+</head>
+<body>
+  <button class="theme-button fixed top-0 right-0 z-999 flex mt3 mr3 bn br-pill pa2" onclick="toggleTheme()">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="20" height="20">
+      <path d="M10 2a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 2zM10 15a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 15zM10 7a3 3 0 100 6 3 3 0 000-6zM15.657 5.404a.75.75 0 10-1.06-1.06l-1.061 1.06a.75.75 0 001.06 1.06l1.06-1.06zM6.464 14.596a.75.75 0 10-1.06-1.06l-1.06 1.06a.75.75 0 001.06 1.06l1.06-1.06zM18 10a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0118 10zM5 10a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 015 10zM14.596 15.657a.75.75 0 001.06-1.06l-1.06-1.061a.75.75 0 10-1.06 1.06l1.06 1.06zM5.404 6.464a.75.75 0 001.06-1.06l-1.06-1.06a.75.75 0 10-1.061 1.06l1.06 1.06z" />
+    </svg>
+  </button>
+  
+  <div class="absolute w-100 vh-100" style="z-index: -1">
     <canvas id="canvas"></canvas>
   </div>
-</header>
-<main>
-  <section class="mw8 center mb5">
-    <h2 class="mb3 ph3">Posts</h2>
-    <ul id="post-list" class="pl0 list">
-              <li
-          class="slide-up pause-animation"
-          style="animation-duration: 300ms"
-        >
-          <a
-            href="triangles.html"
-            class="
-              link br2
-              hover-bg-black-10 dm-hover-bg-black-50
-              flex flex-wrap flex-nowrap-ns ph3 pv3 nt1 nb1
-            "
-          >
-            <time class="gray dib f6 f5-ns" style="min-width: 12rem">
-              2023 June 6            </time>
-            <span class="fw5 dark-gray dm-moon-gray w-100">
-              Drawing A Triangle 7 Ways            </span>
+  <div class="vh-100 flex flex-column justify-center items-center">
+    <h1 class="hero-text tc mv0 fw9">Jason Liang</h1>
+    <p class="fw4 soft f3 f2-l mw6 mw8-l mb6 tc center">
+      A developer that loves to create attractive and interactive
+      applications for the web and desktop.
+    </p>
+  </div>
+  <div class="mw8 center ph2" style="font-size: 1.1rem">
+    <h2 class="mb0">Blog Posts</h2>
+    <p class="soft">Programming guides and thoughts on software.</p>
+    <ul class="list pl0 mt4 mb6">
+      
+        <li class="lh-copy">
+          <a class="post-link no-underline harsh pv2 ph2 nl2 nr2 db br2 flex" href="/wordpress.html">
+            <span class="soft flex-none" style="width: 9rem">
+              Sep 13, 2023
+            </span>
+            <span class="pl1 fw5">
+              WordPress For Non-WordPress Developers
+            </span>
           </a>
         </li>
-              <li
-          class="slide-up pause-animation"
-          style="animation-duration: 424ms"
-        >
-          <a
-            href="fusing.html"
-            class="
-              link br2
-              hover-bg-black-10 dm-hover-bg-black-50
-              flex flex-wrap flex-nowrap-ns ph3 pv3 nt1 nb1
-            "
-          >
-            <time class="gray dib f6 f5-ns" style="min-width: 12rem">
-              2023 February 27            </time>
-            <span class="fw5 dark-gray dm-moon-gray w-100">
-              How LÖVE's Fused Mode Works            </span>
+      
+        <li class="lh-copy">
+          <a class="post-link no-underline harsh pv2 ph2 nl2 nr2 db br2 flex" href="/triangles.html">
+            <span class="soft flex-none" style="width: 9rem">
+              Jun 6, 2023
+            </span>
+            <span class="pl1 fw5">
+              Drawing A Triangle 7 Ways
+            </span>
           </a>
         </li>
-              <li
-          class="slide-up pause-animation"
-          style="animation-duration: 520ms"
-        >
-          <a
-            href="cpp-style.html"
-            class="
-              link br2
-              hover-bg-black-10 dm-hover-bg-black-50
-              flex flex-wrap flex-nowrap-ns ph3 pv3 nt1 nb1
-            "
-          >
-            <time class="gray dib f6 f5-ns" style="min-width: 12rem">
-              2023 January 6            </time>
-            <span class="fw5 dark-gray dm-moon-gray w-100">
-              C++ Coding Style            </span>
+      
+        <li class="lh-copy">
+          <a class="post-link no-underline harsh pv2 ph2 nl2 nr2 db br2 flex" href="/fusing.html">
+            <span class="soft flex-none" style="width: 9rem">
+              Feb 27, 2023
+            </span>
+            <span class="pl1 fw5">
+              How LÖVE&#39;s Fused Mode Works
+            </span>
           </a>
         </li>
-              <li
-          class="slide-up pause-animation"
-          style="animation-duration: 600ms"
-        >
-          <a
-            href="metatables-in-c.html"
-            class="
-              link br2
-              hover-bg-black-10 dm-hover-bg-black-50
-              flex flex-wrap flex-nowrap-ns ph3 pv3 nt1 nb1
-            "
-          >
-            <time class="gray dib f6 f5-ns" style="min-width: 12rem">
-              2022 November 30            </time>
-            <span class="fw5 dark-gray dm-moon-gray w-100">
-              Using Lua Metatables With The C API            </span>
+      
+        <li class="lh-copy">
+          <a class="post-link no-underline harsh pv2 ph2 nl2 nr2 db br2 flex" href="/cpp-style.html">
+            <span class="soft flex-none" style="width: 9rem">
+              Jan 6, 2023
+            </span>
+            <span class="pl1 fw5">
+              C&#43;&#43; Coding Style
+            </span>
           </a>
         </li>
-              <li
-          class="slide-up pause-animation"
-          style="animation-duration: 671ms"
-        >
-          <a
-            href="coroutines.html"
-            class="
-              link br2
-              hover-bg-black-10 dm-hover-bg-black-50
-              flex flex-wrap flex-nowrap-ns ph3 pv3 nt1 nb1
-            "
-          >
-            <time class="gray dib f6 f5-ns" style="min-width: 12rem">
-              2022 April 6            </time>
-            <span class="fw5 dark-gray dm-moon-gray w-100">
-              Lua Coroutines By Example            </span>
+      
+        <li class="lh-copy">
+          <a class="post-link no-underline harsh pv2 ph2 nl2 nr2 db br2 flex" href="/metatables-in-c.html">
+            <span class="soft flex-none" style="width: 9rem">
+              Nov 30, 2022
+            </span>
+            <span class="pl1 fw5">
+              Using Lua Metatables With The C API
+            </span>
           </a>
         </li>
-              <li
-          class="slide-up pause-animation"
-          style="animation-duration: 735ms"
-        >
-          <a
-            href="batch-renderer.html"
-            class="
-              link br2
-              hover-bg-black-10 dm-hover-bg-black-50
-              flex flex-wrap flex-nowrap-ns ph3 pv3 nt1 nb1
-            "
-          >
-            <time class="gray dib f6 f5-ns" style="min-width: 12rem">
-              2022 January 4            </time>
-            <span class="fw5 dark-gray dm-moon-gray w-100">
-              A Tiny OpenGL 2D Batch Renderer            </span>
+      
+        <li class="lh-copy">
+          <a class="post-link no-underline harsh pv2 ph2 nl2 nr2 db br2 flex" href="/coroutines.html">
+            <span class="soft flex-none" style="width: 9rem">
+              Apr 6, 2022
+            </span>
+            <span class="pl1 fw5">
+              Lua Coroutines By Example
+            </span>
           </a>
         </li>
-              <li
-          class="slide-up pause-animation"
-          style="animation-duration: 794ms"
-        >
-          <a
-            href="unit-testing.html"
-            class="
-              link br2
-              hover-bg-black-10 dm-hover-bg-black-50
-              flex flex-wrap flex-nowrap-ns ph3 pv3 nt1 nb1
-            "
-          >
-            <time class="gray dib f6 f5-ns" style="min-width: 12rem">
-              2022 January 3            </time>
-            <span class="fw5 dark-gray dm-moon-gray w-100">
-              Write Your Own C++ Unit Testing Library            </span>
+      
+        <li class="lh-copy">
+          <a class="post-link no-underline harsh pv2 ph2 nl2 nr2 db br2 flex" href="/batch-renderer.html">
+            <span class="soft flex-none" style="width: 9rem">
+              Jan 4, 2022
+            </span>
+            <span class="pl1 fw5">
+              A Tiny OpenGL 2D Batch Renderer
+            </span>
           </a>
         </li>
-          </ul>
-  </section>
-  <section class="mw8 center mb5">
-    <h2 class="mb3 ph3">Projects</h2>
-    <div id="project-list" class="flex flex-wrap items-stretch">
-              <div class="pa3 w-100 w-50-m w-third-l">
-          <div
-            class="project-card shadow br3 overflow-hidden h-100 flex flex-column slide-up pause-animation"
-            style="
-              --color: #115e59;
-              --dark-color: #134e4a;
-              animation-duration: 500ms;
-            "
-          >
-            <a
-              class="link db h-100"
-              href="https://jasonliang.js.org/spry/"
-            >
-              <img
-                src="static/images/spry.png"
-                alt="Screenshot of a 2D game with planes"
-                loading="lazy"
-                decoding="async"
-              >
-              <div class="ph3 flex flex-column ">
-                <div class="flex-auto">
-                  <h3 class="near-white mt0 mb2 f5 fw5">Spry</h3>
-                  <p class="mv0 white-50 lh-copy">
-                    A 2D game framework for rapid prototyping and game jams.                  </p>
-                </div>
-              </div>
-            </a>
-                          <div class="flex justify-between fw5 f6">
-                <a
-                  class="white-80 pv3 link dim flex justify-center items-center w-100"
-                  href="https://github.com/jasonliang-dev/spry"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="white-60" width="20" height="20" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-                  <span class="ml2 mr2">GitHub</span>
-                </a>
-                  <a
-                    class="white-80 link dim flex justify-center items-center w-100"
-                    href="https://jasonliang.js.org/spry/"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 20px; height: 20px" class="white-60">
-                      <path fill-rule="evenodd" d="M4.25 5.5a.75.75 0 00-.75.75v8.5c0 .414.336.75.75.75h8.5a.75.75 0 00.75-.75v-4a.75.75 0 011.5 0v4A2.25 2.25 0 0112.75 17h-8.5A2.25 2.25 0 012 14.75v-8.5A2.25 2.25 0 014.25 4h5a.75.75 0 010 1.5h-5z" clip-rule="evenodd" />
-                      <path fill-rule="evenodd" d="M6.194 12.753a.75.75 0 001.06.053L16.5 4.44v2.81a.75.75 0 001.5 0v-4.5a.75.75 0 00-.75-.75h-4.5a.75.75 0 000 1.5h2.553l-9.056 8.194a.75.75 0 00-.053 1.06z" clip-rule="evenodd" />
-                    </svg>
-                    <span class="ml2 mr2">View</span>
-                  </a>
-              </div>
-                      </div>
-        </div>
-              <div class="pa3 w-100 w-50-m w-third-l">
-          <div
-            class="project-card shadow br3 overflow-hidden h-100 flex flex-column slide-up pause-animation"
-            style="
-              --color: #3730a3;
-              --dark-color: #312e81;
-              animation-duration: 592ms;
-            "
-          >
-            <a
-              class="link db h-100"
-              href="https://github.com/jasonliang-dev/thp"
-            >
-              <img
-                src="static/images/thp.png"
-                alt=""
-                loading="lazy"
-                decoding="async"
-              >
-              <div class="ph3 flex flex-column pb3">
-                <div class="flex-auto">
-                  <h3 class="near-white mt0 mb2 f5 fw5">Tiny Hypertext Preprocessor</h3>
-                  <p class="mv0 white-50 lh-copy">
-                    A program that helps generate static websites using Lua.                  </p>
-                </div>
-              </div>
-            </a>
-                      </div>
-        </div>
-              <div class="pa3 w-100 w-50-m w-third-l">
-          <div
-            class="project-card shadow br3 overflow-hidden h-100 flex flex-column slide-up pause-animation"
-            style="
-              --color: #9a3412;
-              --dark-color: #7c2d12;
-              animation-duration: 671ms;
-            "
-          >
-            <a
-              class="link db h-100"
-              href="https://jasonliang.js.org/rootie-the-mouse/"
-            >
-              <img
-                src="static/images/rootie-the-mouse.png"
-                alt="2D game title screen with a mouse"
-                loading="lazy"
-                decoding="async"
-              >
-              <div class="ph3 flex flex-column ">
-                <div class="flex-auto">
-                  <h3 class="near-white mt0 mb2 f5 fw5">Rootie the Mouse</h3>
-                  <p class="mv0 white-50 lh-copy">
-                    You play as Rootie, a mouse that has the power to control water, air, and fire.                  </p>
-                </div>
-              </div>
-            </a>
-                          <div class="flex justify-between fw5 f6">
-                <a
-                  class="white-80 pv3 link dim flex justify-center items-center w-100"
-                  href="https://github.com/jasonliang-dev/rootie-the-mouse"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="white-60" width="20" height="20" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-                  <span class="ml2 mr2">GitHub</span>
-                </a>
-                  <a
-                    class="white-80 link dim flex justify-center items-center w-100"
-                    href="https://jasonliang.js.org/rootie-the-mouse/"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 20px; height: 20px" class="white-60">
-                      <path fill-rule="evenodd" d="M4.25 5.5a.75.75 0 00-.75.75v8.5c0 .414.336.75.75.75h8.5a.75.75 0 00.75-.75v-4a.75.75 0 011.5 0v4A2.25 2.25 0 0112.75 17h-8.5A2.25 2.25 0 012 14.75v-8.5A2.25 2.25 0 014.25 4h5a.75.75 0 010 1.5h-5z" clip-rule="evenodd" />
-                      <path fill-rule="evenodd" d="M6.194 12.753a.75.75 0 001.06.053L16.5 4.44v2.81a.75.75 0 001.5 0v-4.5a.75.75 0 00-.75-.75h-4.5a.75.75 0 000 1.5h2.553l-9.056 8.194a.75.75 0 00-.053 1.06z" clip-rule="evenodd" />
-                    </svg>
-                    <span class="ml2 mr2">View</span>
-                  </a>
-              </div>
-                      </div>
-        </div>
-              <div class="pa3 w-100 w-50-m w-third-l">
-          <div
-            class="project-card shadow br3 overflow-hidden h-100 flex flex-column slide-up pause-animation"
-            style="
-              --color: #86198f;
-              --dark-color: #701a75;
-              animation-duration: 742ms;
-            "
-          >
-            <a
-              class="link db h-100"
-              href="https://shoppy-store-chi.vercel.app/"
-            >
-              <img
-                src="static/images/storefront.png"
-                alt="Homepage of an online store"
-                loading="lazy"
-                decoding="async"
-              >
-              <div class="ph3 flex flex-column ">
-                <div class="flex-auto">
-                  <h3 class="near-white mt0 mb2 f5 fw5">shoppy-store</h3>
-                  <p class="mv0 white-50 lh-copy">
-                    Custom ecommerce storefront using Next.js and Shopify.                  </p>
-                </div>
-              </div>
-            </a>
-                          <div class="flex justify-between fw5 f6">
-                <a
-                  class="white-80 pv3 link dim flex justify-center items-center w-100"
-                  href="https://github.com/jasonliang-dev/shoppy-store"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="white-60" width="20" height="20" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-                  <span class="ml2 mr2">GitHub</span>
-                </a>
-                  <a
-                    class="white-80 link dim flex justify-center items-center w-100"
-                    href="https://shoppy-store-chi.vercel.app/"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 20px; height: 20px" class="white-60">
-                      <path fill-rule="evenodd" d="M4.25 5.5a.75.75 0 00-.75.75v8.5c0 .414.336.75.75.75h8.5a.75.75 0 00.75-.75v-4a.75.75 0 011.5 0v4A2.25 2.25 0 0112.75 17h-8.5A2.25 2.25 0 012 14.75v-8.5A2.25 2.25 0 014.25 4h5a.75.75 0 010 1.5h-5z" clip-rule="evenodd" />
-                      <path fill-rule="evenodd" d="M6.194 12.753a.75.75 0 001.06.053L16.5 4.44v2.81a.75.75 0 001.5 0v-4.5a.75.75 0 00-.75-.75h-4.5a.75.75 0 000 1.5h2.553l-9.056 8.194a.75.75 0 00-.053 1.06z" clip-rule="evenodd" />
-                    </svg>
-                    <span class="ml2 mr2">View</span>
-                  </a>
-              </div>
-                      </div>
-        </div>
-              <div class="pa3 w-100 w-50-m w-third-l">
-          <div
-            class="project-card shadow br3 overflow-hidden h-100 flex flex-column slide-up pause-animation"
-            style="
-              --color: #334155;
-              --dark-color: #1e293b;
-              animation-duration: 806ms;
-            "
-          >
-            <a
-              class="link db h-100"
-              href="https://github.com/jasonliang-dev/file-sink"
-            >
-              <img
-                src="static/images/sftp.png"
-                alt="A window displaying list of files"
-                loading="lazy"
-                decoding="async"
-              >
-              <div class="ph3 flex flex-column pb3">
-                <div class="flex-auto">
-                  <h3 class="near-white mt0 mb2 f5 fw5">file-sink</h3>
-                  <p class="mv0 white-50 lh-copy">
-                    Tiny SFTP client with automatic file synchronization using C++.                  </p>
-                </div>
-              </div>
-            </a>
-                      </div>
-        </div>
-              <div class="pa3 w-100 w-50-m w-third-l">
-          <div
-            class="project-card shadow br3 overflow-hidden h-100 flex flex-column slide-up pause-animation"
-            style="
-              --color: #1e40af;
-              --dark-color: #1e3a8a;
-              animation-duration: 866ms;
-            "
-          >
-            <a
-              class="link db h-100"
-              href="https://github.com/jasonliang-dev/odin-lua"
-            >
-              <img
-                src="static/images/odin-lua.png"
-                alt="odin-lua's source code"
-                loading="lazy"
-                decoding="async"
-              >
-              <div class="ph3 flex flex-column pb3">
-                <div class="flex-auto">
-                  <h3 class="near-white mt0 mb2 f5 fw5">odin-lua</h3>
-                  <p class="mv0 white-50 lh-copy">
-                    Lua 5.4.4 and LuaJIT support for the Odin programming language.                  </p>
-                </div>
-              </div>
-            </a>
-                      </div>
-        </div>
-              <div class="pa3 w-100 w-50-m w-third-l">
-          <div
-            class="project-card shadow br3 overflow-hidden h-100 flex flex-column slide-up pause-animation"
-            style="
-              --color: #3f6212;
-              --dark-color: #365314;
-              animation-duration: 922ms;
-            "
-          >
-            <a
-              class="link db h-100"
-              href="https://jasonliang.js.org/shooty-game/"
-            >
-              <img
-                src="static/images/shooty-game.png"
-                alt="Screenshot of shooty-game"
-                loading="lazy"
-                decoding="async"
-              >
-              <div class="ph3 flex flex-column ">
-                <div class="flex-auto">
-                  <h3 class="near-white mt0 mb2 f5 fw5">shooty-game</h3>
-                  <p class="mv0 white-50 lh-copy">
-                    A game where you shoot stuff. Made with C++ and Lua, without an engine.                  </p>
-                </div>
-              </div>
-            </a>
-                          <div class="flex justify-between fw5 f6">
-                <a
-                  class="white-80 pv3 link dim flex justify-center items-center w-100"
-                  href="https://github.com/jasonliang-dev/shooty-game"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="white-60" width="20" height="20" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-                  <span class="ml2 mr2">GitHub</span>
-                </a>
-                  <a
-                    class="white-80 link dim flex justify-center items-center w-100"
-                    href="https://jasonliang.js.org/shooty-game/"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 20px; height: 20px" class="white-60">
-                      <path fill-rule="evenodd" d="M4.25 5.5a.75.75 0 00-.75.75v8.5c0 .414.336.75.75.75h8.5a.75.75 0 00.75-.75v-4a.75.75 0 011.5 0v4A2.25 2.25 0 0112.75 17h-8.5A2.25 2.25 0 012 14.75v-8.5A2.25 2.25 0 014.25 4h5a.75.75 0 010 1.5h-5z" clip-rule="evenodd" />
-                      <path fill-rule="evenodd" d="M6.194 12.753a.75.75 0 001.06.053L16.5 4.44v2.81a.75.75 0 001.5 0v-4.5a.75.75 0 00-.75-.75h-4.5a.75.75 0 000 1.5h2.553l-9.056 8.194a.75.75 0 00-.053 1.06z" clip-rule="evenodd" />
-                    </svg>
-                    <span class="ml2 mr2">View</span>
-                  </a>
-              </div>
-                      </div>
-        </div>
-              <div class="pa3 w-100 w-50-m w-third-l">
-          <div
-            class="project-card shadow br3 overflow-hidden h-100 flex flex-column slide-up pause-animation"
-            style="
-              --color: #6b21a8;
-              --dark-color: #581c87;
-              animation-duration: 975ms;
-            "
-          >
-            <a
-              class="link db h-100"
-              href="https://jasonliang.js.org/heroicons-for-elm/"
-            >
-              <img
-                src="static/images/elm-heroicons.png"
-                alt="Gallery of icons in a grid"
-                loading="lazy"
-                decoding="async"
-              >
-              <div class="ph3 flex flex-column ">
-                <div class="flex-auto">
-                  <h3 class="near-white mt0 mb2 f5 fw5">Heroicons for Elm</h3>
-                  <p class="mv0 white-50 lh-copy">
-                    Web app that provides SVG icons for the Elm programming language.                  </p>
-                </div>
-              </div>
-            </a>
-                          <div class="flex justify-between fw5 f6">
-                <a
-                  class="white-80 pv3 link dim flex justify-center items-center w-100"
-                  href="https://github.com/jasonliang-dev/heroicons-for-elm"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="white-60" width="20" height="20" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-                  <span class="ml2 mr2">GitHub</span>
-                </a>
-                  <a
-                    class="white-80 link dim flex justify-center items-center w-100"
-                    href="https://jasonliang.js.org/heroicons-for-elm/"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 20px; height: 20px" class="white-60">
-                      <path fill-rule="evenodd" d="M4.25 5.5a.75.75 0 00-.75.75v8.5c0 .414.336.75.75.75h8.5a.75.75 0 00.75-.75v-4a.75.75 0 011.5 0v4A2.25 2.25 0 0112.75 17h-8.5A2.25 2.25 0 012 14.75v-8.5A2.25 2.25 0 014.25 4h5a.75.75 0 010 1.5h-5z" clip-rule="evenodd" />
-                      <path fill-rule="evenodd" d="M6.194 12.753a.75.75 0 001.06.053L16.5 4.44v2.81a.75.75 0 001.5 0v-4.5a.75.75 0 00-.75-.75h-4.5a.75.75 0 000 1.5h2.553l-9.056 8.194a.75.75 0 00-.053 1.06z" clip-rule="evenodd" />
-                    </svg>
-                    <span class="ml2 mr2">View</span>
-                  </a>
-              </div>
-                      </div>
-        </div>
-              <div class="pa3 w-100 w-50-m w-third-l">
-          <div
-            class="project-card shadow br3 overflow-hidden h-100 flex flex-column slide-up pause-animation"
-            style="
-              --color: #166534;
-              --dark-color: #14532d;
-              animation-duration: 1025ms;
-            "
-          >
-            <a
-              class="link db h-100"
-              href="https://github.com/jasonliang-dev/yet-another-chat-app"
-            >
-              <img
-                src="static/images/chat-app.png"
-                alt="A chat interface"
-                loading="lazy"
-                decoding="async"
-              >
-              <div class="ph3 flex flex-column pb3">
-                <div class="flex-auto">
-                  <h3 class="near-white mt0 mb2 f5 fw5">Yet Another Chat App</h3>
-                  <p class="mv0 white-50 lh-copy">
-                    Chat application that uses the MERN stack. Messages are sent in real time using Socket.IO.                  </p>
-                </div>
-              </div>
-            </a>
-                      </div>
-        </div>
-              <div class="pa3 w-100 w-50-m w-third-l">
-          <div
-            class="project-card shadow br3 overflow-hidden h-100 flex flex-column slide-up pause-animation"
-            style="
-              --color: #854d0e;
-              --dark-color: #713f12;
-              animation-duration: 1072ms;
-            "
-          >
-            <a
-              class="link db h-100"
-              href="https://temtypecalc.netlify.app/"
-            >
-              <img
-                src="static/images/temtem.png"
-                alt="Temtem creatures in a list"
-                loading="lazy"
-                decoding="async"
-              >
-              <div class="ph3 flex flex-column ">
-                <div class="flex-auto">
-                  <h3 class="near-white mt0 mb2 f5 fw5">Temtem Type Calculator</h3>
-                  <p class="mv0 white-50 lh-copy">
-                    For the game Temtem, view matchups between different creature types. Made with Gatsby.                  </p>
-                </div>
-              </div>
-            </a>
-                          <div class="flex justify-between fw5 f6">
-                <a
-                  class="white-80 pv3 link dim flex justify-center items-center w-100"
-                  href="https://github.com/jasonliang-dev/temtem-type-calculator"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="white-60" width="20" height="20" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-                  <span class="ml2 mr2">GitHub</span>
-                </a>
-                  <a
-                    class="white-80 link dim flex justify-center items-center w-100"
-                    href="https://temtypecalc.netlify.app/"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 20px; height: 20px" class="white-60">
-                      <path fill-rule="evenodd" d="M4.25 5.5a.75.75 0 00-.75.75v8.5c0 .414.336.75.75.75h8.5a.75.75 0 00.75-.75v-4a.75.75 0 011.5 0v4A2.25 2.25 0 0112.75 17h-8.5A2.25 2.25 0 012 14.75v-8.5A2.25 2.25 0 014.25 4h5a.75.75 0 010 1.5h-5z" clip-rule="evenodd" />
-                      <path fill-rule="evenodd" d="M6.194 12.753a.75.75 0 001.06.053L16.5 4.44v2.81a.75.75 0 001.5 0v-4.5a.75.75 0 00-.75-.75h-4.5a.75.75 0 000 1.5h2.553l-9.056 8.194a.75.75 0 00-.053 1.06z" clip-rule="evenodd" />
-                    </svg>
-                    <span class="ml2 mr2">View</span>
-                  </a>
-              </div>
-                      </div>
-        </div>
-              <div class="pa3 w-100 w-50-m w-third-l">
-          <div
-            class="project-card shadow br3 overflow-hidden h-100 flex flex-column slide-up pause-animation"
-            style="
-              --color: #115e59;
-              --dark-color: #134e4a;
-              animation-duration: 1118ms;
-            "
-          >
-            <a
-              class="link db h-100"
-              href="https://jasonliang.js.org/wildermaze/"
-            >
-              <img
-                src="static/images/maze.png"
-                alt="Screenshot of Wildermaze"
-                loading="lazy"
-                decoding="async"
-              >
-              <div class="ph3 flex flex-column ">
-                <div class="flex-auto">
-                  <h3 class="near-white mt0 mb2 f5 fw5">Wildermaze</h3>
-                  <p class="mv0 white-50 lh-copy">
-                    A game where you escape a maze while avoiding wolves. Created during BC Game Jam 2020.                  </p>
-                </div>
-              </div>
-            </a>
-                          <div class="flex justify-between fw5 f6">
-                <a
-                  class="white-80 pv3 link dim flex justify-center items-center w-100"
-                  href="https://github.com/jasonliang-dev/wildermaze"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="white-60" width="20" height="20" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-                  <span class="ml2 mr2">GitHub</span>
-                </a>
-                  <a
-                    class="white-80 link dim flex justify-center items-center w-100"
-                    href="https://jasonliang.js.org/wildermaze/"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 20px; height: 20px" class="white-60">
-                      <path fill-rule="evenodd" d="M4.25 5.5a.75.75 0 00-.75.75v8.5c0 .414.336.75.75.75h8.5a.75.75 0 00.75-.75v-4a.75.75 0 011.5 0v4A2.25 2.25 0 0112.75 17h-8.5A2.25 2.25 0 012 14.75v-8.5A2.25 2.25 0 014.25 4h5a.75.75 0 010 1.5h-5z" clip-rule="evenodd" />
-                      <path fill-rule="evenodd" d="M6.194 12.753a.75.75 0 001.06.053L16.5 4.44v2.81a.75.75 0 001.5 0v-4.5a.75.75 0 00-.75-.75h-4.5a.75.75 0 000 1.5h2.553l-9.056 8.194a.75.75 0 00-.053 1.06z" clip-rule="evenodd" />
-                    </svg>
-                    <span class="ml2 mr2">View</span>
-                  </a>
-              </div>
-                      </div>
-        </div>
-              <div class="pa3 w-100 w-50-m w-third-l">
-          <div
-            class="project-card shadow br3 overflow-hidden h-100 flex flex-column slide-up pause-animation"
-            style="
-              --color: #86198f;
-              --dark-color: #701a75;
-              animation-duration: 1162ms;
-            "
-          >
-            <a
-              class="link db h-100"
-              href="https://github.com/jasonliang-dev/space-shooter"
-            >
-              <img
-                src="static/images/spaceshooter.png"
-                alt="Screenshot of Space Shooter Game"
-                loading="lazy"
-                decoding="async"
-              >
-              <div class="ph3 flex flex-column pb3">
-                <div class="flex-auto">
-                  <h3 class="near-white mt0 mb2 f5 fw5">Space Shooter Game</h3>
-                  <p class="mv0 white-50 lh-copy">
-                    Avoid asteroids and enemy fire in a fast paced arcade romp.                  </p>
-                </div>
-              </div>
-            </a>
-                      </div>
-        </div>
-              <div class="pa3 w-100 w-50-m w-third-l">
-          <div
-            class="project-card shadow br3 overflow-hidden h-100 flex flex-column slide-up pause-animation"
-            style="
-              --color: #334155;
-              --dark-color: #1e293b;
-              animation-duration: 1204ms;
-            "
-          >
-            <a
-              class="link db h-100"
-              href="https://github.com/jasonliang-dev/lite-vim"
-            >
-              <img
-                src="static/images/lite-vim.png"
-                alt="lite-vim's source code"
-                loading="lazy"
-                decoding="async"
-              >
-              <div class="ph3 flex flex-column pb3">
-                <div class="flex-auto">
-                  <h3 class="near-white mt0 mb2 f5 fw5">lite-vim</h3>
-                  <p class="mv0 white-50 lh-copy">
-                    A plugin for the Lite text editor that emulates a subset of Vim.                  </p>
-                </div>
-              </div>
-            </a>
-                      </div>
-        </div>
-              <div class="pa3 w-100 w-50-m w-third-l">
-          <div
-            class="project-card shadow br3 overflow-hidden h-100 flex flex-column slide-up pause-animation"
-            style="
-              --color: #9a3412;
-              --dark-color: #7c2d12;
-              animation-duration: 1245ms;
-            "
-          >
-            <a
-              class="link db h-100"
-              href="https://github.com/jasonliang-dev/entity-component-system"
-            >
-              <img
-                src="static/images/ecs.png"
-                alt="A 2d game screenshot with many projectiles"
-                loading="lazy"
-                decoding="async"
-              >
-              <div class="ph3 flex flex-column pb3">
-                <div class="flex-auto">
-                  <h3 class="near-white mt0 mb2 f5 fw5">Entity Component System</h3>
-                  <p class="mv0 white-50 lh-copy">
-                    Archetype entity component system library for C.                  </p>
-                </div>
-              </div>
-            </a>
-                      </div>
-        </div>
-              <div class="pa3 w-100 w-50-m w-third-l">
-          <div
-            class="project-card shadow br3 overflow-hidden h-100 flex flex-column slide-up pause-animation"
-            style="
-              --color: #3730a3;
-              --dark-color: #312e81;
-              animation-duration: 1285ms;
-            "
-          >
-            <a
-              class="link db h-100"
-              href="https://github.com/jasonliang-dev/costello"
-            >
-              <img
-                src="static/images/discord-stickers.png"
-                alt="Several images/stickers shown in a grid"
-                loading="lazy"
-                decoding="async"
-              >
-              <div class="ph3 flex flex-column pb3">
-                <div class="flex-auto">
-                  <h3 class="near-white mt0 mb2 f5 fw5">Costello</h3>
-                  <p class="mv0 white-50 lh-copy">
-                    BetterDiscord plugin that lets you save and rapidly send a collection of images.                  </p>
-                </div>
-              </div>
-            </a>
-                      </div>
-        </div>
-              <div class="pa3 w-100 w-50-m w-third-l">
-          <div
-            class="project-card shadow br3 overflow-hidden h-100 flex flex-column slide-up pause-animation"
-            style="
-              --color: #6b21a8;
-              --dark-color: #581c87;
-              animation-duration: 1323ms;
-            "
-          >
-            <a
-              class="link db h-100"
-              href="https://github.com/jasonliang-dev/dream-eater"
-            >
-              <img
-                src="static/images/php.png"
-                alt="Some PHP source code"
-                loading="lazy"
-                decoding="async"
-              >
-              <div class="ph3 flex flex-column pb3">
-                <div class="flex-auto">
-                  <h3 class="near-white mt0 mb2 f5 fw5">dream-eater</h3>
-                  <p class="mv0 white-50 lh-copy">
-                    Emacs minor mode that respects Dreamweaver's check in/out system.                  </p>
-                </div>
-              </div>
-            </a>
-                      </div>
-        </div>
-              <div class="pa3 w-100 w-50-m w-third-l">
-          <div
-            class="project-card shadow br3 overflow-hidden h-100 flex flex-column slide-up pause-animation"
-            style="
-              --color: #9d174d;
-              --dark-color: #831843;
-              animation-duration: 1360ms;
-            "
-          >
-            <a
-              class="link db h-100"
-              href="https://github.com/jasonliang-dev/lulu"
-            >
-              <img
-                src="static/images/lulu.png"
-                alt="Code showcasing the lulu programming language"
-                loading="lazy"
-                decoding="async"
-              >
-              <div class="ph3 flex flex-column pb3">
-                <div class="flex-auto">
-                  <h3 class="near-white mt0 mb2 f5 fw5">lulu</h3>
-                  <p class="mv0 white-50 lh-copy">
-                    Tiny lispy toy programming language. Written in Haskell under 300 SLOC.                  </p>
-                </div>
-              </div>
-            </a>
-                      </div>
-        </div>
-              <div class="pa3 w-100 w-50-m w-third-l">
-          <div
-            class="project-card shadow br3 overflow-hidden h-100 flex flex-column slide-up pause-animation"
-            style="
-              --color: #334155;
-              --dark-color: #1e293b;
-              animation-duration: 1396ms;
-            "
-          >
-            <a
-              class="link db h-100"
-              href="https://github.com/jasonliang-dev/game-of-life"
-            >
-              <img
-                src="static/images/game-of-life.png"
-                alt="A grid of black/white squares"
-                loading="lazy"
-                decoding="async"
-              >
-              <div class="ph3 flex flex-column pb3">
-                <div class="flex-auto">
-                  <h3 class="near-white mt0 mb2 f5 fw5">Game of Life</h3>
-                  <p class="mv0 white-50 lh-copy">
-                    Conway's Game of Life written in C with SDL2.                  </p>
-                </div>
-              </div>
-            </a>
-                      </div>
-        </div>
+      
+        <li class="lh-copy">
+          <a class="post-link no-underline harsh pv2 ph2 nl2 nr2 db br2 flex" href="/unit-testing.html">
+            <span class="soft flex-none" style="width: 9rem">
+              Jan 3, 2022
+            </span>
+            <span class="pl1 fw5">
+              Write Your Own C&#43;&#43; Unit Testing Library
+            </span>
+          </a>
+        </li>
+      
+    </ul>
+
+    <h2 class="mb0">GitHub Projects</h2>
+    <p class="soft lh-copy">
+      You can also find these projects on my
+      <a href="https://github.com/jasonliang-dev/" class="harsh better-underline fw5">GitHub</a>
+      profile.
+    </p>
+    <ul class="project-grid list pl0 mt4 mb6">
+      
+        <li class="mb3">
+          <a href="https://jasonliang.js.org/spry/" class="no-underline br3 db border-outline shadow img-scale-over" style="max-width: 24rem">
+            <img src="/public/images/spry.png" alt="Screenshot of a 2D game with planes" class="db w-100" style="object-fit: cover; aspect-ratio: 16 / 9">
+          </a>
+          <div class="pt3">
+            <h3 class="mt0 mb2 fw5 f4">
+              <a href="https://jasonliang.js.org/spry/" class="harsh better-underline">
+                Spry
+              </a>
+            </h3>
+            <p class="mt0 lh-copy soft mb0">
+              A 2D game framework for rapid prototyping and game jams.
+            </p>
+            
+              <a class="eyebrow better-underline inline-flex items-center mt2" href="https://github.com/jasonliang-dev/spry">
+                <span class="mr1">
+                  GitHub
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 20px; height: 20px">
+                  <path fill-rule="evenodd" d="M4.25 5.5a.75.75 0 00-.75.75v8.5c0 .414.336.75.75.75h8.5a.75.75 0 00.75-.75v-4a.75.75 0 011.5 0v4A2.25 2.25 0 0112.75 17h-8.5A2.25 2.25 0 012 14.75v-8.5A2.25 2.25 0 014.25 4h5a.75.75 0 010 1.5h-5z" clip-rule="evenodd" />
+                  <path fill-rule="evenodd" d="M6.194 12.753a.75.75 0 001.06.053L16.5 4.44v2.81a.75.75 0 001.5 0v-4.5a.75.75 0 00-.75-.75h-4.5a.75.75 0 000 1.5h2.553l-9.056 8.194a.75.75 0 00-.053 1.06z" clip-rule="evenodd" />
+                </svg>
+              </a>
+            
           </div>
-  </section>
-</main>
-<script>
-  const canvas = document.getElementById("canvas");
-  const ctx = canvas.getContext("2d");
+        </li>
+      
+        <li class="mb3">
+          <a href="https://github.com/jasonliang-dev/thp" class="no-underline br3 db border-outline shadow img-scale-over" style="max-width: 24rem">
+            <img src="/public/images/thp.png" alt="" class="db w-100" style="object-fit: cover; aspect-ratio: 16 / 9">
+          </a>
+          <div class="pt3">
+            <h3 class="mt0 mb2 fw5 f4">
+              <a href="https://github.com/jasonliang-dev/thp" class="harsh better-underline">
+                Tiny Hypertext Preprocessor
+              </a>
+            </h3>
+            <p class="mt0 lh-copy soft mb0">
+              A program that helps generate static websites using Lua.
+            </p>
+            
+          </div>
+        </li>
+      
+        <li class="mb3">
+          <a href="https://jasonliang.js.org/rootie-the-mouse/" class="no-underline br3 db border-outline shadow img-scale-over" style="max-width: 24rem">
+            <img src="/public/images/rootie-the-mouse.png" alt="2D game title screen with a mouse" class="db w-100" style="object-fit: cover; aspect-ratio: 16 / 9">
+          </a>
+          <div class="pt3">
+            <h3 class="mt0 mb2 fw5 f4">
+              <a href="https://jasonliang.js.org/rootie-the-mouse/" class="harsh better-underline">
+                Rootie the Mouse
+              </a>
+            </h3>
+            <p class="mt0 lh-copy soft mb0">
+              You play as Rootie, a mouse that has the power to control water, air, and fire.
+            </p>
+            
+              <a class="eyebrow better-underline inline-flex items-center mt2" href="https://github.com/jasonliang-dev/rootie-the-mouse">
+                <span class="mr1">
+                  GitHub
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 20px; height: 20px">
+                  <path fill-rule="evenodd" d="M4.25 5.5a.75.75 0 00-.75.75v8.5c0 .414.336.75.75.75h8.5a.75.75 0 00.75-.75v-4a.75.75 0 011.5 0v4A2.25 2.25 0 0112.75 17h-8.5A2.25 2.25 0 012 14.75v-8.5A2.25 2.25 0 014.25 4h5a.75.75 0 010 1.5h-5z" clip-rule="evenodd" />
+                  <path fill-rule="evenodd" d="M6.194 12.753a.75.75 0 001.06.053L16.5 4.44v2.81a.75.75 0 001.5 0v-4.5a.75.75 0 00-.75-.75h-4.5a.75.75 0 000 1.5h2.553l-9.056 8.194a.75.75 0 00-.053 1.06z" clip-rule="evenodd" />
+                </svg>
+              </a>
+            
+          </div>
+        </li>
+      
+        <li class="mb3">
+          <a href="https://shoppy-store-chi.vercel.app/" class="no-underline br3 db border-outline shadow img-scale-over" style="max-width: 24rem">
+            <img src="/public/images/storefront.png" alt="Homepage of an online store" class="db w-100" style="object-fit: cover; aspect-ratio: 16 / 9">
+          </a>
+          <div class="pt3">
+            <h3 class="mt0 mb2 fw5 f4">
+              <a href="https://shoppy-store-chi.vercel.app/" class="harsh better-underline">
+                shoppy-store
+              </a>
+            </h3>
+            <p class="mt0 lh-copy soft mb0">
+              Custom ecommerce storefront using Next.js and Shopify.
+            </p>
+            
+              <a class="eyebrow better-underline inline-flex items-center mt2" href="https://github.com/jasonliang-dev/shoppy-store">
+                <span class="mr1">
+                  GitHub
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 20px; height: 20px">
+                  <path fill-rule="evenodd" d="M4.25 5.5a.75.75 0 00-.75.75v8.5c0 .414.336.75.75.75h8.5a.75.75 0 00.75-.75v-4a.75.75 0 011.5 0v4A2.25 2.25 0 0112.75 17h-8.5A2.25 2.25 0 012 14.75v-8.5A2.25 2.25 0 014.25 4h5a.75.75 0 010 1.5h-5z" clip-rule="evenodd" />
+                  <path fill-rule="evenodd" d="M6.194 12.753a.75.75 0 001.06.053L16.5 4.44v2.81a.75.75 0 001.5 0v-4.5a.75.75 0 00-.75-.75h-4.5a.75.75 0 000 1.5h2.553l-9.056 8.194a.75.75 0 00-.053 1.06z" clip-rule="evenodd" />
+                </svg>
+              </a>
+            
+          </div>
+        </li>
+      
+        <li class="mb3">
+          <a href="https://github.com/jasonliang-dev/file-sink" class="no-underline br3 db border-outline shadow img-scale-over" style="max-width: 24rem">
+            <img src="/public/images/sftp.png" alt="A window displaying list of files" class="db w-100" style="object-fit: cover; aspect-ratio: 16 / 9">
+          </a>
+          <div class="pt3">
+            <h3 class="mt0 mb2 fw5 f4">
+              <a href="https://github.com/jasonliang-dev/file-sink" class="harsh better-underline">
+                file-sink
+              </a>
+            </h3>
+            <p class="mt0 lh-copy soft mb0">
+              Tiny SFTP client with automatic file synchronization using C&#43;&#43;.
+            </p>
+            
+          </div>
+        </li>
+      
+        <li class="mb3">
+          <a href="https://github.com/jasonliang-dev/odin-lua" class="no-underline br3 db border-outline shadow img-scale-over" style="max-width: 24rem">
+            <img src="/public/images/odin-lua.png" alt="odin-lua&#39;s source code" class="db w-100" style="object-fit: cover; aspect-ratio: 16 / 9">
+          </a>
+          <div class="pt3">
+            <h3 class="mt0 mb2 fw5 f4">
+              <a href="https://github.com/jasonliang-dev/odin-lua" class="harsh better-underline">
+                odin-lua
+              </a>
+            </h3>
+            <p class="mt0 lh-copy soft mb0">
+              Lua 5.4.4 and LuaJIT support for the Odin programming language.
+            </p>
+            
+          </div>
+        </li>
+      
+        <li class="mb3">
+          <a href="https://jasonliang.js.org/shooty-game/" class="no-underline br3 db border-outline shadow img-scale-over" style="max-width: 24rem">
+            <img src="/public/images/shooty-game.png" alt="Screenshot of shooty-game" class="db w-100" style="object-fit: cover; aspect-ratio: 16 / 9">
+          </a>
+          <div class="pt3">
+            <h3 class="mt0 mb2 fw5 f4">
+              <a href="https://jasonliang.js.org/shooty-game/" class="harsh better-underline">
+                shooty-game
+              </a>
+            </h3>
+            <p class="mt0 lh-copy soft mb0">
+              A game where you shoot stuff. Made with C&#43;&#43; and Lua, without an engine.
+            </p>
+            
+              <a class="eyebrow better-underline inline-flex items-center mt2" href="https://github.com/jasonliang-dev/shooty-game">
+                <span class="mr1">
+                  GitHub
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 20px; height: 20px">
+                  <path fill-rule="evenodd" d="M4.25 5.5a.75.75 0 00-.75.75v8.5c0 .414.336.75.75.75h8.5a.75.75 0 00.75-.75v-4a.75.75 0 011.5 0v4A2.25 2.25 0 0112.75 17h-8.5A2.25 2.25 0 012 14.75v-8.5A2.25 2.25 0 014.25 4h5a.75.75 0 010 1.5h-5z" clip-rule="evenodd" />
+                  <path fill-rule="evenodd" d="M6.194 12.753a.75.75 0 001.06.053L16.5 4.44v2.81a.75.75 0 001.5 0v-4.5a.75.75 0 00-.75-.75h-4.5a.75.75 0 000 1.5h2.553l-9.056 8.194a.75.75 0 00-.053 1.06z" clip-rule="evenodd" />
+                </svg>
+              </a>
+            
+          </div>
+        </li>
+      
+        <li class="mb3">
+          <a href="https://jasonliang.js.org/heroicons-for-elm/" class="no-underline br3 db border-outline shadow img-scale-over" style="max-width: 24rem">
+            <img src="/public/images/elm-heroicons.png" alt="Gallery of icons in a grid" class="db w-100" style="object-fit: cover; aspect-ratio: 16 / 9">
+          </a>
+          <div class="pt3">
+            <h3 class="mt0 mb2 fw5 f4">
+              <a href="https://jasonliang.js.org/heroicons-for-elm/" class="harsh better-underline">
+                Heroicons for Elm
+              </a>
+            </h3>
+            <p class="mt0 lh-copy soft mb0">
+              Web app that provides SVG icons for the Elm programming language.
+            </p>
+            
+              <a class="eyebrow better-underline inline-flex items-center mt2" href="https://github.com/jasonliang-dev/heroicons-for-elm">
+                <span class="mr1">
+                  GitHub
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 20px; height: 20px">
+                  <path fill-rule="evenodd" d="M4.25 5.5a.75.75 0 00-.75.75v8.5c0 .414.336.75.75.75h8.5a.75.75 0 00.75-.75v-4a.75.75 0 011.5 0v4A2.25 2.25 0 0112.75 17h-8.5A2.25 2.25 0 012 14.75v-8.5A2.25 2.25 0 014.25 4h5a.75.75 0 010 1.5h-5z" clip-rule="evenodd" />
+                  <path fill-rule="evenodd" d="M6.194 12.753a.75.75 0 001.06.053L16.5 4.44v2.81a.75.75 0 001.5 0v-4.5a.75.75 0 00-.75-.75h-4.5a.75.75 0 000 1.5h2.553l-9.056 8.194a.75.75 0 00-.053 1.06z" clip-rule="evenodd" />
+                </svg>
+              </a>
+            
+          </div>
+        </li>
+      
+        <li class="mb3">
+          <a href="https://github.com/jasonliang-dev/yet-another-chat-app" class="no-underline br3 db border-outline shadow img-scale-over" style="max-width: 24rem">
+            <img src="/public/images/chat-app.png" alt="A chat interface" class="db w-100" style="object-fit: cover; aspect-ratio: 16 / 9">
+          </a>
+          <div class="pt3">
+            <h3 class="mt0 mb2 fw5 f4">
+              <a href="https://github.com/jasonliang-dev/yet-another-chat-app" class="harsh better-underline">
+                Yet Another Chat App
+              </a>
+            </h3>
+            <p class="mt0 lh-copy soft mb0">
+              Chat application that uses the MERN stack. Messages are sent in real time using Socket.IO.
+            </p>
+            
+          </div>
+        </li>
+      
+        <li class="mb3">
+          <a href="https://temtypecalc.netlify.app/" class="no-underline br3 db border-outline shadow img-scale-over" style="max-width: 24rem">
+            <img src="/public/images/temtem.png" alt="Temtem creatures in a list" class="db w-100" style="object-fit: cover; aspect-ratio: 16 / 9">
+          </a>
+          <div class="pt3">
+            <h3 class="mt0 mb2 fw5 f4">
+              <a href="https://temtypecalc.netlify.app/" class="harsh better-underline">
+                Temtem Type Calculator
+              </a>
+            </h3>
+            <p class="mt0 lh-copy soft mb0">
+              For the game Temtem, view matchups between different creature types. Made with Gatsby.
+            </p>
+            
+              <a class="eyebrow better-underline inline-flex items-center mt2" href="https://github.com/jasonliang-dev/temtem-type-calculator">
+                <span class="mr1">
+                  GitHub
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 20px; height: 20px">
+                  <path fill-rule="evenodd" d="M4.25 5.5a.75.75 0 00-.75.75v8.5c0 .414.336.75.75.75h8.5a.75.75 0 00.75-.75v-4a.75.75 0 011.5 0v4A2.25 2.25 0 0112.75 17h-8.5A2.25 2.25 0 012 14.75v-8.5A2.25 2.25 0 014.25 4h5a.75.75 0 010 1.5h-5z" clip-rule="evenodd" />
+                  <path fill-rule="evenodd" d="M6.194 12.753a.75.75 0 001.06.053L16.5 4.44v2.81a.75.75 0 001.5 0v-4.5a.75.75 0 00-.75-.75h-4.5a.75.75 0 000 1.5h2.553l-9.056 8.194a.75.75 0 00-.053 1.06z" clip-rule="evenodd" />
+                </svg>
+              </a>
+            
+          </div>
+        </li>
+      
+        <li class="mb3">
+          <a href="https://jasonliang.js.org/wildermaze/" class="no-underline br3 db border-outline shadow img-scale-over" style="max-width: 24rem">
+            <img src="/public/images/maze.png" alt="Screenshot of Wildermaze" class="db w-100" style="object-fit: cover; aspect-ratio: 16 / 9">
+          </a>
+          <div class="pt3">
+            <h3 class="mt0 mb2 fw5 f4">
+              <a href="https://jasonliang.js.org/wildermaze/" class="harsh better-underline">
+                Wildermaze
+              </a>
+            </h3>
+            <p class="mt0 lh-copy soft mb0">
+              A game where you escape a maze while avoiding wolves. Created during BC Game Jam 2020.
+            </p>
+            
+              <a class="eyebrow better-underline inline-flex items-center mt2" href="https://github.com/jasonliang-dev/wildermaze">
+                <span class="mr1">
+                  GitHub
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 20px; height: 20px">
+                  <path fill-rule="evenodd" d="M4.25 5.5a.75.75 0 00-.75.75v8.5c0 .414.336.75.75.75h8.5a.75.75 0 00.75-.75v-4a.75.75 0 011.5 0v4A2.25 2.25 0 0112.75 17h-8.5A2.25 2.25 0 012 14.75v-8.5A2.25 2.25 0 014.25 4h5a.75.75 0 010 1.5h-5z" clip-rule="evenodd" />
+                  <path fill-rule="evenodd" d="M6.194 12.753a.75.75 0 001.06.053L16.5 4.44v2.81a.75.75 0 001.5 0v-4.5a.75.75 0 00-.75-.75h-4.5a.75.75 0 000 1.5h2.553l-9.056 8.194a.75.75 0 00-.053 1.06z" clip-rule="evenodd" />
+                </svg>
+              </a>
+            
+          </div>
+        </li>
+      
+        <li class="mb3">
+          <a href="https://github.com/jasonliang-dev/space-shooter" class="no-underline br3 db border-outline shadow img-scale-over" style="max-width: 24rem">
+            <img src="/public/images/spaceshooter.png" alt="Screenshot of Space Shooter Game" class="db w-100" style="object-fit: cover; aspect-ratio: 16 / 9">
+          </a>
+          <div class="pt3">
+            <h3 class="mt0 mb2 fw5 f4">
+              <a href="https://github.com/jasonliang-dev/space-shooter" class="harsh better-underline">
+                Space Shooter Game
+              </a>
+            </h3>
+            <p class="mt0 lh-copy soft mb0">
+              Avoid asteroids and enemy fire in a fast paced arcade romp.
+            </p>
+            
+          </div>
+        </li>
+      
+        <li class="mb3">
+          <a href="https://github.com/jasonliang-dev/lite-vim" class="no-underline br3 db border-outline shadow img-scale-over" style="max-width: 24rem">
+            <img src="/public/images/lite-vim.png" alt="lite-vim&#39;s source code" class="db w-100" style="object-fit: cover; aspect-ratio: 16 / 9">
+          </a>
+          <div class="pt3">
+            <h3 class="mt0 mb2 fw5 f4">
+              <a href="https://github.com/jasonliang-dev/lite-vim" class="harsh better-underline">
+                lite-vim
+              </a>
+            </h3>
+            <p class="mt0 lh-copy soft mb0">
+              A plugin for the Lite text editor that emulates a subset of Vim.
+            </p>
+            
+          </div>
+        </li>
+      
+        <li class="mb3">
+          <a href="https://github.com/jasonliang-dev/entity-component-system" class="no-underline br3 db border-outline shadow img-scale-over" style="max-width: 24rem">
+            <img src="/public/images/ecs.png" alt="A 2d game screenshot with many projectiles" class="db w-100" style="object-fit: cover; aspect-ratio: 16 / 9">
+          </a>
+          <div class="pt3">
+            <h3 class="mt0 mb2 fw5 f4">
+              <a href="https://github.com/jasonliang-dev/entity-component-system" class="harsh better-underline">
+                Entity Component System
+              </a>
+            </h3>
+            <p class="mt0 lh-copy soft mb0">
+              Archetype entity component system library for C.
+            </p>
+            
+          </div>
+        </li>
+      
+        <li class="mb3">
+          <a href="https://github.com/jasonliang-dev/costello" class="no-underline br3 db border-outline shadow img-scale-over" style="max-width: 24rem">
+            <img src="/public/images/discord-stickers.png" alt="Several images/stickers shown in a grid" class="db w-100" style="object-fit: cover; aspect-ratio: 16 / 9">
+          </a>
+          <div class="pt3">
+            <h3 class="mt0 mb2 fw5 f4">
+              <a href="https://github.com/jasonliang-dev/costello" class="harsh better-underline">
+                Costello
+              </a>
+            </h3>
+            <p class="mt0 lh-copy soft mb0">
+              BetterDiscord plugin that lets you save and rapidly send a collection of images.
+            </p>
+            
+          </div>
+        </li>
+      
+        <li class="mb3">
+          <a href="https://github.com/jasonliang-dev/dream-eater" class="no-underline br3 db border-outline shadow img-scale-over" style="max-width: 24rem">
+            <img src="/public/images/php.png" alt="Some PHP source code" class="db w-100" style="object-fit: cover; aspect-ratio: 16 / 9">
+          </a>
+          <div class="pt3">
+            <h3 class="mt0 mb2 fw5 f4">
+              <a href="https://github.com/jasonliang-dev/dream-eater" class="harsh better-underline">
+                dream-eater
+              </a>
+            </h3>
+            <p class="mt0 lh-copy soft mb0">
+              Emacs minor mode that respects Dreamweaver&#39;s check in/out system.
+            </p>
+            
+          </div>
+        </li>
+      
+        <li class="mb3">
+          <a href="https://github.com/jasonliang-dev/lulu" class="no-underline br3 db border-outline shadow img-scale-over" style="max-width: 24rem">
+            <img src="/public/images/lulu.png" alt="Code showcasing the lulu programming language" class="db w-100" style="object-fit: cover; aspect-ratio: 16 / 9">
+          </a>
+          <div class="pt3">
+            <h3 class="mt0 mb2 fw5 f4">
+              <a href="https://github.com/jasonliang-dev/lulu" class="harsh better-underline">
+                lulu
+              </a>
+            </h3>
+            <p class="mt0 lh-copy soft mb0">
+              Tiny lispy toy programming language. Written in Haskell under 300 SLOC.
+            </p>
+            
+          </div>
+        </li>
+      
+        <li class="mb3">
+          <a href="https://github.com/jasonliang-dev/game-of-life" class="no-underline br3 db border-outline shadow img-scale-over" style="max-width: 24rem">
+            <img src="/public/images/game-of-life.png" alt="A grid of black/white squares" class="db w-100" style="object-fit: cover; aspect-ratio: 16 / 9">
+          </a>
+          <div class="pt3">
+            <h3 class="mt0 mb2 fw5 f4">
+              <a href="https://github.com/jasonliang-dev/game-of-life" class="harsh better-underline">
+                Game of Life
+              </a>
+            </h3>
+            <p class="mt0 lh-copy soft mb0">
+              Conway&#39;s Game of Life written in C with SDL2.
+            </p>
+            
+          </div>
+        </li>
+      
+    </ul>
 
-  const state = {
-    theme: document.documentElement.classList.contains("dark-mode") ? "dark" : "light",
-    motionReduced: window.matchMedia("(prefers-reduced-motion)").matches,
-    fontsLoaded: false,
-    fancyTextDrawn: false,
-    reservedWidth: 0,
-    reservedHeight: 0,
-    scrollPos: 0,
-    hue: 90,
-    jason: makeFancyText("Jason", 2, 5),
-    liang: makeFancyText("Liang", 3, 6),
-    about: makeFancyText("I make interactive programs", 7, 10),
-    lineAlpha: 0,
-    points: [],
-  };
+    <h2 class="mb0">WordPress Work</h2>
+    <p class="soft lh-copy">
+      WordPress Websites that I've built for clients.
+    </p>
+    <ul class="list pl0 mt4 mb6">
+      
+        <li class="flex flex-column flex-row-l items-start items-center-l mb4">
+          <a href="https://burnabyheightsaccounting.com/" class="no-underline db br3 border-outline shadow img-scale-over" style="max-width: 24rem">
+            <img src="/public/websites/burnabyheightsaccounting.com_.png" alt="Screenshot of Burnaby Heights Accounting&#39;s website" class="db">
+          </a>
+          <div class="pl4-l pt3 pt0-l pb3">
+            <h3 class="mt0 mb2 fw5 f4">
+              <a href="https://burnabyheightsaccounting.com/" class="harsh better-underline inline-flex items-center">
+                Burnaby Heights Accounting
+                <svg class="ml2 soft" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="20" height="20">
+                  <path fill-rule="evenodd" d="M4.25 5.5a.75.75 0 00-.75.75v8.5c0 .414.336.75.75.75h8.5a.75.75 0 00.75-.75v-4a.75.75 0 011.5 0v4A2.25 2.25 0 0112.75 17h-8.5A2.25 2.25 0 012 14.75v-8.5A2.25 2.25 0 014.25 4h5a.75.75 0 010 1.5h-5z" clip-rule="evenodd" />
+                  <path fill-rule="evenodd" d="M6.194 12.753a.75.75 0 001.06.053L16.5 4.44v2.81a.75.75 0 001.5 0v-4.5a.75.75 0 00-.75-.75h-4.5a.75.75 0 000 1.5h2.553l-9.056 8.194a.75.75 0 00-.053 1.06z" clip-rule="evenodd" />
+                </svg>
+              </a>
+            </h3>
+            <p class="mt0 lh-copy soft mw6">
+              A sleek and user-friendly website for a business that specializes in tax and accounting services.
+            </p>
+          </div>
+        </li>
+      
+        <li class="flex flex-column flex-row-l items-start items-center-l mb4">
+          <a href="https://nimbasa.co/" class="no-underline db br3 border-outline shadow img-scale-over" style="max-width: 24rem">
+            <img src="/public/websites/nimbasa.co_.png" alt="Screenshot of Nimbasa Entertainment&#39;s website" class="db">
+          </a>
+          <div class="pl4-l pt3 pt0-l pb3">
+            <h3 class="mt0 mb2 fw5 f4">
+              <a href="https://nimbasa.co/" class="harsh better-underline inline-flex items-center">
+                Nimbasa Entertainment
+                <svg class="ml2 soft" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="20" height="20">
+                  <path fill-rule="evenodd" d="M4.25 5.5a.75.75 0 00-.75.75v8.5c0 .414.336.75.75.75h8.5a.75.75 0 00.75-.75v-4a.75.75 0 011.5 0v4A2.25 2.25 0 0112.75 17h-8.5A2.25 2.25 0 012 14.75v-8.5A2.25 2.25 0 014.25 4h5a.75.75 0 010 1.5h-5z" clip-rule="evenodd" />
+                  <path fill-rule="evenodd" d="M6.194 12.753a.75.75 0 001.06.053L16.5 4.44v2.81a.75.75 0 001.5 0v-4.5a.75.75 0 00-.75-.75h-4.5a.75.75 0 000 1.5h2.553l-9.056 8.194a.75.75 0 00-.053 1.06z" clip-rule="evenodd" />
+                </svg>
+              </a>
+            </h3>
+            <p class="mt0 lh-copy soft mw6">
+              E-commerce storefront that showcases anime figures and video games for a local vendor in Vancouver.
+            </p>
+          </div>
+        </li>
+      
+    </ul>
+  </div>
+  <footer class="print-hidden tc gray pb4 pt6">
+    Made with <a class="harsh better-underline fw5" href="https://github.com/jasonliang-dev/jasonliang-dev.github.io/">code</a>
+  </footer>
 
-  window.onToggleDark = theme => {
-    state.theme = theme;
-  };
-
-  function onscroll() {
-    state.scrollPos = window.scrollY;
-  }
-  document.addEventListener("scroll", onscroll);
-
-  let resizeTimeout = 0;
-  function onresize() {
-    canvas.width = canvas.parentNode.clientWidth;
-    canvas.height = canvas.parentNode.clientHeight;
-
-    if (state.reservedWidth < canvas.width || state.reservedHeight < canvas.height) {
-      state.reservedWidth = Math.max(state.reservedWidth, canvas.width);
-      state.reservedHeight = Math.max(state.reservedHeight, canvas.height);
-      makePoints();
-    } else if (state.motionReduced) {
-      clearTimeout(resizeTimeout);
-      resizeTimeout = setTimeout(() => {
-        draw();
-      }, 150);
-    }
-  }
-  window.addEventListener("resize", onresize);
-
-  let makePointsTimeout = 0;
-  function makePoints() {
-    state.lineAlpha = 0;
-    clearTimeout(makePointsTimeout);
-    makePointsTimeout = setTimeout(() => {
-      const PI2 = Math.PI * 2;
-      const arr = [];
-      for (let y = 0; y < window.innerHeight; y += 120) {
-        for (let x = 0; x < window.innerWidth; x += 120) {
-          arr.push({
-            x,
-            y,
-            angle: Math.random() * PI2,
-            mag: Math.random() * 20 + 10,
-            angleVel: Math.random() * 0.002 + 0.003,
-          });
-        }
-      }
-      state.points = arr;
-
-      if (state.motionReduced) {
-        draw();
-      }
-    }, 150);
-  }
-
-  function makeFancyText(text, min, max) {
-    const arr = [];
-    let i = text.length;
-    for (const c of text) {
-      arr.push({
-        char: c,
-        x: 0,
-        y: 0,
-        scrollOff: Math.random() * (max - min) + min,
-        alpha: 0,
-        alphaVel: 0.02 * i,
-      });
-      i--;
-    }
-
-    return { text, arr };
-  }
-
-  function drawFancyText(fancy, opts) {
-    if (!state.fontsLoaded) {
-      return;
-    }
-
-    const widths = [];
-    for (const item of fancy.arr) {
-      widths.push(ctx.measureText(item.char).width);
-    }
-
-    const left = (canvas.width - ctx.measureText(fancy.text).width) / 2;
-    let advance = 0;
-    for (let i = 0; i < fancy.arr.length; i++) {
-      const item = fancy.arr[i];
-
-      const xGap = (i - fancy.arr.length / 2) * state.scrollPos * opts.xGapFactor;
-      const x = left + advance + xGap;
-      const y = opts.y - item.scrollOff * state.scrollPos * opts.scrollFactor;
-
-      if (!state.fancyTextDrawn || state.motionReduced) {
-        item.x = x;
-        item.y = y;
-      } else {
-        item.x += (x - item.x) * 0.25;
-        item.y += (y - item.y) * 0.25;
-      }
-
-      item.alpha = Math.min(item.alpha + item.alphaVel, 1);
-      ctx.globalAlpha = item.alpha;
-
-      opts.draw(item.char, item.x, item.y);
-
-      advance += widths[i];
-    }
-  }
-
-  function draw() {
-    if (state.motionReduced) {
-      state.scrollPos = 0;
-    }
-
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    if (state.hue >= 360) {
-      state.hue -= 360;
-    }
-    state.hue += 0.15;
-
-    for (const p of state.points) {
-      p.angle += p.angleVel;
-    }
-
-    let headerFontSize = 250;
-    let fontSize = 30;
-    if (window.innerHeight < 700 || window.innerWidth < 900) {
-      headerFontSize = 150;
-      fontSize = 20;
-    }
-
-    if (window.innerWidth < 600) {
-      headerFontSize = 100;
-    }
-
-    const top = window.innerHeight * 0.4;
-
-    ctx.lineWidth = 1;
-
-    state.lineAlpha = Math.min(state.lineAlpha + 0.01, 1);
-    ctx.globalAlpha = state.lineAlpha;
-
-    if (state.theme === "dark") {
-      ctx.strokeStyle = "rgb(255 255 255 / 0.08)";
-    } else {
-      ctx.strokeStyle = "rgb(0 0 0 / 0.08)";
-    }
-
-    ctx.beginPath();
-    for (const p1 of state.points) {
-      const mag = 33;
-
-      const c1 = Math.cos(p1.angle) * mag;
-      const s1 = Math.sin(p1.angle) * mag;
-      const x1 = c1 + p1.x;
-      const y1 = s1 + p1.y;
-
-      for (const p2 of state.points) {
-        if (p1 === p2) {
-          continue;
-        }
-        const c2 = Math.cos(p2.angle) * mag;
-        const s2 = Math.sin(p2.angle) * mag;
-        const x2 = c2 + p2.x;
-        const y2 = s2 + p2.y;
-
-        const dx = x2 - x1;
-        const dy = y2 - y1;
-        const len = Math.sqrt(dx * dx + dy * dy);
-        if (len < 120) {
-          ctx.moveTo(x2, y2);
-          ctx.lineTo(x1, y1);
-        }
-      }
-    }
-    ctx.stroke();
-
-    const opacity = 1 - Math.min(state.scrollPos * 0.003, 1);
-    ctx.font = `700 ${fontSize}px Inter`;
-
-    if (state.theme === "dark") {
-      ctx.fillStyle = `rgb(250 250 250 / ${opacity})`;
-    } else {
-      ctx.fillStyle = `rgb(0 0 0 / ${opacity})`;
-    }
-
-    drawFancyText(state.about, {
-      y: top + headerFontSize + fontSize + 80,
-      xGapFactor: 0.03,
-      scrollFactor: 0.2,
-      draw: ctx.fillText.bind(ctx),
-    });
-
-    const grad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-    grad.addColorStop(0.25, `hsl(${state.hue}, 100%, 50%)`);
-    grad.addColorStop(0.5, `hsl(${state.hue + 120}, 100%, 50%)`);
-    grad.addColorStop(0.75, `hsl(${state.hue + 240}, 100%, 50%)`);
-
-    ctx.strokeStyle = grad;
-
-    ctx.lineWidth = 3;
-    ctx.font = `900 ${headerFontSize}px Inter`;
-
-    drawFancyText(state.jason, {
-      y: top,
-      xGapFactor: 0.1,
-      scrollFactor: 0.15,
-      draw: ctx.strokeText.bind(ctx),
-    });
-    drawFancyText(state.liang, {
-      y: top + headerFontSize,
-      xGapFactor: 0.1,
-      scrollFactor: 0.15,
-      draw: ctx.strokeText.bind(ctx),
-    });
-
-    if (state.fontsLoaded) {
-      state.fancyTextDrawn = true;
-    }
-
-    if (!state.motionReduced) {
-      requestAnimationFrame(draw);
-    }
-  }
-
-  requestAnimationFrame(() => {
-    onscroll();
-    onresize();
-    draw();
-  });
-
-  document.fonts.ready.then(() => {
-    state.fontsLoaded = true;
-  });
-
-  const observer = new IntersectionObserver(entries => {
-    for (const entry of entries) {
-      if (entry.isIntersecting) {
-        for (const item of entry.target.querySelectorAll(".pause-animation")) {
-          item.classList.remove("pause-animation");
-        }
-      }
-    }
-  }, { rootMargin: "0px 0px -100px 0px" });
-
-  observer.observe(document.getElementById("post-list"));
-  observer.observe(document.getElementById("project-list"));
-</script>
-  </body>
-  </html>
-  <!-- be nice to people -->
   
+  <script>
+    const canvas = document.getElementById('canvas')
+    const ctx = canvas.getContext('2d')
+
+    const reserved = {width: 0, height: 0}
+    const points = []
+    const mouse = {x: 300, y: 300}
+    const camera = {x: 0, y: 0}
+    let dark = document.documentElement.classList.contains('dark')
+
+    function mousemove(e) {
+      mouse.x = e.pageX
+      mouse.y = e.pageY
+    }
+    window.addEventListener('mousemove', mousemove)
+
+    function resize() {
+      canvas.width = canvas.parentNode.clientWidth
+      canvas.height = canvas.parentNode.clientHeight
+
+      if (reserved.width < canvas.width || reserved.height < canvas.height) {
+        reserved.width = Math.max(reserved.width, canvas.width)
+        reserved.height = Math.max(reserved.height, canvas.height)
+
+        const count = reserved.width * reserved.height * 0.0001
+        for (let i = 0; i < count; i++) {
+          points[i] = {
+            x: random(0, reserved.width),
+            y: random(0, reserved.height),
+            vx: random(0.2, 0.8),
+            vy: random(0.2, 0.8),
+            size: Math.floor(random(2, 5)),
+          }
+        }
+      }
+    }
+    window.addEventListener('resize', resize)
+    resize()
+
+    function draw() {
+      ctx.resetTransform()
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      ctx.translate(camera.x, camera.y)
+
+      const cam_move = 20
+      const cx = lerp(-cam_move, cam_move, mouse.x / canvas.width)
+      const cy = lerp(-cam_move, cam_move, clamp(mouse.y / canvas.height), 0, 1)
+      camera.x += (cx - camera.x) * 0.1
+      camera.y += (cy - camera.y) * 0.1
+
+      for (let p of points) {
+        p.x += p.vx
+        p.y += p.vy
+
+        const padding = 50
+        if (p.x > reserved.width + padding) {
+          p.x = -padding
+        }
+
+        if (p.y > reserved.height + padding) {
+          p.y = -padding
+        }
+      }
+
+      if (dark) {
+        ctx.fillStyle = 'rgb(250 250 250 / 0.15)'
+      } else {
+        ctx.fillStyle = 'rgb(0 0 0 / 0.2)'
+      }
+
+      ctx.beginPath()
+      for (let p of points) {
+        ctx.moveTo(p.x, p.y)
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2)
+      }
+      ctx.fill()
+
+      for (let p of points) {
+        
+        const bias = 0.707106781186548
+
+        const dx = mouse.x - p.x
+        const dy = mouse.y - p.y
+        const dist = dx * dx + dy * dy
+
+        if (dark) {
+          const opacity = clamp(2000 / dist, 0, 0.15)
+          ctx.strokeStyle = `rgb(250 250 250 / ${opacity})`
+        } else {
+          const opacity = clamp(2000 / dist, 0, 0.2)
+          ctx.strokeStyle = `rgb(0 0 0 / ${opacity})`
+        }
+
+        const len = 50 * (p.size * 0.5)
+        ctx.beginPath()
+        ctx.moveTo(p.x - (p.size * bias), p.y - (p.size * bias))
+        ctx.lineTo(p.x - len, p.y - len)
+        ctx.stroke()
+      }
+
+      requestAnimationFrame(draw)
+    }
+    draw()
+
+    function random(min, max) {
+      const diff = max - min
+      return Math.random() * diff + min
+    }
+
+    function clamp(x, min, max) {
+      if (x < min) {
+        return min
+      } else if (x > max) {
+        return max
+      } else {
+        return x
+      }
+    }
+
+    function lerp(a, b, t) {
+      return a + (b - a) * t
+    }
+
+    function onUpdateTheme() {
+      dark = document.documentElement.classList.contains('dark')
+    }
+  </script>
+
+  
+</body>
+</html>

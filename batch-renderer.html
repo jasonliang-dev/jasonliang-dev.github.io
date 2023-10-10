@@ -1,94 +1,75 @@
-  <!doctype html>
-  <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A Tiny OpenGL 2D Batch Renderer | Jason Liang</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@500;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-1691VYRF8G"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-1691VYRF8G');
-    </script>
-    <link rel="stylesheet" href="static/tachyons.min.css">
-    <link id="hljs-light" rel="stylesheet" href="static/atom-one-light.min.css" disabled>
-    <link id="hljs-dark" rel="stylesheet" href="static/default-dark.min.css" disabled>
-    <link rel="stylesheet" href="static/style.css?v=1686281868">
-    <script src="static/highlight.min.js"></script>
-    <script>
-      const prefersDark = localStorage.theme === undefined && window.matchMedia("(prefers-color-scheme: dark)").matches;
-      if (localStorage.theme === "dark" || prefersDark) {
-        document.documentElement.classList.add("dark-mode");
-        document.getElementById("hljs-dark").removeAttribute("disabled");
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+  A Tiny OpenGL 2D Batch Renderer
+</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/public/style.css">
+  <link rel="stylesheet" href="/public/tachyons.min.css">
+  
+  <script>
+    function updateTheme() {
+      const doc = document.documentElement
+
+      let dark
+      if ('theme' in localStorage) {
+        dark = localStorage.theme === 'dark'
       } else {
-        document.documentElement.classList.remove("dark-mode");
-        document.getElementById("hljs-light").removeAttribute("disabled");
+        dark = window.matchMedia('(prefers-color-scheme: dark)').matches
       }
 
-      function toggleDark() {
-        if (document.documentElement.classList.contains("dark-mode")) {
-          document.documentElement.classList.remove("dark-mode");
-          localStorage.theme = "light";
-          document.getElementById("hljs-light").removeAttribute("disabled");
-          document.getElementById("hljs-dark").setAttribute("disabled", "disabled");
-          if (window.onToggleDark) {
-            window.onToggleDark("light");
-          }
-        } else {
-          document.documentElement.classList.add("dark-mode");
-          localStorage.theme = "dark";
-          document.getElementById("hljs-dark").removeAttribute("disabled");
-          document.getElementById("hljs-light").setAttribute("disabled", "disabled");
-          if (window.onToggleDark) {
-            window.onToggleDark("dark");
-          }
-        }
+      if (dark) {
+        doc.classList.add('dark')
+      } else {
+        doc.classList.remove('dark')
       }
-    </script>
-  </head>
-  <body class="bg-near-white near-black dm-bg-near-black dm-near-white mb6">
-    <button
-      class="
-        bg-near-black near-white hover-bg-mid-gray
-        dm-bg-near-white dm-near-black dm-hover-bg-moon-gray
-        fixed top-0 right-0 z-999
-        flex justify-center items-center mr3 mt3
-        shadow bn br-pill
-      "
-      type="button"
-      style="width: 2.25rem; height: 2.25rem"
-      onclick="toggleDark()"
-    >
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 20px; height: 20px">
-        <path fill-rule="evenodd" d="M7.455 2.004a.75.75 0 01.26.77 7 7 0 009.958 7.967.75.75 0 011.067.853A8.5 8.5 0 116.647 1.921a.75.75 0 01.808.083z" clip-rule="evenodd" />
-      </svg>
-    </button>
-    <nav class="tc pv4">
-  <a class="b link near-black dm-near-white dim f4" href="/">Jason Liang</a>
-</nav>
-<article class="prose">
-  <time class="gray flex items-center">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 20px; height: 20px">
-      <path fill-rule="evenodd" d="M5.75 2a.75.75 0 01.75.75V4h7V2.75a.75.75 0 011.5 0V4h.25A2.75 2.75 0 0118 6.75v8.5A2.75 2.75 0 0115.25 18H4.75A2.75 2.75 0 012 15.25v-8.5A2.75 2.75 0 014.75 4H5V2.75A.75.75 0 015.75 2zm-1 5.5c-.69 0-1.25.56-1.25 1.25v6.5c0 .69.56 1.25 1.25 1.25h10.5c.69 0 1.25-.56 1.25-1.25v-6.5c0-.69-.56-1.25-1.25-1.25H4.75z" clip-rule="evenodd" />
+
+      if (typeof onUpdateTheme === 'function') {
+        onUpdateTheme()
+      }
+    }
+
+    function toggleTheme() {
+      const doc = document.documentElement
+      localStorage.theme = doc.classList.contains('dark') ? 'light' : 'dark'
+      updateTheme()
+    }
+
+    updateTheme()
+  </script>
+</head>
+<body>
+  <button class="theme-button fixed top-0 right-0 z-999 flex mt3 mr3 bn br-pill pa2" onclick="toggleTheme()">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="20" height="20">
+      <path d="M10 2a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 2zM10 15a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 15zM10 7a3 3 0 100 6 3 3 0 000-6zM15.657 5.404a.75.75 0 10-1.06-1.06l-1.061 1.06a.75.75 0 001.06 1.06l1.06-1.06zM6.464 14.596a.75.75 0 10-1.06-1.06l-1.06 1.06a.75.75 0 001.06 1.06l1.06-1.06zM18 10a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0118 10zM5 10a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 015 10zM14.596 15.657a.75.75 0 001.06-1.06l-1.06-1.061a.75.75 0 10-1.06 1.06l1.06 1.06zM5.404 6.464a.75.75 0 001.06-1.06l-1.06-1.06a.75.75 0 10-1.061 1.06l1.06 1.06z" />
     </svg>
-    <span class="ml1 f6 fw5">
-      January 4, 2022    </span>
-  </time>
-  <h1 class="mt1">A Tiny OpenGL 2D Batch Renderer</h1>
-  <div class="lh-copy">
-    <p><img src="/static/batch-rendering/aliens.png" alt="A grid of 2D sprites" /></p>
+  </button>
+  
+  <div class="mw7 center ph3">
+    <header class="pt4">
+      <a class="harsh fw7 f3 link" href="/">Jason Liang</a>
+    </header>
+    <article class="prose">
+      <time>January 4, 2022</time>
+      <h1>A Tiny OpenGL 2D Batch Renderer</h1>
+      <p><img src="/public/batch-rendering/aliens.png" alt="A grid of 2D sprites" /></p>
+
 <p>If you rather read code than words, the source is available
-on <a href="https://github.com/jasonliang-dev/tiny-batch-renderer">GitHub</a>.</p>
+on <a href="https://github.com/jasonliang-dev/tiny-batch-renderer" target="_blank">GitHub</a>.</p>
+
 <p>This article describes a small batch renderer written in C using modern OpenGL.
-The goal is to write the minimum amount to code to reduce draw calls. It's not
-going to be the fastest or the most efficient implementation, but it's probably
+The goal is to write the minimum amount to code to reduce draw calls. It&rsquo;s not
+going to be the fastest or the most efficient implementation, but it&rsquo;s probably
 one of the smallest, for learning purposes.</p>
+
 <p>Below is an example of how the batch renderer can be used to draw a grid of sprites
 representing aliens:</p>
+
 <pre><code class="language-c">typedef struct {
   // position
   float px, py;
@@ -121,7 +102,7 @@ void draw_alien(BatchRenderer *renderer, Texture tex, Alien a) {
 int main(void) {
   // ...
   BatchRenderer renderer = create_renderer(6000);
-  Texture tex_aliens = create_texture("aliens.png");
+  Texture tex_aliens = create_texture(&quot;aliens.png&quot;);
 
   struct {
     float x, y, w, h;
@@ -157,10 +138,15 @@ int main(void) {
     r_flush(&amp;renderer);
     // ...
   }
-}</code></pre>
+}
+</code></pre>
+
 <p>This (incomplete) program produces the image at the top of this article.</p>
-<h2>How Batch Rendering Works</h2>
+
+<h2 id="how-batch-rendering-works">How Batch Rendering Works</h2>
+
 <p>Without batch rendering, this is how drawing a grid of aliens might look like:</p>
+
 <pre><code class="language-c">void draw_alien() {
   // ...
   glBindVertexArray(vao);
@@ -173,22 +159,29 @@ int main() {
       draw_alien();
     }
   }
-}</code></pre>
+}
+</code></pre>
+
 <p>Each alien performs a draw call. Six vertices are drawn from the vertex array,
 which probably describes two triangles that make up a single quad.</p>
+
 <p>A batch renderer avoids making draw calls by setting up a large dynamic vertex
 buffer object, where vertex data gets written to a buffer every frame and then
 the buffer gets used in a single draw call. The data itself may contain
 multiple quads with different vertex positions, texture coordinates, and
 perhaps tint colour.</p>
+
 <p>A draw call should be performed:</p>
+
 <ul>
 <li>When the vertex buffer reaches its capacity</li>
 <li>When any uniform values need to change</li>
-<li>When it's the end of the frame</li>
+<li>When it&rsquo;s the end of the frame</li>
 </ul>
-<p>After submitting a draw call, the vertex buffer is "flushed" to set up for the
+
+<p>After submitting a draw call, the vertex buffer is &ldquo;flushed&rdquo; to set up for the
 next draw call.</p>
+
 <pre><code class="language-c">void draw_alien() {
   // nothing is actually drawn at this stage.
   // data is just being written to a buffer
@@ -202,18 +195,27 @@ int main() {
     }
     r_flush(); // this is where glDrawArrays actually gets called
   }
-}</code></pre>
+}
+</code></pre>
+
 <p>In summary, instead of naively making a draw call for each alien:</p>
-<p><img src="/static/batch-rendering/draw1.png" alt="" /></p>
+
+<p><img src="/public/batch-rendering/draw1.png" alt="" /></p>
+
 <p><code>draw_alien()</code> writes to a buffer, and then <code>r_flush()</code> performs a single draw
 call.</p>
-<p><img src="/static/batch-rendering/draw2.png" alt="" /></p>
+
+<p><img src="/public/batch-rendering/draw2.png" alt="" /></p>
+
 <p>By reducing the number of draw calls, we can increase the performance of our
 program.</p>
-<h2>Implementation</h2>
+
+<h2 id="implementation">Implementation</h2>
+
 <p>The <code>BatchRenderer</code> struct contains a shader program <code>shader</code>, a vertex array
 object <code>vao</code>, a vertex buffer object <code>vbo</code>, an array of vertices in CPU memory
 <code>vertices</code>, and values that get bound to uniforms <code>texture</code> and <code>mvp</code>.</p>
+
 <pre><code class="language-c">typedef struct { float cols[4][4]; } Matrix;
 typedef struct { float position[2]; float texcoord[2]; } Vertex;
 
@@ -230,14 +232,18 @@ typedef struct {
   // uniform values
   GLuint texture;
   Matrix mvp;
-} BatchRenderer;</code></pre>
+} BatchRenderer;
+</code></pre>
+
 <p>The <code>vertices</code> buffer is needed to write vertex data somewhere in CPU memory,
 and the vertex buffer object <code>vbo</code> is needed to read vertex data in GPU memory.
-To avoid confusion, I'll be referring to the vertex buffer object as the GPU
+To avoid confusion, I&rsquo;ll be referring to the vertex buffer object as the GPU
 vertex buffer or VBO, and the array of vertices in CPU memory as the CPU vertex
 buffer.</p>
+
 <p>The following function initializes a batch renderer with a given capacity for
 the CPU vertex buffer:</p>
+
 <pre><code class="language-c">BatchRenderer create_renderer(int vertex_capacity) {
   GLuint vao;
   glGenVertexArrays(1, &amp;vao);
@@ -259,23 +265,23 @@ the CPU vertex buffer:</p>
                         (void *)offsetof(Vertex, texcoord));
 
   const char *vertex =
-      "#version 330 core\n"
-      "layout(location=0) in vec2 a_position;\n"
-      "layout(location=1) in vec2 a_texindex;\n"
-      "out vec2 v_texindex;\n"
-      "uniform mat4 u_mvp;\n"
-      "void main() {\n"
-      "    gl_Position = u_mvp * vec4(a_position, 0.0, 1.0);\n"
-      "    v_texindex = a_texindex;\n"
-      "}\n";
+      &quot;#version 330 core\n&quot;
+      &quot;layout(location=0) in vec2 a_position;\n&quot;
+      &quot;layout(location=1) in vec2 a_texindex;\n&quot;
+      &quot;out vec2 v_texindex;\n&quot;
+      &quot;uniform mat4 u_mvp;\n&quot;
+      &quot;void main() {\n&quot;
+      &quot;    gl_Position = u_mvp * vec4(a_position, 0.0, 1.0);\n&quot;
+      &quot;    v_texindex = a_texindex;\n&quot;
+      &quot;}\n&quot;;
 
-  const char *fragment = "#version 330 core\n"
-                         "in vec2 v_texindex;\n"
-                         "out vec4 f_color;\n"
-                         "uniform sampler2D u_texture;\n"
-                         "void main() {\n"
-                         "    f_color = texture(u_texture, v_texindex);\n"
-                         "}\n";
+  const char *fragment = &quot;#version 330 core\n&quot;
+                         &quot;in vec2 v_texindex;\n&quot;
+                         &quot;out vec4 f_color;\n&quot;
+                         &quot;uniform sampler2D u_texture;\n&quot;
+                         &quot;void main() {\n&quot;
+                         &quot;    f_color = texture(u_texture, v_texindex);\n&quot;
+                         &quot;}\n&quot;;
 
   GLuint program = load_shader(vertex, fragment);
 
@@ -289,22 +295,27 @@ the CPU vertex buffer:</p>
     .texture = 0,
     .mvp = {0},
   };
-}</code></pre>
+}
+</code></pre>
+
 <p>The main takeaway is the call to <code>glBufferData()</code>. The usage pattern for the
 GPU vertex buffer is <code>GL_DYNAMIC_DRAW</code> instead of something like
 <code>GL_STATIC_DRAW</code>.  This allows us to change the contents of the GPU vertex
 buffer in the future using the <code>glBufferSubData()</code> function. The data parameter
 is <code>NULL</code>, which means the VBO data living in VRAM is uninitialized.</p>
-<p>I won't go into detail about the <code>load_shader()</code> function since it's nothing
+
+<p>I won&rsquo;t go into detail about the <code>load_shader()</code> function since it&rsquo;s nothing
 special. The function returns the result of <code>glCreateProgram()</code> after compiling
 the given vertex and fragment shaders. The shaders themselves consist of simple
 GLSL that would be expected from a basic 2D renderer.</p>
+
 <p>The memory allocated for <code>vertices</code> should be the same size as the VBO, which
 is <code>sizeof(Vertex) * vertex_capacity</code>. This array of vertices living in CPU
 memory is the buffer that will be written to whenever something needs to be
 drawn, but it should not be mutated directly. <code>r_push_vertex()</code> should be used
 instead, which does some housekeeping by incrementing <code>vertex_count</code> by one and
 it checks when the CPU vertex buffer is at capacity.</p>
+
 <pre><code class="language-c">void r_push_vertex(BatchRenderer *renderer, float x, float y, float u,
                    float v) {
   if (renderer-&gt;vertex_count == renderer-&gt;vertex_capacity) {
@@ -315,10 +326,13 @@ it checks when the CPU vertex buffer is at capacity.</p>
     .position = {x, y},
     .texcoord = {u, v},
   };
-}</code></pre>
+}
+</code></pre>
+
 <p>When the CPU vertex buffer reaches its capacity, then we have no more room to
 add another vertex. The solution is to submit a draw call and empty the CPU
 vertex buffer with <code>r_flush()</code>.</p>
+
 <pre><code class="language-c">void r_flush(BatchRenderer *renderer) {
   if (renderer-&gt;vertex_count == 0) {
     return;
@@ -329,8 +343,8 @@ vertex buffer with <code>r_flush()</code>.</p>
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, renderer-&gt;texture);
 
-  glUniform1i(glGetUniformLocation(renderer-&gt;shader, "u_texture"), 0);
-  glUniformMatrix4fv(glGetUniformLocation(renderer-&gt;shader, "u_mvp"), 1,
+  glUniform1i(glGetUniformLocation(renderer-&gt;shader, &quot;u_texture&quot;), 0);
+  glUniformMatrix4fv(glGetUniformLocation(renderer-&gt;shader, &quot;u_mvp&quot;), 1,
                      GL_FALSE, renderer-&gt;mvp.cols[0]);
 
   glBindBuffer(GL_ARRAY_BUFFER, renderer-&gt;vbo);
@@ -341,18 +355,23 @@ vertex buffer with <code>r_flush()</code>.</p>
   glDrawArrays(GL_TRIANGLES, 0, renderer-&gt;vertex_count);
 
   renderer-&gt;vertex_count = 0;
-}</code></pre>
+}
+</code></pre>
+
 <p>This is where <code>glBufferSubData()</code> comes into play. <code>glBufferSubData()</code> is analogous
 to <code>memcpy()</code> except it copies from CPU memory into GPU memory instead of
 exclusively working in CPU memory. <code>0</code> is the offset where data is copied to
 (0 being the start of the VBO data). <code>sizeof(Vertex) * renderer-&gt;vertex_count</code> is
 the number of bytes to copy. <code>renderer-&gt;vertices</code> is the data to copy from.</p>
+
 <p>After binding the uniform values, and copying the CPU vertex buffer data to GPU memory,
 a draw call is made with <code>glDrawArrays()</code>, and <code>vertex_count</code> is set to 0 to set up
 for the next call to <code>r_flush</code>.</p>
-<p>Almost done. There's one case that has to be handled: whenever any uniform needs to change,
+
+<p>Almost done. There&rsquo;s one case that has to be handled: whenever any uniform needs to change,
 the CPU vertex buffer needs to be flushed before setting the uniform. The following
 functions are created just for these cases:</p>
+
 <pre><code class="language-c">void r_texture(BatchRenderer *renderer, GLuint id) {
   if (renderer-&gt;texture != id) {
     r_flush(renderer);
@@ -365,50 +384,37 @@ void r_mvp(BatchRenderer *renderer, Matrix mat) {
     r_flush(renderer);
     renderer-&gt;mvp = mat;
   }
-}</code></pre>
-<p>That's it! To use the renderer, call <code>create_renderer()</code> during program initialization,
+}
+</code></pre>
+
+<p>That&rsquo;s it! To use the renderer, call <code>create_renderer()</code> during program initialization,
 <code>r_push_vertex()</code> when drawing in the main render loop, and <code>r_flush()</code> at the
 end of each frame.</p>
+
 <p>The source code for the entire program is available on
-<a href="https://github.com/jasonliang-dev/tiny-batch-renderer">GitHub</a>.</p>
-<h2>Improvements</h2>
+<a href="https://github.com/jasonliang-dev/tiny-batch-renderer" target="_blank">GitHub</a>.</p>
+
+<h2 id="improvements">Improvements</h2>
+
 <p>Here is a list of changes that can be made to this renderer to improve its
 performance and efficiency:</p>
+
 <ul>
 <li>Store uniform locations to avoid <code>glGetUniformLocation()</code> in <code>r_flush()</code>.</li>
 <li>Create an index buffer to improve efficiency and memory usage when exclusively
 drawing quads. Drawing a quad would need four calls to <code>r_push_vertex()</code> instead of six.</li>
 <li>Create multiple buffers and group them based on texture to minimize state changes.</li>
-</ul>  </div>
-</article>
-<script>
-  hljs.registerLanguage("wgsl", hljs => {
-    return {
-      name: "WGSL",
-      aliases: ["wgsl", "language-wgsl"],
-      keywords: {
-        keyword: "alias break case const const_assert continue continuing default diagnostic discard else enable false fn for if let loop override requires return struct switch true var while",
-        type: "vec2f vec3f vec4f",
-      },
-      contains: [
-        hljs.C_LINE_COMMENT_MODE,
-        hljs.C_BLOCK_COMMENT_MODE,
-        {
-          className: "built_in",
-          begin: /@\w+/,
-        },
-        {
-          beginKeywords: "struct",
-          end: /{/,
-          contains: [hljs.TITLE_MODE],
-        },
-      ]
-    }
-  });
+</ul>
 
-  hljs.highlightAll();
-</script>
-  </body>
-  </html>
-  <!-- be nice to people -->
+    </article>
+  </div>
+
   
+  <script src="/public/hljs/highlight.min.js"></script>
+  <script>
+    hljs.highlightAll();
+  </script>
+
+  
+</body>
+</html>

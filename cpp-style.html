@@ -1,120 +1,119 @@
-  <!doctype html>
-  <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>C++ Coding Style | Jason Liang</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@500;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-1691VYRF8G"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-1691VYRF8G');
-    </script>
-    <link rel="stylesheet" href="static/tachyons.min.css">
-    <link id="hljs-light" rel="stylesheet" href="static/atom-one-light.min.css" disabled>
-    <link id="hljs-dark" rel="stylesheet" href="static/default-dark.min.css" disabled>
-    <link rel="stylesheet" href="static/style.css?v=1686281868">
-    <script src="static/highlight.min.js"></script>
-    <script>
-      const prefersDark = localStorage.theme === undefined && window.matchMedia("(prefers-color-scheme: dark)").matches;
-      if (localStorage.theme === "dark" || prefersDark) {
-        document.documentElement.classList.add("dark-mode");
-        document.getElementById("hljs-dark").removeAttribute("disabled");
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+  C&#43;&#43; Coding Style
+</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/public/style.css">
+  <link rel="stylesheet" href="/public/tachyons.min.css">
+  
+  <script>
+    function updateTheme() {
+      const doc = document.documentElement
+
+      let dark
+      if ('theme' in localStorage) {
+        dark = localStorage.theme === 'dark'
       } else {
-        document.documentElement.classList.remove("dark-mode");
-        document.getElementById("hljs-light").removeAttribute("disabled");
+        dark = window.matchMedia('(prefers-color-scheme: dark)').matches
       }
 
-      function toggleDark() {
-        if (document.documentElement.classList.contains("dark-mode")) {
-          document.documentElement.classList.remove("dark-mode");
-          localStorage.theme = "light";
-          document.getElementById("hljs-light").removeAttribute("disabled");
-          document.getElementById("hljs-dark").setAttribute("disabled", "disabled");
-          if (window.onToggleDark) {
-            window.onToggleDark("light");
-          }
-        } else {
-          document.documentElement.classList.add("dark-mode");
-          localStorage.theme = "dark";
-          document.getElementById("hljs-dark").removeAttribute("disabled");
-          document.getElementById("hljs-light").setAttribute("disabled", "disabled");
-          if (window.onToggleDark) {
-            window.onToggleDark("dark");
-          }
-        }
+      if (dark) {
+        doc.classList.add('dark')
+      } else {
+        doc.classList.remove('dark')
       }
-    </script>
-  </head>
-  <body class="bg-near-white near-black dm-bg-near-black dm-near-white mb6">
-    <button
-      class="
-        bg-near-black near-white hover-bg-mid-gray
-        dm-bg-near-white dm-near-black dm-hover-bg-moon-gray
-        fixed top-0 right-0 z-999
-        flex justify-center items-center mr3 mt3
-        shadow bn br-pill
-      "
-      type="button"
-      style="width: 2.25rem; height: 2.25rem"
-      onclick="toggleDark()"
-    >
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 20px; height: 20px">
-        <path fill-rule="evenodd" d="M7.455 2.004a.75.75 0 01.26.77 7 7 0 009.958 7.967.75.75 0 011.067.853A8.5 8.5 0 116.647 1.921a.75.75 0 01.808.083z" clip-rule="evenodd" />
-      </svg>
-    </button>
-    <nav class="tc pv4">
-  <a class="b link near-black dm-near-white dim f4" href="/">Jason Liang</a>
-</nav>
-<article class="prose">
-  <time class="gray flex items-center">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 20px; height: 20px">
-      <path fill-rule="evenodd" d="M5.75 2a.75.75 0 01.75.75V4h7V2.75a.75.75 0 011.5 0V4h.25A2.75 2.75 0 0118 6.75v8.5A2.75 2.75 0 0115.25 18H4.75A2.75 2.75 0 012 15.25v-8.5A2.75 2.75 0 014.75 4H5V2.75A.75.75 0 015.75 2zm-1 5.5c-.69 0-1.25.56-1.25 1.25v6.5c0 .69.56 1.25 1.25 1.25h10.5c.69 0 1.25-.56 1.25-1.25v-6.5c0-.69-.56-1.25-1.25-1.25H4.75z" clip-rule="evenodd" />
+
+      if (typeof onUpdateTheme === 'function') {
+        onUpdateTheme()
+      }
+    }
+
+    function toggleTheme() {
+      const doc = document.documentElement
+      localStorage.theme = doc.classList.contains('dark') ? 'light' : 'dark'
+      updateTheme()
+    }
+
+    updateTheme()
+  </script>
+</head>
+<body>
+  <button class="theme-button fixed top-0 right-0 z-999 flex mt3 mr3 bn br-pill pa2" onclick="toggleTheme()">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="20" height="20">
+      <path d="M10 2a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 2zM10 15a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 15zM10 7a3 3 0 100 6 3 3 0 000-6zM15.657 5.404a.75.75 0 10-1.06-1.06l-1.061 1.06a.75.75 0 001.06 1.06l1.06-1.06zM6.464 14.596a.75.75 0 10-1.06-1.06l-1.06 1.06a.75.75 0 001.06 1.06l1.06-1.06zM18 10a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0118 10zM5 10a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 015 10zM14.596 15.657a.75.75 0 001.06-1.06l-1.06-1.061a.75.75 0 10-1.06 1.06l1.06 1.06zM5.404 6.464a.75.75 0 001.06-1.06l-1.06-1.06a.75.75 0 10-1.061 1.06l1.06 1.06z" />
     </svg>
-    <span class="ml1 f6 fw5">
-      January 6, 2023    </span>
-  </time>
-  <h1 class="mt1">C++ Coding Style</h1>
-  <div class="lh-copy">
-    <p>C++ is a ridiculously complex language. Most people stick to a subset of its
-features. I've been using a lot of C++ for side projects that never see the
-light of day, and over time, I've developed a style that I like and I wanted
+  </button>
+  
+  <div class="mw7 center ph3">
+    <header class="pt4">
+      <a class="harsh fw7 f3 link" href="/">Jason Liang</a>
+    </header>
+    <article class="prose">
+      <time>January 6, 2023</time>
+      <h1>C&#43;&#43; Coding Style</h1>
+      <p><strong>UPDATE (October 10, 2023)</strong>: There&rsquo;s some ideas here that I still stick
+  with, but I don&rsquo;t strictly follow this style anymore.</p>
+
+<hr>
+
+<p>C++ is a ridiculously complex language. Most people stick to a subset of its
+features. I&rsquo;ve been using a lot of C++ for side projects that never see the
+light of day, and over time, I&rsquo;ve developed a style that I like and I wanted
 to document it.</p>
-<h2>Code Format</h2>
+
+<h2 id="code-format">Code Format</h2>
+
 <p>Use Clang-Format for code formatting:</p>
+
 <pre><code class="language-text">BasedOnStyle: LLVM
 IndentWidth: 2
-AllowShortCaseLabelsOnASingleLine: true</code></pre>
-<h2>Naming</h2>
+AllowShortCaseLabelsOnASingleLine: true
+</code></pre>
+
+<h2 id="naming">Naming</h2>
+
 <ul>
-<li>Types are PascalCase</li>
-<li>Preprocessor defines are UPPER_CASE, except for commonly used macros like:<ul>
+<li><p>Types are PascalCase</p></li>
+
+<li><p>Preprocessor defines are UPPER_CASE, except for commonly used macros like:</p>
+
+<ul>
 <li><code>#define array_size(a) (sizeof(a) / sizeof(a[0]))</code></li>
-<li><code>#define defer(code) /* stuff */</code> (see <a href="http://www.gingerbill.org/article/2015/08/19/defer-in-cpp/">A Defer Statement For C++11</a>)</li>
-</ul>
-</li>
-<li>Constants are UPPER_CASE</li>
-<li>Enums types are PascalCase.<ul>
+<li><code>#define defer(code) /* stuff */</code> (see <a href="http://www.gingerbill.org/article/2015/08/19/defer-in-cpp/" target="_blank">A Defer Statement For C++11</a>)</li>
+</ul></li>
+
+<li><p>Constants are UPPER_CASE</p></li>
+
+<li><p>Enums types are PascalCase.</p>
+
+<ul>
 <li>Raw enum values are TypeName_PascalCase</li>
 <li>Enum class values are PascalCase</li>
-</ul>
-</li>
-<li>Functions are snake_case</li>
-<li>Variables are snake_case<ul>
+</ul></li>
+
+<li><p>Functions are snake_case</p></li>
+
+<li><p>Variables are snake_case</p>
+
+<ul>
 <li>Public member variables are snake_case</li>
 <li>Private member variables are m_snake_case</li>
 <li>Static variables are s_snake_case</li>
 <li>Global variables are g_snake_case</li>
+</ul></li>
+
+<li><p>File names are either snake_case.cpp or snake_case.h</p></li>
 </ul>
-</li>
-<li>File names are either snake_case.cpp or snake_case.h</li>
-</ul>
+
 <p>Example:</p>
-<pre><code class="language-c++">constexpr const char *SETTINGS_FILE_PATH = "./data/settings.ini";
+
+<pre><code class="language-c++">constexpr const char *SETTINGS_FILE_PATH = &quot;./data/settings.ini&quot;;
 
 struct String {
   String() = default;
@@ -151,23 +150,28 @@ String g_str;
 const char *some_function(i32 kind) {
   static char s_str[2048];
   return s_str;
-}</code></pre>
-<h2>Style</h2>
-<ul>
-<li>
+}
+</code></pre>
+
+<h2 id="break"><code>break</code></h2>
+
 <p>If there are brackets for a case statement, the <code>break</code> goes inside.</p>
+
 <pre><code class="language-c++">switch (val) {
 case Kind_Foo: {
   i32 n = 0;
   do_stuff(&amp;n);
-  printf("%d\n", n);
+  printf(&quot;%d\n&quot;, n);
   break; // &lt;-- here
 }
-}</code></pre>
-</li>
-<li>
+}
+</code></pre>
+
+<h2 id="sized-integers">Sized Integers</h2>
+
 <p>Prefer explicitly sized integers such as <code>int32_t</code>. Use the following type
 aliases:</p>
+
 <pre><code class="language-c++">using i8 = int8_t;
 using i16 = int16_t;
 using i32 = int32_t;
@@ -175,22 +179,30 @@ using i64 = int64_t;
 using u8 = uint8_t;
 using u16 = uint16_t;
 using u32 = uint32_t;
-using u64 = uint64_t;</code></pre>
-</li>
-<li>
+using u64 = uint64_t;
+</code></pre>
+
+<h2 id="exceptions">Exceptions</h2>
+
 <p>Never use <code>throw</code>. Never catch exceptions.</p>
+
 <blockquote>
-<p>Read <a href="https://www.gingerbill.org/article/2018/09/05/exceptions-and-why-odin-will-never-have-them/">Exceptions — And Why Odin Will Never Have Them</a>.
+<p>Read <a href="https://www.gingerbill.org/article/2018/09/05/exceptions-and-why-odin-will-never-have-them/" target="_blank">Exceptions — And Why Odin Will Never Have Them</a>.
 <strong>TL;DR</strong>: Errors are not special. Treat errors as values.</p>
 </blockquote>
-</li>
-<li>
-<p>Custom memory allocator comes first, then output parameters, then the rest
-of the function parameters.</p>
-<pre><code class="language-c++">bool make_texture(Allocator *a, Texture *out, u8 *data, i32 w, i32 h);</code></pre>
-</li>
-<li>
+
+<h2 id="parameter-order">Parameter Order</h2>
+
+<p>Custom memory allocator comes first, then output parameters, then the rest of
+the function parameters.</p>
+
+<pre><code class="language-c++">bool make_texture(Allocator *a, Texture *out, u8 *data, i32 w, i32 h);
+</code></pre>
+
+<h2 id="constructors">Constructors</h2>
+
 <p>If object creation can fail, use functions instead of constructors.</p>
+
 <pre><code class="language-c++">// bad
 // if this can fail. how do you let the user know?
 // is there a global error flag? or does it throw an exception?
@@ -201,37 +213,47 @@ Bullet::Bullet(Entity *owner);
 Maybe&lt;Bullet&gt; make_bullet(Entity *owner);
 
 // also good
-bool make_bullet(Bullet *out, Entity *owner);</code></pre>
-</li>
-<li>
+bool make_bullet(Bullet *out, Entity *owner);
+</code></pre>
+
+<h2 id="destructors">Destructors</h2>
+
 <p>Avoid writing destructors. No RAII.</p>
+
 <blockquote>
-<p><a href="http://www.gingerbill.org/article/2015/08/19/defer-in-cpp/">Defer</a>
+<p><a href="http://www.gingerbill.org/article/2015/08/19/defer-in-cpp/" target="_blank">Defer</a>
 can help with some of the friction that comes with explicit destruction.</p>
 </blockquote>
-</li>
-<li>
+
+<h2 id="strings">Strings</h2>
+
 <p>Prefer string views over C-style strings or <code>std::string</code>.</p>
+
 <blockquote>
 <p>Unlike C strings, string views stores the length. Unlike string buffers
 (like <code>std::string</code>), substring is constant time and does not require
 memory allocation. Also, copying a string view is very cheap.</p>
 </blockquote>
-</li>
-<li>
+
+<h2 id="c-header-files">C Header Files</h2>
+
 <p>Use <code>&lt;stdio.h&gt;</code>, <code>&lt;math.h&gt;</code>, etc, over their C++ counterparts <code>&lt;cstdio&gt;</code>,
 <code>&lt;cmath&gt;</code>, etc.</p>
+
 <blockquote>
 <p>The idea with the C++ headers was probably to avoid polluting the global
-namespace, but they don't actually do that so there's no benefit.</p>
+namespace, but they don&rsquo;t actually do that so there&rsquo;s no benefit.</p>
 </blockquote>
-</li>
-<li>
+
+<h2 id="class"><code>class</code></h2>
+
 <p>Avoid defining types with <code>class</code>.</p>
+
 <blockquote>
-<p>Public members should be listed first. It's common to see <code>class</code> followed
-by the <code>public</code> access specifier, but that's exactly what <code>struct</code> does.</p>
+<p>Public members should be listed first. It&rsquo;s common to see <code>class</code> followed
+by the <code>public</code> access specifier, but that&rsquo;s exactly what <code>struct</code> does.</p>
 </blockquote>
+
 <pre><code class="language-c++">// bad
 class Foo {
 public:
@@ -245,14 +267,18 @@ struct Foo {
   Foo();
 private:
   i32 m_the_data;
-};</code></pre>
-</li>
-<li>
+};
+</code></pre>
+
+<h2 id="public-members">Public Members</h2>
+
 <p>Public members go at the top.</p>
+
 <blockquote>
 <p>The public interface/API is the most important information to look for.
 The elements are sorted by importance.</p>
 </blockquote>
+
 <pre><code class="language-c++">// bad
 struct Foo {
 private:
@@ -266,140 +292,186 @@ class Foo {
   i32 m_the_data;
 public:
   Foo();
-};</code></pre>
-</li>
-<li>
+};
+</code></pre>
+
+<h2 id="zero-initialization">Zero Initialization</h2>
+
 <p>Prefer ZII (Zero Is Initialization).</p>
+
 <pre><code class="language-c++">template &lt;typename T&gt; struct Array {
 private:
   T *m_buffer = nullptr;
   i32 m_size = 0;
   i32 m_capacity = 0;
-};</code></pre>
+};
+</code></pre>
+
 <blockquote>
 <p>Easy to reason with struct data if most types are initialized the same
-way. It's also common to recieve zero initalized memory from custom
+way. It&rsquo;s also common to recieve zero initalized memory from custom
 memory allocators.</p>
+
 <p>The name of a boolean may be flipped to support ZII. For example, instead
 of <code>bool alive = true</code>, use <code>bool dead = false</code>.</p>
 </blockquote>
-</li>
-<li>
+
+<h2 id="default-constructor">Default Constructor</h2>
+
 <p>If any user constructor is provided, declare a default constructor.</p>
+
 <pre><code class="language-c++">struct Shader {
   Shader() = default;
   Shader(const char *filename);
 
 private:
   u32 m_id = 0;
-};</code></pre>
-</li>
-<li>
+};
+</code></pre>
+
+<h2 id="mutable"><code>mutable</code></h2>
+
 <p>Avoid <code>mutable</code>.</p>
+
 <blockquote>
 <p>Constant values should be constant.</p>
 </blockquote>
-</li>
-<li>
+
+<h2 id="friend"><code>friend</code></h2>
+
 <p>Avoid <code>friend</code>.</p>
+
 <blockquote>
 <p>Hidden data should be hidden.</p>
 </blockquote>
-</li>
-<li>
+
+<h2 id="signed-integers">Signed Integers</h2>
+
 <p>Prefer signed integers over unsigned.</p>
+
 <blockquote>
-<p>You can't write a for loop that walks an array backwards with unsigned
+<p>You can&rsquo;t write a for loop that walks an array backwards with unsigned
 integers:</p>
 </blockquote>
+
 <pre><code class="language-c++">for (u32 i = some_unsigned_int; i &gt;= 0; i--) {
   // infinite loop!
 }
 
 for (i32 i = some_unsigned_int; i &gt;= 0; i--) {
   // signed/unsigned mismatch
-}</code></pre>
-</li>
-<li>
+}
+</code></pre>
+
+<h2 id="struct-initialization">Struct Initialization</h2>
+
 <p>Zero initialize structs and C style arrays with <code>= {}</code>.</p>
+
 <pre><code class="language-c++">Image m_white = {};
-Value m_stack[STACK_MAX] = {};</code></pre>
-</li>
-<li>
+Value m_stack[STACK_MAX] = {};
+</code></pre>
+
+<h2 id="header-guards">Header guards</h2>
+
 <p>Header files should use <code>#pragma once</code>.</p>
+
 <blockquote>
 <p>Supported by commonly used compilers. Less typing compared to header
 guards.</p>
 </blockquote>
-</li>
-<li>
-<p>Prefer C style casts instead of <code>static_cast</code>, <code>dynamic_cast</code>, ...</p>
+
+<h2 id="type-casting">Type Casting</h2>
+
+<p>Prefer C style casts instead of <code>static_cast</code>, <code>dynamic_cast</code>, &hellip;</p>
+
 <blockquote>
 <p>Most type casts involve casting between integers or from <code>void *</code>. For
 these cases, C++ casts just adds extra keystrokes for little benefit.</p>
 </blockquote>
-</li>
-<li>
+
+<h2 id="typename"><code>typename</code></h2>
+
 <p>Use <code>typename</code> for declaring template types.</p>
+
 <pre><code class="language-c++">template &lt;class T&gt; struct Array; // bad
-template &lt;typename T&gt; struct Array; // good</code></pre>
-</li>
-<li>
+template &lt;typename T&gt; struct Array; // good
+</code></pre>
+
+<h2 id="sized-enums">Sized Enums</h2>
+
 <p>Set an explicit size for enums.</p>
+
 <blockquote>
 <p>This is so that the enum type can be stored in a struct with a known
 size.</p>
 </blockquote>
+
 <pre><code class="language-c++">enum EnemyState : i32 {
   EnemyState_Idle,
   EnemyState_Alert,
   EnemyState_Chase,
   EnemyState_Dead,
-};</code></pre>
-</li>
-<li>
+};
+</code></pre>
+
+<h2 id="references">References</h2>
+
 <p>Prefer passing paremeters by pointer rather than by mutable reference.
 References are okay if its const.</p>
+
 <blockquote>
-<p>It's easier to see that something can be changed when <code>&amp;</code> is involved at
+<p>It&rsquo;s easier to see that something can be changed when <code>&amp;</code> is involved at
 the call site.</p>
 </blockquote>
+
 <pre><code class="language-c++">// does do_stuff get the data as a copy? const reference?
 // mutable reference? who knows?
 do_stuff(the_data);
 
 // oh okay, the_data is likely mutated after calling do_stuff
-do_stuff(&amp;the_data);</code></pre>
-</li>
-<li>
+do_stuff(&amp;the_data);
+</code></pre>
+
+<h2 id="header-include-order">Header Include Order</h2>
+
 <p>When include order matters, add an empty line in between the includes.</p>
+
 <blockquote>
-<p>The rationale is that Clang-Format will reorder includes if they're
+<p>The rationale is that Clang-Format will reorder includes if they&rsquo;re
 grouped together.</p>
 </blockquote>
-<pre><code class="language-c++">#include "texture.h"
+
+<pre><code class="language-c++">#include &quot;texture.h&quot;
 
 #define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"</code></pre>
-</li>
-<li>
+#include &quot;stb_image.h&quot;
+</code></pre>
+
+<h2 id="void"><code>void *</code></h2>
+
 <p>Avoid <code>void *</code>.</p>
+
 <blockquote>
-<p>There's usually some meaningful type that can be used with the pointer.
+<p>There&rsquo;s usually some meaningful type that can be used with the pointer.
 When dealing with a raw memory block, then the type can be <code>u8 *</code>, for
 pointer arithmetic.</p>
 </blockquote>
-</li>
-<li>
+
+<h2 id="conditions">Conditions</h2>
+
 <p>The condition in an if statement should be a boolean type. No truthy/falsy
 expressions.</p>
+
 <pre><code class="language-c++">char *buf = get_buf_data();
 if (buf) {} // bad
-if (buf != nullptr) {} // good</code></pre>
-</li>
-<li>
+if (buf != nullptr) {} // good
+</code></pre>
+
+<h2 id="multi-line-strings">Multi-line Strings</h2>
+
 <p>Use raw string literals for multi-line strings.</p>
-<pre><code class="language-c++">auto fragment = R"(
+
+<pre><code class="language-c++">auto fragment = R&quot;(
   #version 330 core
 
   in vec2 v_texindex;
@@ -409,38 +481,18 @@ if (buf != nullptr) {} // good</code></pre>
   void main() {
     f_color = texture(u_texture, v_texindex);
   }
-)";</code></pre>
-</li>
-</ul>  </div>
-</article>
-<script>
-  hljs.registerLanguage("wgsl", hljs => {
-    return {
-      name: "WGSL",
-      aliases: ["wgsl", "language-wgsl"],
-      keywords: {
-        keyword: "alias break case const const_assert continue continuing default diagnostic discard else enable false fn for if let loop override requires return struct switch true var while",
-        type: "vec2f vec3f vec4f",
-      },
-      contains: [
-        hljs.C_LINE_COMMENT_MODE,
-        hljs.C_BLOCK_COMMENT_MODE,
-        {
-          className: "built_in",
-          begin: /@\w+/,
-        },
-        {
-          beginKeywords: "struct",
-          end: /{/,
-          contains: [hljs.TITLE_MODE],
-        },
-      ]
-    }
-  });
+)&quot;;
+</code></pre>
 
-  hljs.highlightAll();
-</script>
-  </body>
-  </html>
-  <!-- be nice to people -->
+    </article>
+  </div>
+
   
+  <script src="/public/hljs/highlight.min.js"></script>
+  <script>
+    hljs.highlightAll();
+  </script>
+
+  
+</body>
+</html>

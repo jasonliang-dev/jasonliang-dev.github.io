@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/public/style.css">
+  <link rel="stylesheet" href="/public/tachyons.min.css">
+  
+  <script>
+    function updateTheme() {
+      const doc = document.documentElement
+
+      let dark
+      if ('theme' in localStorage) {
+        dark = localStorage.theme === 'dark'
+      } else {
+        dark = window.matchMedia('(prefers-color-scheme: dark)').matches
+      }
+
+      if (dark) {
+        doc.classList.add('dark')
+      } else {
+        doc.classList.remove('dark')
+      }
+
+      if (typeof onUpdateTheme === 'function') {
+        onUpdateTheme()
+      }
+    }
+
+    function toggleTheme() {
+      const doc = document.documentElement
+      localStorage.theme = doc.classList.contains('dark') ? 'light' : 'dark'
+      updateTheme()
+    }
+
+    updateTheme()
+  </script>
+</head>
+<body>
+  <button class="theme-button fixed top-0 right-0 z-999 flex mt3 mr3 bn br-pill pa2" onclick="toggleTheme()">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="20" height="20">
+      <path d="M10 2a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 2zM10 15a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 15zM10 7a3 3 0 100 6 3 3 0 000-6zM15.657 5.404a.75.75 0 10-1.06-1.06l-1.061 1.06a.75.75 0 001.06 1.06l1.06-1.06zM6.464 14.596a.75.75 0 10-1.06-1.06l-1.06 1.06a.75.75 0 001.06 1.06l1.06-1.06zM18 10a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0118 10zM5 10a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 015 10zM14.596 15.657a.75.75 0 001.06-1.06l-1.06-1.061a.75.75 0 10-1.06 1.06l1.06 1.06zM5.404 6.464a.75.75 0 001.06-1.06l-1.06-1.06a.75.75 0 10-1.061 1.06l1.06 1.06z" />
+    </svg>
+  </button>
+  
+  <div class="flex flex-column justify-center items-center vh-75">
+    <h1 class="f-6 tc">404</h1>
+    <a href="/" class="blue better-underline">Home</a>
+  </div>
+
+  
+  
+</body>
+</html>

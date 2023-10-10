@@ -1,115 +1,105 @@
-  <!doctype html>
-  <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>How LÖVE&#039;s Fused Mode Works | Jason Liang</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@500;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-1691VYRF8G"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-1691VYRF8G');
-    </script>
-    <link rel="stylesheet" href="static/tachyons.min.css">
-    <link id="hljs-light" rel="stylesheet" href="static/atom-one-light.min.css" disabled>
-    <link id="hljs-dark" rel="stylesheet" href="static/default-dark.min.css" disabled>
-    <link rel="stylesheet" href="static/style.css?v=1686281868">
-    <script src="static/highlight.min.js"></script>
-    <script>
-      const prefersDark = localStorage.theme === undefined && window.matchMedia("(prefers-color-scheme: dark)").matches;
-      if (localStorage.theme === "dark" || prefersDark) {
-        document.documentElement.classList.add("dark-mode");
-        document.getElementById("hljs-dark").removeAttribute("disabled");
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+  How LÖVE&#39;s Fused Mode Works
+</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/public/style.css">
+  <link rel="stylesheet" href="/public/tachyons.min.css">
+  
+  <script>
+    function updateTheme() {
+      const doc = document.documentElement
+
+      let dark
+      if ('theme' in localStorage) {
+        dark = localStorage.theme === 'dark'
       } else {
-        document.documentElement.classList.remove("dark-mode");
-        document.getElementById("hljs-light").removeAttribute("disabled");
+        dark = window.matchMedia('(prefers-color-scheme: dark)').matches
       }
 
-      function toggleDark() {
-        if (document.documentElement.classList.contains("dark-mode")) {
-          document.documentElement.classList.remove("dark-mode");
-          localStorage.theme = "light";
-          document.getElementById("hljs-light").removeAttribute("disabled");
-          document.getElementById("hljs-dark").setAttribute("disabled", "disabled");
-          if (window.onToggleDark) {
-            window.onToggleDark("light");
-          }
-        } else {
-          document.documentElement.classList.add("dark-mode");
-          localStorage.theme = "dark";
-          document.getElementById("hljs-dark").removeAttribute("disabled");
-          document.getElementById("hljs-light").setAttribute("disabled", "disabled");
-          if (window.onToggleDark) {
-            window.onToggleDark("dark");
-          }
-        }
+      if (dark) {
+        doc.classList.add('dark')
+      } else {
+        doc.classList.remove('dark')
       }
-    </script>
-  </head>
-  <body class="bg-near-white near-black dm-bg-near-black dm-near-white mb6">
-    <button
-      class="
-        bg-near-black near-white hover-bg-mid-gray
-        dm-bg-near-white dm-near-black dm-hover-bg-moon-gray
-        fixed top-0 right-0 z-999
-        flex justify-center items-center mr3 mt3
-        shadow bn br-pill
-      "
-      type="button"
-      style="width: 2.25rem; height: 2.25rem"
-      onclick="toggleDark()"
-    >
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 20px; height: 20px">
-        <path fill-rule="evenodd" d="M7.455 2.004a.75.75 0 01.26.77 7 7 0 009.958 7.967.75.75 0 011.067.853A8.5 8.5 0 116.647 1.921a.75.75 0 01.808.083z" clip-rule="evenodd" />
-      </svg>
-    </button>
-    <nav class="tc pv4">
-  <a class="b link near-black dm-near-white dim f4" href="/">Jason Liang</a>
-</nav>
-<article class="prose">
-  <time class="gray flex items-center">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 20px; height: 20px">
-      <path fill-rule="evenodd" d="M5.75 2a.75.75 0 01.75.75V4h7V2.75a.75.75 0 011.5 0V4h.25A2.75 2.75 0 0118 6.75v8.5A2.75 2.75 0 0115.25 18H4.75A2.75 2.75 0 012 15.25v-8.5A2.75 2.75 0 014.75 4H5V2.75A.75.75 0 015.75 2zm-1 5.5c-.69 0-1.25.56-1.25 1.25v6.5c0 .69.56 1.25 1.25 1.25h10.5c.69 0 1.25-.56 1.25-1.25v-6.5c0-.69-.56-1.25-1.25-1.25H4.75z" clip-rule="evenodd" />
+
+      if (typeof onUpdateTheme === 'function') {
+        onUpdateTheme()
+      }
+    }
+
+    function toggleTheme() {
+      const doc = document.documentElement
+      localStorage.theme = doc.classList.contains('dark') ? 'light' : 'dark'
+      updateTheme()
+    }
+
+    updateTheme()
+  </script>
+</head>
+<body>
+  <button class="theme-button fixed top-0 right-0 z-999 flex mt3 mr3 bn br-pill pa2" onclick="toggleTheme()">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="20" height="20">
+      <path d="M10 2a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 2zM10 15a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 15zM10 7a3 3 0 100 6 3 3 0 000-6zM15.657 5.404a.75.75 0 10-1.06-1.06l-1.061 1.06a.75.75 0 001.06 1.06l1.06-1.06zM6.464 14.596a.75.75 0 10-1.06-1.06l-1.06 1.06a.75.75 0 001.06 1.06l1.06-1.06zM18 10a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0118 10zM5 10a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 015 10zM14.596 15.657a.75.75 0 001.06-1.06l-1.06-1.061a.75.75 0 10-1.06 1.06l1.06 1.06zM5.404 6.464a.75.75 0 001.06-1.06l-1.06-1.06a.75.75 0 10-1.061 1.06l1.06 1.06z" />
     </svg>
-    <span class="ml1 f6 fw5">
-      February 27, 2023    </span>
-  </time>
-  <h1 class="mt1">How LÖVE&#039;s Fused Mode Works</h1>
-  <div class="lh-copy">
-    <p><a href="https://love2d.org/">LÖVE</a> is a 2D game framework. One of its features allows
-you to attach a zip file to the end of the program, "fusing" all of your
-game's assets and the game's executable into a single file.</p>
+  </button>
+  
+  <div class="mw7 center ph3">
+    <header class="pt4">
+      <a class="harsh fw7 f3 link" href="/">Jason Liang</a>
+    </header>
+    <article class="prose">
+      <time>February 27, 2023</time>
+      <h1>How LÖVE&#39;s Fused Mode Works</h1>
+      <p><a href="https://love2d.org/" target="_blank">LÖVE</a> is a 2D game framework. One of its features allows
+you to attach a zip file to the end of the program, &ldquo;fusing&rdquo; all of your
+game&rsquo;s assets and the game&rsquo;s executable into a single file.</p>
+
 <p>You can create a fused LÖVE program on Windows like this:</p>
-<pre><code class="language-plaintext">copy /b love.exe+MyGame.zip MyGame.exe</code></pre>
+
+<pre><code class="language-plaintext">copy /b love.exe+MyGame.zip MyGame.exe
+</code></pre>
+
 <p>Now, what the heck did we create? What kind of file is <code>MyGame.exe</code>? Sure,
 with the <code>.exe</code> extension, it looks like an executable. Assuming <code>MyGame.zip</code>
 contains a working LÖVE project, opening <code>MyGame.exe</code> runs the game. So yes,
-it's an honest Windows program. But how does it read the game data?</p>
+it&rsquo;s an honest Windows program. But how does it read the game data?</p>
+
 <p>The answer: <code>MyGame.exe</code> is both a valid Windows executable and a valid zip
 file! To get the game data, the program simply reads itself. To confirm that
 this file is a zip file, you can open <code>MyGame.exe</code> in an archive manager,
 such as 7-Zip.</p>
-<p><img src="/static/fusing/7zip.png" alt="" /></p>
+
+<p><img src="/public/fusing/7zip.png" alt="" /></p>
+
 <p>Depending on the program you might have trouble reading the zip file contents.
 For example, if you rename <code>MyGame.exe</code> to <code>MyGame.zip</code>, and then open it
-with Windows Explorer, you'll get a complaint that the file isn't a proper
+with Windows Explorer, you&rsquo;ll get a complaint that the file isn&rsquo;t a proper
 zip file.</p>
-<p>The <code>copy</code> command that produced <code>MyGame.exe</code> isn't witchcraft. It's as
+
+<p>The <code>copy</code> command that produced <code>MyGame.exe</code> isn&rsquo;t witchcraft. It&rsquo;s as
 primitive as slamming <code>love.exe</code> and <code>MyGame.zip</code> next to each other. Windows
 is perfectly happy to run <code>love.exe</code> with extra data added to the back, and
-the extra zip file data doesn't change how the OS executes the program.</p>
-<p><img src="/static/fusing/mygame_exe.png" alt="" /></p>
+the extra zip file data doesn&rsquo;t change how the OS executes the program.</p>
+
+<p><img src="/public/fusing/mygame_exe.png" alt="" /></p>
+
 <p>Even with this arrangement, 7-Zip is perfectly happy to read the zip contents
-from this file. However, Windows Explorer isn't as happy. We'll get to why
+from this file. However, Windows Explorer isn&rsquo;t as happy. We&rsquo;ll get to why
 that might be the case later.</p>
-<h2>Implementation</h2>
-<p>It's pretty easy to implement LÖVE's fusing behaviour yourself. You just need
+
+<h2 id="implementation">Implementation</h2>
+
+<p>It&rsquo;s pretty easy to implement LÖVE&rsquo;s fusing behaviour yourself. You just need
 to know a bit about how zip files are structured. Before going any further,
-I'll pull out some functions out of thin air to make the examples shorter:</p>
+I&rsquo;ll pull out some functions out of thin air to make the examples shorter:</p>
+
 <pre><code class="language-c">// loads an entire file to `contents`, returns file size
 size_t read_entire_file(char **contents, char *filepath);
 
@@ -117,41 +107,57 @@ size_t read_entire_file(char **contents, char *filepath);
 char *get_executable_path(void);
 
 // print error message and abort
-void panic(const char *fmt, ...);</code></pre>
-<p>Let's start by creating a C program using <a href="https://github.com/richgel999/miniz">miniz</a>.
-Miniz is a library that helps us read zip archives. We'll let the program read
+void panic(const char *fmt, ...);
+</code></pre>
+
+<p>Let&rsquo;s start by creating a C program using <a href="https://github.com/richgel999/miniz" target="_blank">miniz</a>.
+Miniz is a library that helps us read zip archives. We&rsquo;ll let the program read
 itself as a zip file.</p>
+
 <pre><code class="language-c">mz_zip_archive zip = {0};
 mz_bool ok = mz_zip_reader_init_file(&amp;zip, get_executable_path(), 0);
 if (!ok) {
   mz_zip_error err = mz_zip_get_last_error(&amp;zip);
-  panic("failed to read zip: %s", mz_zip_get_error_string(err));
-}</code></pre>
+  panic(&quot;failed to read zip: %s&quot;, mz_zip_get_error_string(err));
+}
+</code></pre>
+
 <p>The program outputs:</p>
-<pre><code class="language-plaintext">failed to read zip: invalid header or archive is corrupted</code></pre>
-<p>Okay, so like Windows Explorer, there's a complaint that our executable file
-isn't a valid zip file. This is because miniz is reading the file from the
-start, looking for a file entry header that isn't there.</p>
-<p>Unlike a lot of other file formats, we're able to read a zip file from the
-back instead of the front. The back of a zip file contains the "end of
-central directory" record (or EOCD). The record contains information to
+
+<pre><code class="language-plaintext">failed to read zip: invalid header or archive is corrupted
+</code></pre>
+
+<p>Okay, so like Windows Explorer, there&rsquo;s a complaint that our executable file
+isn&rsquo;t a valid zip file. This is because miniz is reading the file from the
+start, looking for a file entry header that isn&rsquo;t there.</p>
+
+<p>Unlike a lot of other file formats, we&rsquo;re able to read a zip file from the
+back instead of the front. The back of a zip file contains the &ldquo;end of
+central directory&rdquo; record (or EOCD). The record contains information to
 locate the central directory, which is a listing of file entries in the zip
-archive. Once the central directory is located, there's enough information to
+archive. Once the central directory is located, there&rsquo;s enough information to
 get the location where the executable stops, and where the zip file starts.</p>
-<p><img src="/static/fusing/zip_format.png" alt="" /></p>
+
+<p><img src="/public/fusing/zip_format.png" alt="" /></p>
+
 <p>By finding the end of the executable, we can give miniz the proper zip file
 data that it expects.</p>
-<p>Assuming the zip file doesn't have any comments, the EOCD record is 22 bytes.
+
+<p>Assuming the zip file doesn&rsquo;t have any comments, the EOCD record is 22 bytes.
 It contains the size of the central directory and the offset of the central
 directory relative to the start of the zip archive.</p>
-<p><img src="/static/fusing/eocd.png" alt="" /></p>
+
+<p><img src="/public/fusing/eocd.png" alt="" /></p>
+
 <blockquote>
-<p>If you're wondering where these offsets and byte sizes are coming from, I
-took them off of Wikipedia's
-<a href="https://en.wikipedia.org/wiki/ZIP_(file_format)">Zip file format</a> article.</p>
+<p>If you&rsquo;re wondering where these offsets and byte sizes are coming from, I
+  took them off of Wikipedia&rsquo;s
+  <a href="https://en.wikipedia.org/wiki/ZIP_(file_format)" target="_blank">Zip file format</a> article.</p>
 </blockquote>
-<p>We'll use this info to get the central directory. Start by getting the EOCD
+
+<p>We&rsquo;ll use this info to get the central directory. Start by getting the EOCD
 record from the back of the file.</p>
+
 <pre><code class="language-c">// read myself
 char *contents;
 size_t read = read_entire_file(&amp;contents, get_executable_path());
@@ -160,9 +166,12 @@ size_t read = read_entire_file(&amp;contents, get_executable_path());
 uint32_t eocd_sig = 0x06054b50; // EOCD header signature (4 bytes)
 char *eocd = &amp;contents[read - 22]; // EOCD header (22 bytes)
 if (memcmp(eocd, &amp;eocd_sig, 4) != 0) {
-  panic("this is not the EOCD record");
-}</code></pre>
+  panic(&quot;this is not the EOCD record&quot;);
+}
+</code></pre>
+
 <p>Now we can find the location of the central directory from the back.</p>
+
 <pre><code class="language-c">// size of central directory (offset 12, 4 bytes)
 uint32_t central_size;
 memcpy(&amp;central_size, &amp;eocd[12], 4);
@@ -171,49 +180,38 @@ memcpy(&amp;central_size, &amp;eocd[12], 4);
 uint32_t central_sig = 0x02014b50; // central directory header signature (4 bytes)
 char *central_dir = eocd - central_size;
 if (memcmp(central_dir, &amp;central_sig, 4) != 0) {
-  panic("this is not the central directory");
-}</code></pre>
-<p>Once we've found the central directory, we can use the offset of the central
+  panic(&quot;this is not the central directory&quot;);
+}
+</code></pre>
+
+<p>Once we&rsquo;ve found the central directory, we can use the offset of the central
 directory to jump to the start of the archive.</p>
+
 <pre><code class="language-c">// central directory location (offset 16, 4 bytes)
 uint32_t central_offset;
 memcpy(&amp;central_offset, &amp;eocd[16], 4);
 
 char *zip_contents = central_dir - central_offset;
-size_t zip_size = contents + read - zip_contents;</code></pre>
-<p>Pass <code>zip_contents</code> to <code>mz_zip_reader_init_mem</code> to read the zip file.</p>
-<pre><code class="language-c">mz_bool ok = mz_zip_reader_init_mem(&amp;zip, zip_contents, zip_size, 0);</code></pre>
-<p>And that's how you can read zip data from a fused executable à la LÖVE. For
-further reading, search for "self-extracting zip file" online.</p>  </div>
-</article>
-<script>
-  hljs.registerLanguage("wgsl", hljs => {
-    return {
-      name: "WGSL",
-      aliases: ["wgsl", "language-wgsl"],
-      keywords: {
-        keyword: "alias break case const const_assert continue continuing default diagnostic discard else enable false fn for if let loop override requires return struct switch true var while",
-        type: "vec2f vec3f vec4f",
-      },
-      contains: [
-        hljs.C_LINE_COMMENT_MODE,
-        hljs.C_BLOCK_COMMENT_MODE,
-        {
-          className: "built_in",
-          begin: /@\w+/,
-        },
-        {
-          beginKeywords: "struct",
-          end: /{/,
-          contains: [hljs.TITLE_MODE],
-        },
-      ]
-    }
-  });
+size_t zip_size = contents + read - zip_contents;
+</code></pre>
 
-  hljs.highlightAll();
-</script>
-  </body>
-  </html>
-  <!-- be nice to people -->
+<p>Pass <code>zip_contents</code> to <code>mz_zip_reader_init_mem</code> to read the zip file.</p>
+
+<pre><code class="language-c">mz_bool ok = mz_zip_reader_init_mem(&amp;zip, zip_contents, zip_size, 0);
+</code></pre>
+
+<p>And that&rsquo;s how you can read zip data from a fused executable à la LÖVE. For
+further reading, search for &ldquo;self-extracting zip file&rdquo; online.</p>
+
+    </article>
+  </div>
+
   
+  <script src="/public/hljs/highlight.min.js"></script>
+  <script>
+    hljs.highlightAll();
+  </script>
+
+  
+</body>
+</html>
