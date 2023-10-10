@@ -1,19 +1,16 @@
 # jasonliang-dev.github.io
 
-## Dev Server
+## Development
+
+Install Go and SASS, then:
 
 ```sh
-# php's built in web server, but it's slow even for dev
-php -S localhost:8080
-
-# better web server using symfony cli
-# https://symfony.com/doc/current/setup/symfony_server.html
-symfony server:start
+go run . serve
 ```
 
-## Site Generation
+## Deployment
 
 ```sh
-# create a `dist` directory for deployment
-php index.php
+go run . build # creates a `dist` directory
+gh-pages -d dist # deploy to GitHub
 ```

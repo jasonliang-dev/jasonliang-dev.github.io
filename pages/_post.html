@@ -1,0 +1,23 @@
+{{ define "title" }}
+  {{ .Title }}
+{{ end }}
+
+{{ define "body" }}
+  <div class="mw7 center ph3">
+    <header class="pt4">
+      <a class="harsh fw7 f3 link" href="/">Jason Liang</a>
+    </header>
+    <article class="prose">
+      <time>{{ .Date.Format "January 2, 2006" }}</time>
+      <h1>{{ .Title }}</h1>
+      {{ .HTML }}
+    </article>
+  </div>
+{{ end }}
+
+{{ define "script" }}
+  <script src="/public/hljs/highlight.min.js"></script>
+  <script>
+    hljs.highlightAll();
+  </script>
+{{ end }}

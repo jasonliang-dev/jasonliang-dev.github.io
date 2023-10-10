@@ -1,5 +1,7 @@
 {
+  "name": "jasonliang-dev.github.io",
+  "private": true,
   "scripts": {
-    "deploy": "php index.php && gh-pages -d dist"
+    "deploy": "go run . build && gh-pages -d dist"
   }
 }

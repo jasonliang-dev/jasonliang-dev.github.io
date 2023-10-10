@@ -1,0 +1,182 @@
+[
+  {
+    "title": "Spry",
+    "desc": "A 2D game framework for rapid prototyping and game jams.",
+    "img": "/public/images/spry.png",
+    "alt": "Screenshot of a 2D game with planes",
+    "github": "https://github.com/jasonliang-dev/spry",
+    "link": "https://jasonliang.js.org/spry/",
+    "color": "#115e59",
+    "dark_color": "#134e4a"
+  },
+  {
+    "title": "Tiny Hypertext Preprocessor",
+    "desc": "A program that helps generate static websites using Lua.",
+    "img": "/public/images/thp.png",
+    "alt": "",
+    "github": "https://github.com/jasonliang-dev/thp",
+    "link": false,
+    "color": "#3730a3",
+    "dark_color": "#312e81"
+  },
+  {
+    "title": "Rootie the Mouse",
+    "desc": "You play as Rootie, a mouse that has the power to control water, air, and fire.",
+    "img": "/public/images/rootie-the-mouse.png",
+    "alt": "2D game title screen with a mouse",
+    "github": "https://github.com/jasonliang-dev/rootie-the-mouse",
+    "link": "https://jasonliang.js.org/rootie-the-mouse/",
+    "color": "#9a3412",
+    "dark_color": "#7c2d12"
+  },
+  {
+    "title": "shoppy-store",
+    "desc": "Custom ecommerce storefront using Next.js and Shopify.",
+    "img": "/public/images/storefront.png",
+    "alt": "Homepage of an online store",
+    "github": "https://github.com/jasonliang-dev/shoppy-store",
+    "link": "https://shoppy-store-chi.vercel.app/",
+    "color": "#86198f",
+    "dark_color": "#701a75"
+  },
+  {
+    "title": "file-sink",
+    "desc": "Tiny SFTP client with automatic file synchronization using C++.",
+    "img": "/public/images/sftp.png",
+    "alt": "A window displaying list of files",
+    "github": "https://github.com/jasonliang-dev/file-sink",
+    "link": false,
+    "color": "#334155",
+    "dark_color": "#1e293b"
+  },
+  {
+    "title": "odin-lua",
+    "desc": "Lua 5.4.4 and LuaJIT support for the Odin programming language.",
+    "img": "/public/images/odin-lua.png",
+    "alt": "odin-lua's source code",
+    "github": "https://github.com/jasonliang-dev/odin-lua",
+    "link": false,
+    "color": "#1e40af",
+    "dark_color": "#1e3a8a"
+  },
+  {
+    "title": "shooty-game",
+    "desc": "A game where you shoot stuff. Made with C++ and Lua, without an engine.",
+    "img": "/public/images/shooty-game.png",
+    "alt": "Screenshot of shooty-game",
+    "github": "https://github.com/jasonliang-dev/shooty-game",
+    "link": "https://jasonliang.js.org/shooty-game/",
+    "color": "#3f6212",
+    "dark_color": "#365314"
+  },
+  {
+    "title": "Heroicons for Elm",
+    "desc": "Web app that provides SVG icons for the Elm programming language.",
+    "img": "/public/images/elm-heroicons.png",
+    "alt": "Gallery of icons in a grid",
+    "github": "https://github.com/jasonliang-dev/heroicons-for-elm",
+    "link": "https://jasonliang.js.org/heroicons-for-elm/",
+    "color": "#6b21a8",
+    "dark_color": "#581c87"
+  },
+  {
+    "title": "Yet Another Chat App",
+    "desc": "Chat application that uses the MERN stack. Messages are sent in real time using Socket.IO.",
+    "img": "/public/images/chat-app.png",
+    "alt": "A chat interface",
+    "github": "https://github.com/jasonliang-dev/yet-another-chat-app",
+    "link": false,
+    "color": "#166534",
+    "dark_color": "#14532d"
+  },
+  {
+    "title": "Temtem Type Calculator",
+    "desc": "For the game Temtem, view matchups between different creature types. Made with Gatsby.",
+    "img": "/public/images/temtem.png",
+    "alt": "Temtem creatures in a list",
+    "github": "https://github.com/jasonliang-dev/temtem-type-calculator",
+    "link": "https://temtypecalc.netlify.app/",
+    "color": "#854d0e",
+    "dark_color": "#713f12"
+  },
+  {
+    "title": "Wildermaze",
+    "desc": "A game where you escape a maze while avoiding wolves. Created during BC Game Jam 2020.",
+    "img": "/public/images/maze.png",
+    "alt": "Screenshot of Wildermaze",
+    "github": "https://github.com/jasonliang-dev/wildermaze",
+    "link": "https://jasonliang.js.org/wildermaze/",
+    "color": "#115e59",
+    "dark_color": "#134e4a"
+  },
+  {
+    "title": "Space Shooter Game",
+    "desc": "Avoid asteroids and enemy fire in a fast paced arcade romp.",
+    "img": "/public/images/spaceshooter.png",
+    "alt": "Screenshot of Space Shooter Game",
+    "github": "https://github.com/jasonliang-dev/space-shooter",
+    "link": false,
+    "color": "#86198f",
+    "dark_color": "#701a75"
+  },
+  {
+    "title": "lite-vim",
+    "desc": "A plugin for the Lite text editor that emulates a subset of Vim.",
+    "img": "/public/images/lite-vim.png",
+    "alt": "lite-vim's source code",
+    "github": "https://github.com/jasonliang-dev/lite-vim",
+    "link": false,
+    "color": "#334155",
+    "dark_color": "#1e293b"
+  },
+  {
+    "title": "Entity Component System",
+    "desc": "Archetype entity component system library for C.",
+    "img": "/public/images/ecs.png",
+    "alt": "A 2d game screenshot with many projectiles",
+    "github": "https://github.com/jasonliang-dev/entity-component-system",
+    "link": false,
+    "color": "#9a3412",
+    "dark_color": "#7c2d12"
+  },
+  {
+    "title": "Costello",
+    "desc": "BetterDiscord plugin that lets you save and rapidly send a collection of images.",
+    "img": "/public/images/discord-stickers.png",
+    "alt": "Several images/stickers shown in a grid",
+    "github": "https://github.com/jasonliang-dev/costello",
+    "link": false,
+    "color": "#3730a3",
+    "dark_color": "#312e81"
+  },
+  {
+    "title": "dream-eater",
+    "desc": "Emacs minor mode that respects Dreamweaver's check in/out system.",
+    "img": "/public/images/php.png",
+    "alt": "Some PHP source code",
+    "github": "https://github.com/jasonliang-dev/dream-eater",
+    "link": false,
+    "color": "#6b21a8",
+    "dark_color": "#581c87"
+  },
+  {
+    "title": "lulu",
+    "desc": "Tiny lispy toy programming language. Written in Haskell under 300 SLOC.",
+    "img": "/public/images/lulu.png",
+    "alt": "Code showcasing the lulu programming language",
+    "github": "https://github.com/jasonliang-dev/lulu",
+    "link": false,
+    "color": "#9d174d",
+    "dark_color": "#831843"
+  },
+  {
+    "title": "Game of Life",
+    "desc": "Conway's Game of Life written in C with SDL2.",
+    "img": "/public/images/game-of-life.png",
+    "alt": "A grid of black/white squares",
+    "github": "https://github.com/jasonliang-dev/game-of-life",
+    "link": false,
+    "color": "#334155",
+    "dark_color": "#1e293b"
+  }
+]

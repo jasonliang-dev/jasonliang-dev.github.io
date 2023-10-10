@@ -1,0 +1,230 @@
+{{ define "title" }}Home{{ end }}
+
+{{ define "body" }}
+  <div class="absolute w-100 vh-100" style="z-index: -1">
+    <canvas id="canvas"></canvas>
+  </div>
+  <div class="vh-100 flex flex-column justify-center items-center">
+    <h1 class="hero-text tc mv0 fw9">Jason Liang</h1>
+    <p class="fw4 soft f3 f2-l mw6 mw8-l mb6 tc center">
+      A developer that loves to create attractive and interactive
+      applications for the web and desktop.
+    </p>
+  </div>
+  <div class="mw8 center ph2" style="font-size: 1.1rem">
+    <h2 class="mb0">Blog Posts</h2>
+    <p class="soft">Programming guides and thoughts on software.</p>
+    <ul class="list pl0 mt4 mb6">
+      {{ range Posts }}
+        <li class="lh-copy">
+          <a class="post-link no-underline harsh pv2 ph2 nl2 nr2 db br2 flex" href="{{ .Link }}">
+            <span class="soft flex-none" style="width: 9rem">
+              {{ .Date.Format "Jan 2, 2006" }}
+            </span>
+            <span class="pl1 fw5">
+              {{ .Title }}
+            </span>
+          </a>
+        </li>
+      {{ end }}
+    </ul>
+
+    <h2 class="mb0">GitHub Projects</h2>
+    <p class="soft lh-copy">
+      You can also find these projects on my
+      <a href="https://github.com/jasonliang-dev/" class="harsh better-underline fw5">GitHub</a>
+      profile.
+    </p>
+    <ul class="project-grid list pl0 mt4 mb6">
+      {{ range ReadJSONArray "data/projects.json" }}
+        <li class="mb3">
+          <a href="{{ or .link .github }}" class="no-underline br3 db border-outline shadow img-scale-over" style="max-width: 24rem">
+            <img src="{{ .img }}" alt="{{ .alt }}" class="db w-100" style="object-fit: cover; aspect-ratio: 16 / 9">
+          </a>
+          <div class="pt3">
+            <h3 class="mt0 mb2 fw5 f4">
+              <a href="{{ or .link .github }}" class="harsh better-underline">
+                {{ .title }}
+              </a>
+            </h3>
+            <p class="mt0 lh-copy soft mb0">
+              {{ .desc }}
+            </p>
+            {{ if .link }}
+              <a class="eyebrow better-underline inline-flex items-center mt2" href="{{ .github }}">
+                <span class="mr1">
+                  GitHub
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 20px; height: 20px">
+                  <path fill-rule="evenodd" d="M4.25 5.5a.75.75 0 00-.75.75v8.5c0 .414.336.75.75.75h8.5a.75.75 0 00.75-.75v-4a.75.75 0 011.5 0v4A2.25 2.25 0 0112.75 17h-8.5A2.25 2.25 0 012 14.75v-8.5A2.25 2.25 0 014.25 4h5a.75.75 0 010 1.5h-5z" clip-rule="evenodd" />
+                  <path fill-rule="evenodd" d="M6.194 12.753a.75.75 0 001.06.053L16.5 4.44v2.81a.75.75 0 001.5 0v-4.5a.75.75 0 00-.75-.75h-4.5a.75.75 0 000 1.5h2.553l-9.056 8.194a.75.75 0 00-.053 1.06z" clip-rule="evenodd" />
+                </svg>
+              </a>
+            {{ end }}
+          </div>
+        </li>
+      {{ end }}
+    </ul>
+
+    <h2 class="mb0">WordPress Work</h2>
+    <p class="soft lh-copy">
+      WordPress Websites that I've built for clients.
+    </p>
+    <ul class="list pl0 mt4 mb6">
+      {{ range ReadJSONArray "data/websites.json" }}
+        <li class="flex flex-column flex-row-l items-start items-center-l mb4">
+          <a href="{{ .link }}" class="no-underline db br3 border-outline shadow img-scale-over" style="max-width: 24rem">
+            <img src="{{ .img }}" alt="{{ .alt }}" class="db">
+          </a>
+          <div class="pl4-l pt3 pt0-l pb3">
+            <h3 class="mt0 mb2 fw5 f4">
+              <a href="{{ .link }}" class="harsh better-underline inline-flex items-center">
+                {{ .title }}
+                <svg class="ml2 soft" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="20" height="20">
+                  <path fill-rule="evenodd" d="M4.25 5.5a.75.75 0 00-.75.75v8.5c0 .414.336.75.75.75h8.5a.75.75 0 00.75-.75v-4a.75.75 0 011.5 0v4A2.25 2.25 0 0112.75 17h-8.5A2.25 2.25 0 012 14.75v-8.5A2.25 2.25 0 014.25 4h5a.75.75 0 010 1.5h-5z" clip-rule="evenodd" />
+                  <path fill-rule="evenodd" d="M6.194 12.753a.75.75 0 001.06.053L16.5 4.44v2.81a.75.75 0 001.5 0v-4.5a.75.75 0 00-.75-.75h-4.5a.75.75 0 000 1.5h2.553l-9.056 8.194a.75.75 0 00-.053 1.06z" clip-rule="evenodd" />
+                </svg>
+              </a>
+            </h3>
+            <p class="mt0 lh-copy soft mw6">
+              {{ .desc }}
+            </p>
+          </div>
+        </li>
+      {{ end }}
+    </ul>
+  </div>
+  <footer class="print-hidden tc gray pb4 pt6">
+    Made with <a class="harsh better-underline fw5" href="https://github.com/jasonliang-dev/jasonliang-dev.github.io/">code</a>
+  </footer>
+{{ end }}
+
+{{ define "script" }}
+  <script>
+    const canvas = document.getElementById('canvas')
+    const ctx = canvas.getContext('2d')
+
+    const reserved = {width: 0, height: 0}
+    const points = []
+    const mouse = {x: 300, y: 300}
+    const camera = {x: 0, y: 0}
+    let dark = document.documentElement.classList.contains('dark')
+
+    function mousemove(e) {
+      mouse.x = e.pageX
+      mouse.y = e.pageY
+    }
+    window.addEventListener('mousemove', mousemove)
+
+    function resize() {
+      canvas.width = canvas.parentNode.clientWidth
+      canvas.height = canvas.parentNode.clientHeight
+
+      if (reserved.width < canvas.width || reserved.height < canvas.height) {
+        reserved.width = Math.max(reserved.width, canvas.width)
+        reserved.height = Math.max(reserved.height, canvas.height)
+
+        const count = reserved.width * reserved.height * 0.0001
+        for (let i = 0; i < count; i++) {
+          points[i] = {
+            x: random(0, reserved.width),
+            y: random(0, reserved.height),
+            vx: random(0.2, 0.8),
+            vy: random(0.2, 0.8),
+            size: Math.floor(random(2, 5)),
+          }
+        }
+      }
+    }
+    window.addEventListener('resize', resize)
+    resize()
+
+    function draw() {
+      ctx.resetTransform()
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      ctx.translate(camera.x, camera.y)
+
+      const cam_move = 20
+      const cx = lerp(-cam_move, cam_move, mouse.x / canvas.width)
+      const cy = lerp(-cam_move, cam_move, clamp(mouse.y / canvas.height), 0, 1)
+      camera.x += (cx - camera.x) * 0.1
+      camera.y += (cy - camera.y) * 0.1
+
+      for (let p of points) {
+        p.x += p.vx
+        p.y += p.vy
+
+        const padding = 50
+        if (p.x > reserved.width + padding) {
+          p.x = -padding
+        }
+
+        if (p.y > reserved.height + padding) {
+          p.y = -padding
+        }
+      }
+
+      if (dark) {
+        ctx.fillStyle = 'rgb(250 250 250 / 0.15)'
+      } else {
+        ctx.fillStyle = 'rgb(0 0 0 / 0.2)'
+      }
+
+      ctx.beginPath()
+      for (let p of points) {
+        ctx.moveTo(p.x, p.y)
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2)
+      }
+      ctx.fill()
+
+      for (let p of points) {
+        // bias == cos(pi * 0.25)
+        const bias = 0.707106781186548
+
+        const dx = mouse.x - p.x
+        const dy = mouse.y - p.y
+        const dist = dx * dx + dy * dy
+
+        if (dark) {
+          const opacity = clamp(2000 / dist, 0, 0.15)
+          ctx.strokeStyle = `rgb(250 250 250 / ${opacity})`
+        } else {
+          const opacity = clamp(2000 / dist, 0, 0.2)
+          ctx.strokeStyle = `rgb(0 0 0 / ${opacity})`
+        }
+
+        const len = 50 * (p.size * 0.5)
+        ctx.beginPath()
+        ctx.moveTo(p.x - (p.size * bias), p.y - (p.size * bias))
+        ctx.lineTo(p.x - len, p.y - len)
+        ctx.stroke()
+      }
+
+      requestAnimationFrame(draw)
+    }
+    draw()
+
+    function random(min, max) {
+      const diff = max - min
+      return Math.random() * diff + min
+    }
+
+    function clamp(x, min, max) {
+      if (x < min) {
+        return min
+      } else if (x > max) {
+        return max
+      } else {
+        return x
+      }
+    }
+
+    function lerp(a, b, t) {
+      return a + (b - a) * t
+    }
+
+    function onUpdateTheme() {
+      dark = document.documentElement.classList.contains('dark')
+    }
+  </script>
+{{ end }}

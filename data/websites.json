@@ -1,0 +1,16 @@
+[
+  {
+    "title": "Burnaby Heights Accounting",
+    "desc": "A sleek and user-friendly website for a business that specializes in tax and accounting services.",
+    "alt": "Screenshot of Burnaby Heights Accounting's website",
+    "img": "/public/websites/burnabyheightsaccounting.com_.png",
+    "link": "https://burnabyheightsaccounting.com/"
+  },
+  {
+    "title": "Nimbasa Entertainment",
+    "desc": "E-commerce storefront that showcases anime figures and video games for a local vendor in Vancouver.",
+    "alt": "Screenshot of Nimbasa Entertainment's website",
+    "img": "/public/websites/nimbasa.co_.png",
+    "link": "https://nimbasa.co/"
+  }
+]
