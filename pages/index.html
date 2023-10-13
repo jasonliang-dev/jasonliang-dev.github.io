@@ -146,7 +146,7 @@
 
       const cam_move = 20
       const cx = lerp(-cam_move, cam_move, mouse.x / canvas.width)
-      const cy = lerp(-cam_move, cam_move, clamp(mouse.y / canvas.height), 0, 1)
+      const cy = lerp(-cam_move, cam_move, clamp(mouse.y / canvas.height, 0, 1))
       camera.x += (cx - camera.x) * 0.1
       camera.y += (cy - camera.y) * 0.1
 
