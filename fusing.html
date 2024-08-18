@@ -1,112 +1,442 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>
-  How LÖVE&#39;s Fused Mode Works
-</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/public/style.css">
-  <link rel="stylesheet" href="/public/tachyons.min.css">
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-1691VYRF8G"></script>
-  <script>
-    window.dataLayer = window.dataLayer || []
-    function gtag(){dataLayer.push(arguments)}
-    gtag('js', new Date())
-    gtag('config', 'G-1691VYRF8G')
-  </script>
-  
-  <script>
-    function updateTheme() {
-      const doc = document.documentElement
 
-      let dark
-      if ('theme' in localStorage) {
-        dark = localStorage.theme === 'dark'
-      } else {
-        dark = window.matchMedia('(prefers-color-scheme: dark)').matches
-      }
+  <!DOCTYPE html>
+  <html lang="en">
 
-      if (dark) {
-        doc.classList.add('dark')
-      } else {
-        doc.classList.remove('dark')
-      }
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>How LÖVE's Fused Mode Works - Jason Liang</title>
 
-      if (typeof onUpdateTheme === 'function') {
-        onUpdateTheme()
-      }
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-1691VYRF8G');
+    </script>
+
+    <style>
+      body {
+  font-family: sans-serif;
+  margin: 0 auto;
+  max-width: 800px;
+
+  @media (prefers-color-scheme: dark) {
+    color: white;
+    background-color: #111;
+  }
+}
+
+a {
+  color: black;
+  border-radius: .25rem;
+
+  &:hover, &:focus {
+    background-color: black;
+    color: white;
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    color: white;
+
+    &:hover, &:focus {
+      background-color: white;
+      color: black;
     }
+  }
+}
 
-    function toggleTheme() {
-      const doc = document.documentElement
-      localStorage.theme = doc.classList.contains('dark') ? 'light' : 'dark'
-      updateTheme()
+.post-list {
+  list-style-type: none;
+  padding: 0;
+
+  a {
+    text-decoration: none;
+    display: flex;
+    justify-content: space-between;
+    padding: .5rem;
+
+    &:hover, &:focus {
+      background-color: black;
+      color: #fff;
     }
+  }
+}
 
-    updateTheme()
-  </script>
-</head>
-<body>
-  <button class="theme-button fixed top-0 right-0 z-999 flex mt3 mr3 bn br-pill pa2" onclick="toggleTheme()">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="20" height="20">
-      <path d="M10 2a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 2zM10 15a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 15zM10 7a3 3 0 100 6 3 3 0 000-6zM15.657 5.404a.75.75 0 10-1.06-1.06l-1.061 1.06a.75.75 0 001.06 1.06l1.06-1.06zM6.464 14.596a.75.75 0 10-1.06-1.06l-1.06 1.06a.75.75 0 001.06 1.06l1.06-1.06zM18 10a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0118 10zM5 10a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 015 10zM14.596 15.657a.75.75 0 001.06-1.06l-1.06-1.061a.75.75 0 10-1.06 1.06l1.06 1.06zM5.404 6.464a.75.75 0 001.06-1.06l-1.06-1.06a.75.75 0 10-1.061 1.06l1.06 1.06z" />
-    </svg>
-  </button>
-  
-  <div class="mw7 center ph3">
-    <header class="pt4">
-      <a class="harsh fw7 f3 link" href="/">Jason Liang</a>
-    </header>
-    <article class="prose">
-      <time>February 27, 2023</time>
-      <h1>How LÖVE&#39;s Fused Mode Works</h1>
-      <p><a href="https://love2d.org/" target="_blank">LÖVE</a> is a 2D game framework. One of its features allows
-you to attach a zip file to the end of the program, &ldquo;fusing&rdquo; all of your
-game&rsquo;s assets and the game&rsquo;s executable into a single file.</p>
+nav a {
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-decoration: none;
+  margin-top: 2rem;
+  margin-bottom: 4rem;
+  display: inline-block;
+}
 
+.post {
+  h1 {
+    margin-top: 0;
+  }
+
+  article {
+    line-height: 1.5;
+    font-size: 1.125em;
+    color: #111;
+
+    @media (prefers-color-scheme: dark) {
+      color: #ddd;
+    }
+  }
+
+  ul {
+    padding-left: 1.25rem;
+  }
+
+  img {
+    max-width: 100%;
+    border-radius: .5rem;
+    border: 1px solid #bbb;
+
+    @media (prefers-color-scheme: dark) {
+      border-color: #444;
+    }
+  }
+
+  table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    overflow-x: auto;
+  }
+
+  th {
+    text-align: left;
+    border: 1px solid #bbb;
+    padding: .25rem .5rem;
+  }
+
+  td {
+    border: 1px solid #bbb;
+    padding: .25rem .5rem;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    th, td {
+      border-color: #444;
+    }
+  }
+
+  pre>code {
+    padding: 1em;
+    display: block;
+    border-radius: .5rem;
+    overflow-x: auto;
+
+    background-color: #f8f8f8 !important;
+
+    @media (prefers-color-scheme: dark) {
+      background-color: black !important;
+    }
+  }
+}
+
+footer {
+  border-top: 1px solid #ddd;
+  padding: 2rem 0;
+  margin-bottom: 12rem;
+  margin-top: 3rem;
+
+  @media (prefers-color-scheme: dark) {
+    border-top: 1px solid #444;
+  }
+}
+
+.dim {
+  color: #444;
+
+  @media (prefers-color-scheme: dark) {
+    color: #888;
+  }
+}
+
+/*!
+  Theme: GitHub
+  Description: Light theme as seen on github.com
+  Author: github.com
+  Maintainer: @Hirse
+  Updated: 2021-05-15
+
+  Outdated base version: https://github.com/primer/github-syntax-light
+  Current colors taken from GitHub's CSS
+*/
+
+.hljs {
+  color: #24292e;
+  background: #ffffff;
+}
+
+.hljs-doctag,
+.hljs-keyword,
+.hljs-meta .hljs-keyword,
+.hljs-template-tag,
+.hljs-template-variable,
+.hljs-type,
+.hljs-variable.language_ {
+  /* prettylights-syntax-keyword */
+  color: #d73a49;
+}
+
+.hljs-title,
+.hljs-title.class_,
+.hljs-title.class_.inherited__,
+.hljs-title.function_ {
+  /* prettylights-syntax-entity */
+  color: #6f42c1;
+}
+
+.hljs-attr,
+.hljs-attribute,
+.hljs-literal,
+.hljs-meta,
+.hljs-number,
+.hljs-operator,
+.hljs-variable,
+.hljs-selector-attr,
+.hljs-selector-class,
+.hljs-selector-id {
+  /* prettylights-syntax-constant */
+  color: #005cc5;
+}
+
+.hljs-regexp,
+.hljs-string,
+.hljs-meta .hljs-string {
+  /* prettylights-syntax-string */
+  color: #032f62;
+}
+
+.hljs-built_in,
+.hljs-symbol {
+  /* prettylights-syntax-variable */
+  color: #e36209;
+}
+
+.hljs-comment,
+.hljs-code,
+.hljs-formula {
+  /* prettylights-syntax-comment */
+  color: #6a737d;
+}
+
+.hljs-name,
+.hljs-quote,
+.hljs-selector-tag,
+.hljs-selector-pseudo {
+  /* prettylights-syntax-entity-tag */
+  color: #22863a;
+}
+
+.hljs-subst {
+  /* prettylights-syntax-storage-modifier-import */
+  color: #24292e;
+}
+
+.hljs-section {
+  /* prettylights-syntax-markup-heading */
+  color: #005cc5;
+  font-weight: bold;
+}
+
+.hljs-bullet {
+  /* prettylights-syntax-markup-list */
+  color: #735c0f;
+}
+
+.hljs-emphasis {
+  /* prettylights-syntax-markup-italic */
+  color: #24292e;
+  font-style: italic;
+}
+
+.hljs-strong {
+  /* prettylights-syntax-markup-bold */
+  color: #24292e;
+  font-weight: bold;
+}
+
+.hljs-addition {
+  /* prettylights-syntax-markup-inserted */
+  color: #22863a;
+  background-color: #f0fff4;
+}
+
+.hljs-deletion {
+  /* prettylights-syntax-markup-deleted */
+  color: #b31d28;
+  background-color: #ffeef0;
+}
+
+@media (prefers-color-scheme: dark) {
+  /*!
+    Theme: GitHub Dark
+    Description: Dark theme as seen on github.com
+    Author: github.com
+    Maintainer: @Hirse
+    Updated: 2021-05-15
+
+    Outdated base version: https://github.com/primer/github-syntax-dark
+    Current colors taken from GitHub's CSS
+  */
+
+  .hljs {
+    color: #c9d1d9;
+    background: #0d1117;
+  }
+
+  .hljs-doctag,
+  .hljs-keyword,
+  .hljs-meta .hljs-keyword,
+  .hljs-template-tag,
+  .hljs-template-variable,
+  .hljs-type,
+  .hljs-variable.language_ {
+    /* prettylights-syntax-keyword */
+    color: #ff7b72;
+  }
+
+  .hljs-title,
+  .hljs-title.class_,
+  .hljs-title.class_.inherited__,
+  .hljs-title.function_ {
+    /* prettylights-syntax-entity */
+    color: #d2a8ff;
+  }
+
+  .hljs-attr,
+  .hljs-attribute,
+  .hljs-literal,
+  .hljs-meta,
+  .hljs-number,
+  .hljs-operator,
+  .hljs-variable,
+  .hljs-selector-attr,
+  .hljs-selector-class,
+  .hljs-selector-id {
+    /* prettylights-syntax-constant */
+    color: #79c0ff;
+  }
+
+  .hljs-regexp,
+  .hljs-string,
+  .hljs-meta .hljs-string {
+    /* prettylights-syntax-string */
+    color: #a5d6ff;
+  }
+
+  .hljs-built_in,
+  .hljs-symbol {
+    /* prettylights-syntax-variable */
+    color: #ffa657;
+  }
+
+  .hljs-comment,
+  .hljs-code,
+  .hljs-formula {
+    /* prettylights-syntax-comment */
+    color: #8b949e;
+  }
+
+  .hljs-name,
+  .hljs-quote,
+  .hljs-selector-tag,
+  .hljs-selector-pseudo {
+    /* prettylights-syntax-entity-tag */
+    color: #7ee787;
+  }
+
+  .hljs-subst {
+    /* prettylights-syntax-storage-modifier-import */
+    color: #c9d1d9;
+  }
+
+  .hljs-section {
+    /* prettylights-syntax-markup-heading */
+    color: #1f6feb;
+    font-weight: bold;
+  }
+
+  .hljs-bullet {
+    /* prettylights-syntax-markup-list */
+    color: #f2cc60;
+  }
+
+  .hljs-emphasis {
+    /* prettylights-syntax-markup-italic */
+    color: #c9d1d9;
+    font-style: italic;
+  }
+
+  .hljs-strong {
+    /* prettylights-syntax-markup-bold */
+    color: #c9d1d9;
+    font-weight: bold;
+  }
+
+  .hljs-addition {
+    /* prettylights-syntax-markup-inserted */
+    color: #aff5b4;
+    background-color: #033a16;
+  }
+
+  .hljs-deletion {
+    /* prettylights-syntax-markup-deleted */
+    color: #ffdcd7;
+    background-color: #67060c;
+  }
+}
+    </style>
+  </head>
+
+  <body>
+      <div class="post">
+    <nav>
+      <a href="/">Jason Liang</a>
+    </nav>
+
+    <time class="dim" datetime="2023-02-27">February 27, 2023</time>
+    <h1>How LÖVE's Fused Mode Works</h1>
+    <article>
+      <p><a href="https://love2d.org/">LÖVE</a> is a 2D game framework. One of its features allows
+you to attach a zip file to the end of the program, "fusing" all of your
+game's assets and the game's executable into a single file.</p>
 <p>You can create a fused LÖVE program on Windows like this:</p>
-
-<pre><code class="language-plaintext">copy /b love.exe+MyGame.zip MyGame.exe
-</code></pre>
-
+<pre><code class="language-plaintext">copy /b love.exe+MyGame.zip MyGame.exe</code></pre>
 <p>Now, what the heck did we create? What kind of file is <code>MyGame.exe</code>? Sure,
 with the <code>.exe</code> extension, it looks like an executable. Assuming <code>MyGame.zip</code>
 contains a working LÖVE project, opening <code>MyGame.exe</code> runs the game. So yes,
-it&rsquo;s an honest Windows program. But how does it read the game data?</p>
-
+it's an honest Windows program. But how does it read the game data?</p>
 <p>The answer: <code>MyGame.exe</code> is both a valid Windows executable and a valid zip
 file! To get the game data, the program simply reads itself. To confirm that
 this file is a zip file, you can open <code>MyGame.exe</code> in an archive manager,
 such as 7-Zip.</p>
-
 <p><img src="/public/fusing/7zip.png" alt="" /></p>
-
 <p>Depending on the program you might have trouble reading the zip file contents.
 For example, if you rename <code>MyGame.exe</code> to <code>MyGame.zip</code>, and then open it
-with Windows Explorer, you&rsquo;ll get a complaint that the file isn&rsquo;t a proper
+with Windows Explorer, you'll get a complaint that the file isn't a proper
 zip file.</p>
-
-<p>The <code>copy</code> command that produced <code>MyGame.exe</code> isn&rsquo;t witchcraft. It&rsquo;s as
+<p>The <code>copy</code> command that produced <code>MyGame.exe</code> isn't witchcraft. It's as
 primitive as slamming <code>love.exe</code> and <code>MyGame.zip</code> next to each other. Windows
 is perfectly happy to run <code>love.exe</code> with extra data added to the back, and
-the extra zip file data doesn&rsquo;t change how the OS executes the program.</p>
-
+the extra zip file data doesn't change how the OS executes the program.</p>
 <p><img src="/public/fusing/mygame_exe.png" alt="" /></p>
-
 <p>Even with this arrangement, 7-Zip is perfectly happy to read the zip contents
-from this file. However, Windows Explorer isn&rsquo;t as happy. We&rsquo;ll get to why
+from this file. However, Windows Explorer isn't as happy. We'll get to why
 that might be the case later.</p>
-
-<h2 id="implementation">Implementation</h2>
-
-<p>It&rsquo;s pretty easy to implement LÖVE&rsquo;s fusing behaviour yourself. You just need
+<h2>Implementation</h2>
+<p>It's pretty easy to implement LÖVE's fusing behaviour yourself. You just need
 to know a bit about how zip files are structured. Before going any further,
-I&rsquo;ll pull out some functions out of thin air to make the examples shorter:</p>
-
+I'll pull out some functions out of thin air to make the examples shorter:</p>
 <pre><code class="language-c">// loads an entire file to `contents`, returns file size
 size_t read_entire_file(char **contents, char *filepath);
 
@@ -114,57 +444,41 @@ size_t read_entire_file(char **contents, char *filepath);
 char *get_executable_path(void);
 
 // print error message and abort
-void panic(const char *fmt, ...);
-</code></pre>
-
-<p>Let&rsquo;s start by creating a C program using <a href="https://github.com/richgel999/miniz" target="_blank">miniz</a>.
-Miniz is a library that helps us read zip archives. We&rsquo;ll let the program read
+void panic(const char *fmt, ...);</code></pre>
+<p>Let's start by creating a C program using <a href="https://github.com/richgel999/miniz">miniz</a>.
+Miniz is a library that helps us read zip archives. We'll let the program read
 itself as a zip file.</p>
-
 <pre><code class="language-c">mz_zip_archive zip = {0};
 mz_bool ok = mz_zip_reader_init_file(&amp;zip, get_executable_path(), 0);
 if (!ok) {
   mz_zip_error err = mz_zip_get_last_error(&amp;zip);
-  panic(&quot;failed to read zip: %s&quot;, mz_zip_get_error_string(err));
-}
-</code></pre>
-
+  panic("failed to read zip: %s", mz_zip_get_error_string(err));
+}</code></pre>
 <p>The program outputs:</p>
-
-<pre><code class="language-plaintext">failed to read zip: invalid header or archive is corrupted
-</code></pre>
-
-<p>Okay, so like Windows Explorer, there&rsquo;s a complaint that our executable file
-isn&rsquo;t a valid zip file. This is because miniz is reading the file from the
-start, looking for a file entry header that isn&rsquo;t there.</p>
-
-<p>Unlike a lot of other file formats, we&rsquo;re able to read a zip file from the
-back instead of the front. The back of a zip file contains the &ldquo;end of
-central directory&rdquo; record (or EOCD). The record contains information to
+<pre><code class="language-plaintext">failed to read zip: invalid header or archive is corrupted</code></pre>
+<p>Okay, so like Windows Explorer, there's a complaint that our executable file
+isn't a valid zip file. This is because miniz is reading the file from the
+start, looking for a file entry header that isn't there.</p>
+<p>Unlike a lot of other file formats, we're able to read a zip file from the
+back instead of the front. The back of a zip file contains the "end of
+central directory" record (or EOCD). The record contains information to
 locate the central directory, which is a listing of file entries in the zip
-archive. Once the central directory is located, there&rsquo;s enough information to
+archive. Once the central directory is located, there's enough information to
 get the location where the executable stops, and where the zip file starts.</p>
-
 <p><img src="/public/fusing/zip_format.png" alt="" /></p>
-
 <p>By finding the end of the executable, we can give miniz the proper zip file
 data that it expects.</p>
-
-<p>Assuming the zip file doesn&rsquo;t have any comments, the EOCD record is 22 bytes.
+<p>Assuming the zip file doesn't have any comments, the EOCD record is 22 bytes.
 It contains the size of the central directory and the offset of the central
 directory relative to the start of the zip archive.</p>
-
 <p><img src="/public/fusing/eocd.png" alt="" /></p>
-
 <blockquote>
-<p>If you&rsquo;re wondering where these offsets and byte sizes are coming from, I
-  took them off of Wikipedia&rsquo;s
-  <a href="https://en.wikipedia.org/wiki/ZIP_(file_format)" target="_blank">Zip file format</a> article.</p>
+<p>If you're wondering where these offsets and byte sizes are coming from, I
+took them off of Wikipedia's
+<a href="https://en.wikipedia.org/wiki/ZIP_(file_format)">Zip file format</a> article.</p>
 </blockquote>
-
-<p>We&rsquo;ll use this info to get the central directory. Start by getting the EOCD
+<p>We'll use this info to get the central directory. Start by getting the EOCD
 record from the back of the file.</p>
-
 <pre><code class="language-c">// read myself
 char *contents;
 size_t read = read_entire_file(&amp;contents, get_executable_path());
@@ -173,12 +487,9 @@ size_t read = read_entire_file(&amp;contents, get_executable_path());
 uint32_t eocd_sig = 0x06054b50; // EOCD header signature (4 bytes)
 char *eocd = &amp;contents[read - 22]; // EOCD header (22 bytes)
 if (memcmp(eocd, &amp;eocd_sig, 4) != 0) {
-  panic(&quot;this is not the EOCD record&quot;);
-}
-</code></pre>
-
+  panic("this is not the EOCD record");
+}</code></pre>
 <p>Now we can find the location of the central directory from the back.</p>
-
 <pre><code class="language-c">// size of central directory (offset 12, 4 bytes)
 uint32_t central_size;
 memcpy(&amp;central_size, &amp;eocd[12], 4);
@@ -187,38 +498,61 @@ memcpy(&amp;central_size, &amp;eocd[12], 4);
 uint32_t central_sig = 0x02014b50; // central directory header signature (4 bytes)
 char *central_dir = eocd - central_size;
 if (memcmp(central_dir, &amp;central_sig, 4) != 0) {
-  panic(&quot;this is not the central directory&quot;);
-}
-</code></pre>
-
-<p>Once we&rsquo;ve found the central directory, we can use the offset of the central
+  panic("this is not the central directory");
+}</code></pre>
+<p>Once we've found the central directory, we can use the offset of the central
 directory to jump to the start of the archive.</p>
-
 <pre><code class="language-c">// central directory location (offset 16, 4 bytes)
 uint32_t central_offset;
 memcpy(&amp;central_offset, &amp;eocd[16], 4);
 
 char *zip_contents = central_dir - central_offset;
-size_t zip_size = contents + read - zip_contents;
-</code></pre>
-
+size_t zip_size = contents + read - zip_contents;</code></pre>
 <p>Pass <code>zip_contents</code> to <code>mz_zip_reader_init_mem</code> to read the zip file.</p>
-
-<pre><code class="language-c">mz_bool ok = mz_zip_reader_init_mem(&amp;zip, zip_contents, zip_size, 0);
-</code></pre>
-
-<p>And that&rsquo;s how you can read zip data from a fused executable à la LÖVE. For
-further reading, search for &ldquo;self-extracting zip file&rdquo; online.</p>
-
-    </article>
+<pre><code class="language-c">mz_bool ok = mz_zip_reader_init_mem(&amp;zip, zip_contents, zip_size, 0);</code></pre>
+<p>And that's how you can read zip data from a fused executable à la LÖVE. For
+further reading, search for "self-extracting zip file" online.</p>    </article>
   </div>
 
-  
-  <script src="/public/hljs/highlight.min.js"></script>
+  <script src="/public/highlight.min.js"></script>
   <script>
+    hljs.registerLanguage("wgsl", hljs => {
+      return {
+        name: "WGSL",
+        aliases: ["wgsl", "language-wgsl"],
+        keywords: {
+          keyword: "alias break case const const_assert continue continuing default diagnostic discard else enable false fn for if let loop override requires return struct switch true var while",
+          type: "vec2f vec3f vec4f",
+        },
+        contains: [
+          hljs.C_LINE_COMMENT_MODE,
+          hljs.C_BLOCK_COMMENT_MODE,
+          {
+            className: "built_in",
+            begin: /@\w+/,
+          },
+          {
+            beginKeywords: "struct",
+            end: /{/,
+            contains: [hljs.TITLE_MODE],
+          },
+        ]
+      }
+    });
+
     hljs.highlightAll();
   </script>
 
+    <footer class="dim">
+              <a href="/">Jason Liang</a>
+            &middot;
+      <a href="https://github.com/jasonliang-dev/">GitHub</a>
+      &middot;
+      jasonliang512@gmail.com
+    </footer>
+  </body>
+
+  <!-- be nice to people -->
+
+  </html>
   
-</body>
-</html>

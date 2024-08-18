@@ -1,71 +1,413 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>
-  Using Lua Metatables With The C API
-</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/public/style.css">
-  <link rel="stylesheet" href="/public/tachyons.min.css">
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-1691VYRF8G"></script>
-  <script>
-    window.dataLayer = window.dataLayer || []
-    function gtag(){dataLayer.push(arguments)}
-    gtag('js', new Date())
-    gtag('config', 'G-1691VYRF8G')
-  </script>
-  
-  <script>
-    function updateTheme() {
-      const doc = document.documentElement
 
-      let dark
-      if ('theme' in localStorage) {
-        dark = localStorage.theme === 'dark'
-      } else {
-        dark = window.matchMedia('(prefers-color-scheme: dark)').matches
-      }
+  <!DOCTYPE html>
+  <html lang="en">
 
-      if (dark) {
-        doc.classList.add('dark')
-      } else {
-        doc.classList.remove('dark')
-      }
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Using Lua Metatables With The C API - Jason Liang</title>
 
-      if (typeof onUpdateTheme === 'function') {
-        onUpdateTheme()
-      }
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-1691VYRF8G');
+    </script>
+
+    <style>
+      body {
+  font-family: sans-serif;
+  margin: 0 auto;
+  max-width: 800px;
+
+  @media (prefers-color-scheme: dark) {
+    color: white;
+    background-color: #111;
+  }
+}
+
+a {
+  color: black;
+  border-radius: .25rem;
+
+  &:hover, &:focus {
+    background-color: black;
+    color: white;
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    color: white;
+
+    &:hover, &:focus {
+      background-color: white;
+      color: black;
     }
+  }
+}
 
-    function toggleTheme() {
-      const doc = document.documentElement
-      localStorage.theme = doc.classList.contains('dark') ? 'light' : 'dark'
-      updateTheme()
+.post-list {
+  list-style-type: none;
+  padding: 0;
+
+  a {
+    text-decoration: none;
+    display: flex;
+    justify-content: space-between;
+    padding: .5rem;
+
+    &:hover, &:focus {
+      background-color: black;
+      color: #fff;
     }
+  }
+}
 
-    updateTheme()
-  </script>
-</head>
-<body>
-  <button class="theme-button fixed top-0 right-0 z-999 flex mt3 mr3 bn br-pill pa2" onclick="toggleTheme()">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="20" height="20">
-      <path d="M10 2a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 2zM10 15a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 15zM10 7a3 3 0 100 6 3 3 0 000-6zM15.657 5.404a.75.75 0 10-1.06-1.06l-1.061 1.06a.75.75 0 001.06 1.06l1.06-1.06zM6.464 14.596a.75.75 0 10-1.06-1.06l-1.06 1.06a.75.75 0 001.06 1.06l1.06-1.06zM18 10a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0118 10zM5 10a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 015 10zM14.596 15.657a.75.75 0 001.06-1.06l-1.06-1.061a.75.75 0 10-1.06 1.06l1.06 1.06zM5.404 6.464a.75.75 0 001.06-1.06l-1.06-1.06a.75.75 0 10-1.061 1.06l1.06 1.06z" />
-    </svg>
-  </button>
-  
-  <div class="mw7 center ph3">
-    <header class="pt4">
-      <a class="harsh fw7 f3 link" href="/">Jason Liang</a>
-    </header>
-    <article class="prose">
-      <time>November 30, 2022</time>
-      <h1>Using Lua Metatables With The C API</h1>
+nav a {
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-decoration: none;
+  margin-top: 2rem;
+  margin-bottom: 4rem;
+  display: inline-block;
+}
+
+.post {
+  h1 {
+    margin-top: 0;
+  }
+
+  article {
+    line-height: 1.5;
+    font-size: 1.125em;
+    color: #111;
+
+    @media (prefers-color-scheme: dark) {
+      color: #ddd;
+    }
+  }
+
+  ul {
+    padding-left: 1.25rem;
+  }
+
+  img {
+    max-width: 100%;
+    border-radius: .5rem;
+    border: 1px solid #bbb;
+
+    @media (prefers-color-scheme: dark) {
+      border-color: #444;
+    }
+  }
+
+  table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    overflow-x: auto;
+  }
+
+  th {
+    text-align: left;
+    border: 1px solid #bbb;
+    padding: .25rem .5rem;
+  }
+
+  td {
+    border: 1px solid #bbb;
+    padding: .25rem .5rem;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    th, td {
+      border-color: #444;
+    }
+  }
+
+  pre>code {
+    padding: 1em;
+    display: block;
+    border-radius: .5rem;
+    overflow-x: auto;
+
+    background-color: #f8f8f8 !important;
+
+    @media (prefers-color-scheme: dark) {
+      background-color: black !important;
+    }
+  }
+}
+
+footer {
+  border-top: 1px solid #ddd;
+  padding: 2rem 0;
+  margin-bottom: 12rem;
+  margin-top: 3rem;
+
+  @media (prefers-color-scheme: dark) {
+    border-top: 1px solid #444;
+  }
+}
+
+.dim {
+  color: #444;
+
+  @media (prefers-color-scheme: dark) {
+    color: #888;
+  }
+}
+
+/*!
+  Theme: GitHub
+  Description: Light theme as seen on github.com
+  Author: github.com
+  Maintainer: @Hirse
+  Updated: 2021-05-15
+
+  Outdated base version: https://github.com/primer/github-syntax-light
+  Current colors taken from GitHub's CSS
+*/
+
+.hljs {
+  color: #24292e;
+  background: #ffffff;
+}
+
+.hljs-doctag,
+.hljs-keyword,
+.hljs-meta .hljs-keyword,
+.hljs-template-tag,
+.hljs-template-variable,
+.hljs-type,
+.hljs-variable.language_ {
+  /* prettylights-syntax-keyword */
+  color: #d73a49;
+}
+
+.hljs-title,
+.hljs-title.class_,
+.hljs-title.class_.inherited__,
+.hljs-title.function_ {
+  /* prettylights-syntax-entity */
+  color: #6f42c1;
+}
+
+.hljs-attr,
+.hljs-attribute,
+.hljs-literal,
+.hljs-meta,
+.hljs-number,
+.hljs-operator,
+.hljs-variable,
+.hljs-selector-attr,
+.hljs-selector-class,
+.hljs-selector-id {
+  /* prettylights-syntax-constant */
+  color: #005cc5;
+}
+
+.hljs-regexp,
+.hljs-string,
+.hljs-meta .hljs-string {
+  /* prettylights-syntax-string */
+  color: #032f62;
+}
+
+.hljs-built_in,
+.hljs-symbol {
+  /* prettylights-syntax-variable */
+  color: #e36209;
+}
+
+.hljs-comment,
+.hljs-code,
+.hljs-formula {
+  /* prettylights-syntax-comment */
+  color: #6a737d;
+}
+
+.hljs-name,
+.hljs-quote,
+.hljs-selector-tag,
+.hljs-selector-pseudo {
+  /* prettylights-syntax-entity-tag */
+  color: #22863a;
+}
+
+.hljs-subst {
+  /* prettylights-syntax-storage-modifier-import */
+  color: #24292e;
+}
+
+.hljs-section {
+  /* prettylights-syntax-markup-heading */
+  color: #005cc5;
+  font-weight: bold;
+}
+
+.hljs-bullet {
+  /* prettylights-syntax-markup-list */
+  color: #735c0f;
+}
+
+.hljs-emphasis {
+  /* prettylights-syntax-markup-italic */
+  color: #24292e;
+  font-style: italic;
+}
+
+.hljs-strong {
+  /* prettylights-syntax-markup-bold */
+  color: #24292e;
+  font-weight: bold;
+}
+
+.hljs-addition {
+  /* prettylights-syntax-markup-inserted */
+  color: #22863a;
+  background-color: #f0fff4;
+}
+
+.hljs-deletion {
+  /* prettylights-syntax-markup-deleted */
+  color: #b31d28;
+  background-color: #ffeef0;
+}
+
+@media (prefers-color-scheme: dark) {
+  /*!
+    Theme: GitHub Dark
+    Description: Dark theme as seen on github.com
+    Author: github.com
+    Maintainer: @Hirse
+    Updated: 2021-05-15
+
+    Outdated base version: https://github.com/primer/github-syntax-dark
+    Current colors taken from GitHub's CSS
+  */
+
+  .hljs {
+    color: #c9d1d9;
+    background: #0d1117;
+  }
+
+  .hljs-doctag,
+  .hljs-keyword,
+  .hljs-meta .hljs-keyword,
+  .hljs-template-tag,
+  .hljs-template-variable,
+  .hljs-type,
+  .hljs-variable.language_ {
+    /* prettylights-syntax-keyword */
+    color: #ff7b72;
+  }
+
+  .hljs-title,
+  .hljs-title.class_,
+  .hljs-title.class_.inherited__,
+  .hljs-title.function_ {
+    /* prettylights-syntax-entity */
+    color: #d2a8ff;
+  }
+
+  .hljs-attr,
+  .hljs-attribute,
+  .hljs-literal,
+  .hljs-meta,
+  .hljs-number,
+  .hljs-operator,
+  .hljs-variable,
+  .hljs-selector-attr,
+  .hljs-selector-class,
+  .hljs-selector-id {
+    /* prettylights-syntax-constant */
+    color: #79c0ff;
+  }
+
+  .hljs-regexp,
+  .hljs-string,
+  .hljs-meta .hljs-string {
+    /* prettylights-syntax-string */
+    color: #a5d6ff;
+  }
+
+  .hljs-built_in,
+  .hljs-symbol {
+    /* prettylights-syntax-variable */
+    color: #ffa657;
+  }
+
+  .hljs-comment,
+  .hljs-code,
+  .hljs-formula {
+    /* prettylights-syntax-comment */
+    color: #8b949e;
+  }
+
+  .hljs-name,
+  .hljs-quote,
+  .hljs-selector-tag,
+  .hljs-selector-pseudo {
+    /* prettylights-syntax-entity-tag */
+    color: #7ee787;
+  }
+
+  .hljs-subst {
+    /* prettylights-syntax-storage-modifier-import */
+    color: #c9d1d9;
+  }
+
+  .hljs-section {
+    /* prettylights-syntax-markup-heading */
+    color: #1f6feb;
+    font-weight: bold;
+  }
+
+  .hljs-bullet {
+    /* prettylights-syntax-markup-list */
+    color: #f2cc60;
+  }
+
+  .hljs-emphasis {
+    /* prettylights-syntax-markup-italic */
+    color: #c9d1d9;
+    font-style: italic;
+  }
+
+  .hljs-strong {
+    /* prettylights-syntax-markup-bold */
+    color: #c9d1d9;
+    font-weight: bold;
+  }
+
+  .hljs-addition {
+    /* prettylights-syntax-markup-inserted */
+    color: #aff5b4;
+    background-color: #033a16;
+  }
+
+  .hljs-deletion {
+    /* prettylights-syntax-markup-deleted */
+    color: #ffdcd7;
+    background-color: #67060c;
+  }
+}
+    </style>
+  </head>
+
+  <body>
+      <div class="post">
+    <nav>
+      <a href="/">Jason Liang</a>
+    </nav>
+
+    <time class="dim" datetime="2022-11-30">November 30, 2022</time>
+    <h1>Using Lua Metatables With The C API</h1>
+    <article>
       <p>Here is one way to implement the classic object-oriented bank account in Lua:</p>
-
 <pre><code class="language-lua">local Account = {}
 Account.__index = Account
 
@@ -84,90 +426,65 @@ function Account:deposit(n)
   self.balance = self.balance + n
 end
 
-local acc = Account.new(&quot;Jason&quot;, 1000)
+local acc = Account.new("Jason", 1000)
 acc:withdraw(200)
-print(acc.balance) -- prints 800
-</code></pre>
-
-<p>But if you have some data that&rsquo;s heavily tied to code written in C (or any
-language, as long as it&rsquo;s part of the host program), then you might want to
+print(acc.balance) -- prints 800</code></pre>
+<p>But if you have some data that's heavily tied to code written in C (or any
+language, as long as it's part of the host program), then you might want to
 implement the same pattern outside of Lua. This article describes how you can
 do that.</p>
-
-<h2 id="running-lua-from-c">Running Lua from C</h2>
-
-<p>Let&rsquo;s start off with a host program:</p>
-
+<h2>Running Lua from C</h2>
+<p>Let's start off with a host program:</p>
 <pre><code class="language-c">#define MAKE_LIB
-#include &quot;lua/onelua.c&quot;
+#include "lua/onelua.c"
 
 int main(void) {
   lua_State *L = luaL_newstate();
   luaL_openlibs(L);
 
-  luaL_dostring(L, &quot;print 'hello from lua'&quot;);
+  luaL_dostring(L, "print 'hello from lua'");
 
   lua_close(L);
-}
-</code></pre>
-
+}</code></pre>
 <p>The <code>lua</code> directory (which contains <code>onelua.c</code>), comes from
-<a href="https://github.com/lua/lua" target="_blank">Lua&rsquo;s GitHub repo</a>. We&rsquo;re using Lua v5.4.4.</p>
-
-<p>Compile and run just to check everything&rsquo;s working and the <code>hello from lua</code>
+<a href="https://github.com/lua/lua">Lua's GitHub repo</a>. We're using Lua v5.4.4.</p>
+<p>Compile and run just to check everything's working and the <code>hello from lua</code>
 string is being printed. Now create a <code>main.lua</code> file to run from:</p>
-
-<pre><code class="language-lua">print &quot;I am being printed from main.lua&quot;
-</code></pre>
-
-<p>Back in the C program, you could use <code>luaL_dofile</code>, but I&rsquo;ll continue to use
-<code>luaL_dostring</code> because it&rsquo;s easy to inspect errors with the follow snippet:</p>
-
-<pre><code class="language-c">const char *run = &quot;xpcall(function ()\n&quot;
-                  &quot;  require 'main'\n&quot;
-                  &quot;end, function(err)\n&quot;
-                  &quot;  print(tostring(err))\n&quot;
-                  &quot;  print(debug.traceback(nil, 2))\n&quot;
-                  &quot;  os.exit(1)\n&quot;
-                  &quot;end)\n&quot;;
-luaL_dostring(L, run);
-</code></pre>
-
-<p>So if there&rsquo;s any syntax or runtime errors raised by <code>main.lua</code>, we print the
+<pre><code class="language-lua">print "I am being printed from main.lua"</code></pre>
+<p>Back in the C program, you could use <code>luaL_dofile</code>, but I'll continue to use
+<code>luaL_dostring</code> because it's easy to inspect errors with the follow snippet:</p>
+<pre><code class="language-c">const char *run = "xpcall(function ()\n"
+                  "  require 'main'\n"
+                  "end, function(err)\n"
+                  "  print(tostring(err))\n"
+                  "  print(debug.traceback(nil, 2))\n"
+                  "  os.exit(1)\n"
+                  "end)\n";
+luaL_dostring(L, run);</code></pre>
+<p>So if there's any syntax or runtime errors raised by <code>main.lua</code>, we print the
 error and the backtrace. The same can be done with just the C API, but it
 takes a bit more work.</p>
-
-<p>Compile and run. Check if &ldquo;I am being printed from main.lua&rdquo; is being printed
+<p>Compile and run. Check if "I am being printed from main.lua" is being printed
 to the console before continuing.</p>
-
-<h2 id="calling-c-functions-from-lua">Calling C functions from Lua</h2>
-
-<p>Before getting into metatables, we&rsquo;ll create a C function that only prints the
-string &ldquo;hi&rdquo; and expose it to our Lua script. All C functions have the same
+<h2>Calling C functions from Lua</h2>
+<p>Before getting into metatables, we'll create a C function that only prints the
+string "hi" and expose it to our Lua script. All C functions have the same
 signature. It takes a <code>lua_State *</code>, and returns an integer representing the
 number of return values:</p>
-
 <pre><code class="language-c">int sys_say_hi(lua_State *L) {
-  printf(&quot;hi\n&quot;);
+  printf("hi\n");
   return 0;
-}
-</code></pre>
-
-<p>We&rsquo;re returning 0, because there&rsquo;s no values to return after printing &ldquo;hi&rdquo;.</p>
-
-<p>The function starts with <code>sys_</code> for namespacing. We&rsquo;ll use this function from
+}</code></pre>
+<p>We're returning 0, because there's no values to return after printing "hi".</p>
+<p>The function starts with <code>sys_</code> for namespacing. We'll use this function from
 <code>main.lua</code> like so:</p>
-
-<pre><code class="language-lua">sys.say_hi()
-</code></pre>
-
+<pre><code class="language-lua">sys.say_hi()</code></pre>
 <p>This can be done by creating a table with <code>luaL_newlib</code>, which accepts a null
-terminated array of C functions to insert into a table that we&rsquo;ll call
+terminated array of C functions to insert into a table that we'll call
 <code>sys</code>:</p>
-
 <pre><code class="language-c">int open_sys(lua_State *L) {
   luaL_Reg reg[] = {
-    {&quot;say_hi&quot;, sys_say_hi},
+    {"say_hi", sys_say_hi},
     {NULL, NULL},
   };
 
@@ -178,36 +495,24 @@ terminated array of C functions to insert into a table that we&rsquo;ll call
 
 int main(void) {
   // ...
-  luaL_requiref(L, &quot;sys&quot;, open_sys, 1); // add before luaL_dostring
+  luaL_requiref(L, "sys", open_sys, 1); // add before luaL_dostring
   // ...
-}
-</code></pre>
-
+}</code></pre>
 <p>Now with all of this code in place, check if the program actually prints
-out &ldquo;hi&rdquo;.</p>
-
-<h2 id="yeah-i-d-like-to-open-a-bank-account">Yeah I&rsquo;d like to open a bank account</h2>
-
+out "hi".</p>
+<h2>Yeah I'd like to open a bank account</h2>
 <p>Now that the Lua script has a way to run C functions, we can start working on
 a bank account object using metatables. We need an account type to play with:</p>
-
 <pre><code class="language-c">typedef struct {
   char *name;
   int balance;
-} Account;
-</code></pre>
-
+} Account;</code></pre>
 <p>From Lua, making a new account will look like this:</p>
-
-<pre><code class="language-lua">local acc = sys.Account.new(&quot;Jason&quot;, 1000)
-</code></pre>
-
+<pre><code class="language-lua">local acc = sys.Account.new("Jason", 1000)</code></pre>
 <p>The <code>new</code> function will return a full userdata value with a metatable
 attached. Userdata is simply a chunk of data for our Account type.</p>
-
 <p>To demostrate how an account interacts with the garbage collector, the name
 of the account will be created in heap memory using <code>malloc</code>.</p>
-
 <pre><code class="language-c">int mt_account_new(lua_State *L) {
   const char *name = luaL_checkstring(L, 1);
   int balance = (int)luaL_checkinteger(L, 2);
@@ -219,73 +524,53 @@ of the account will be created in heap memory using <code>malloc</code>.</p>
 
   self-&gt;balance = balance;
 
-  luaL_setmetatable(L, &quot;mt_account&quot;);
+  luaL_setmetatable(L, "mt_account");
 
   return 1;
-}
-</code></pre>
-
+}</code></pre>
 <p>This roughly translates to the following Lua code, but the difference is that
 the constructor returns a table instead of full userdata:</p>
-
 <pre><code class="language-lua">function mt_account.new(name, balance)
   local self = {}
   self.name = name
   self.balance = balance
   return setmetatable(self, mt_account)
-end
-</code></pre>
-
-<p>The &ldquo;mt_account&rdquo; will be a table in the Lua registry. The Lua registry is a
+end</code></pre>
+<p>The "mt_account" will be a table in the Lua registry. The Lua registry is a
 place to store values for the host program to use. It can be accessed in Lua
 with <code>debug.getregistry()</code>. So this:</p>
-
-<pre><code class="language-lua">local acc = sys.Account.new(&quot;Jason&quot;, 1000)
-</code></pre>
-
+<pre><code class="language-lua">local acc = sys.Account.new("Jason", 1000)</code></pre>
 <p>Is the same as this:</p>
-
 <pre><code class="language-lua">local reg = debug.getregistry()
-local acc = reg.mt_account.new(&quot;Jason&quot;, 1000)
-</code></pre>
-
+local acc = reg.mt_account.new("Jason", 1000)</code></pre>
 <p>To create the <code>mt_account</code> metatable, we can use <code>luaL_newmetatable</code>.</p>
-
 <pre><code class="language-c">int push_mt_account(lua_State *L) {
   luaL_Reg reg[] = {
-      {&quot;new&quot;, mt_account_new},
+      {"new", mt_account_new},
       {NULL, NULL},
   };
 
-  luaL_newmetatable(L, &quot;mt_account&quot;);
+  luaL_newmetatable(L, "mt_account");
   luaL_setfuncs(L, reg, 0);
   lua_pushvalue(L, -1);
-  lua_setfield(L, -2, &quot;__index&quot;);
+  lua_setfield(L, -2, "__index");
 
   return 1;
-}
-</code></pre>
-
+}</code></pre>
 <p>The equivalent Lua code looks like this:</p>
-
 <pre><code class="language-lua">local reg = debug.getregistry();
 reg.mt_account = {}
 mt_account.new = function() --[[ mt_account_new c function ]] end
-mt_account.__index = mt_account
-</code></pre>
-
+mt_account.__index = mt_account</code></pre>
 <p><code>push_mt_account</code> will push a new metatable on top of the Lua stack.
-<code>luaL_setfuncs</code> is similar to <code>luaL_newlib</code>, it&rsquo;ll attach the <code>new</code> method to
-the <code>mt_account</code> table. We&rsquo;ll be adding more methods later.</p>
-
-<p><code>lua_setfield(L, -2, &quot;__index&quot;)</code> is there to set the <code>__index</code> value of our
+<code>luaL_setfuncs</code> is similar to <code>luaL_newlib</code>, it'll attach the <code>new</code> method to
+the <code>mt_account</code> table. We'll be adding more methods later.</p>
+<p><code>lua_setfield(L, -2, "__index")</code> is there to set the <code>__index</code> value of our
 metatable to itself. <code>lua_setfield</code> pops the value at the top of the stack,
-but we&rsquo;re going to need to keep the table on the stack so we can access it
-through the <code>sys</code> table that we had created eariler. That&rsquo;s why
+but we're going to need to keep the table on the stack so we can access it
+through the <code>sys</code> table that we had created eariler. That's why
 <code>lua_pushvalue(L, -1)</code> is there.</p>
-
-<p>Here&rsquo;s a visual of the Lua stack before calling <code>luaL_newmetatable</code>:</p>
-
+<p>Here's a visual of the Lua stack before calling <code>luaL_newmetatable</code>:</p>
 <table style="table-layout: fixed">
   <thead>
     <tr><th>index</th><th>value</th></tr>
@@ -295,10 +580,8 @@ through the <code>sys</code> table that we had created eariler. That&rsquo;s why
     <tr><td>1</td><td>...</td></tr>
   </tbody>
 </table>
-
 <p>After calling <code>luaL_newmetatable</code> and <code>luaL_setfuncs</code>, the new table gets
 pushed to the top:</p>
-
 <table style="table-layout: fixed">
   <thead>
     <tr><th>index</th><th>value</th></tr>
@@ -309,9 +592,7 @@ pushed to the top:</p>
     <tr><td>1</td><td>...</td></tr>
   </tbody>
 </table>
-
 <p>Then <code>lua_pushvalue</code> pushes the same metatable:</p>
-
 <table style="table-layout: fixed">
   <thead>
     <tr><th>index</th><th>value</th></tr>
@@ -323,10 +604,8 @@ pushed to the top:</p>
     <tr><td>1</td><td>...</td></tr>
   </tbody>
 </table>
-
 <p>Finally, calling <code>lua_setfield</code> sets the <code>__index</code> field and pops <code>mt_account</code>
 off the stack:</p>
-
 <table style="table-layout: fixed">
   <thead>
     <tr><th>index</th><th>value</th></tr>
@@ -337,113 +616,80 @@ off the stack:</p>
     <tr><td>1</td><td>...</td></tr>
   </tbody>
 </table>
-
 <p>Our <code>push_mt_account</code> function returns one value, the metatable at the top of
-the stack. We&rsquo;ll add it to the <code>sys</code> table:</p>
-
+the stack. We'll add it to the <code>sys</code> table:</p>
 <pre><code class="language-c">int open_sys(lua_State *L) {
   // ...
 
   luaL_newlib(L, reg);
   register_mt_account(L);
-  lua_setfield(L, -2, &quot;Account&quot;);
+  lua_setfield(L, -2, "Account");
 
   return 1;
-}
-</code></pre>
-
-<h2 id="adding-more-methods">Adding more methods</h2>
-
+}</code></pre>
+<h2>Adding more methods</h2>
 <p>Withdrawing money will look like this:</p>
-
-<pre><code class="language-lua">acc:withdraw(200)
-</code></pre>
-
+<pre><code class="language-lua">acc:withdraw(200)</code></pre>
 <p>Which is syntax sugar for:</p>
-
-<pre><code class="language-lua">acc.withdraw(acc, 200)
-</code></pre>
-
+<pre><code class="language-lua">acc.withdraw(acc, 200)</code></pre>
 <p>So we need a function that takes an account for the first parameter, and a
 number for the second. Here it is in C:</p>
-
 <pre><code class="language-c">int mt_account_withdraw(lua_State *L) {
-  Account *self = luaL_checkudata(L, 1, &quot;mt_account&quot;);
+  Account *self = luaL_checkudata(L, 1, "mt_account");
   int n = (int)luaL_checknumber(L, 2);
   self-&gt;balance -= n;
   return 0;
-}
-</code></pre>
-
+}</code></pre>
 <p>You can probably guess how the deposit function will look like.</p>
-
-<p>We don&rsquo;t have a way to inspect the account. So we&rsquo;ll create getters for that.</p>
-
+<p>We don't have a way to inspect the account. So we'll create getters for that.</p>
 <pre><code class="language-c">int mt_account_get_name(lua_State *L) {
-  Account *self = luaL_checkudata(L, 1, &quot;mt_account&quot;);
+  Account *self = luaL_checkudata(L, 1, "mt_account");
   lua_pushstring(L, self-&gt;name);
   return 1;
 }
 
 int mt_account_get_balance(lua_State *L) {
-  Account *self = luaL_checkudata(L, 1, &quot;mt_account&quot;);
+  Account *self = luaL_checkudata(L, 1, "mt_account");
   lua_pushinteger(L, self-&gt;balance);
   return 1;
-}
-</code></pre>
-
+}</code></pre>
 <p>Add the newly created functions to the function list:</p>
-
 <pre><code class="language-c">luaL_Reg reg[] = {
-  {&quot;new&quot;, mt_account_new},
-  {&quot;withdraw&quot;, mt_account_withdraw},
-  {&quot;get_name&quot;, mt_account_get_name},
-  {&quot;get_balance&quot;, mt_account_get_balance},
+  {"new", mt_account_new},
+  {"withdraw", mt_account_withdraw},
+  {"get_name", mt_account_get_name},
+  {"get_balance", mt_account_get_balance},
   {NULL, NULL},
-};
-</code></pre>
-
-<h2 id="cleaning-up-the-mess">Cleaning up the mess</h2>
-
-<p>Our program is nearly done, but there&rsquo;s just one more thing.</p>
-
-<p>Whenever we&rsquo;re done with an account, we leak memory. This is because we used
-<code>malloc</code> for the account&rsquo;s name and never called <code>free</code>. The <code>__gc</code>
-metamethod let&rsquo;s us perform some stuff right before we lose the account to
+};</code></pre>
+<h2>Cleaning up the mess</h2>
+<p>Our program is nearly done, but there's just one more thing.</p>
+<p>Whenever we're done with an account, we leak memory. This is because we used
+<code>malloc</code> for the account's name and never called <code>free</code>. The <code>__gc</code>
+metamethod let's us perform some stuff right before we lose the account to
 the garbage collector. Add the following to the function list:</p>
-
 <pre><code class="language-c">luaL_Reg reg[] = {
   // ...
-  {&quot;__gc&quot;, mt_account_delete},
+  {"__gc", mt_account_delete},
   // ...
-};
-</code></pre>
-
-<p>And now here&rsquo;s the place where we free the memory allocated for an account&rsquo;s
+};</code></pre>
+<p>And now here's the place where we free the memory allocated for an account's
 name:</p>
-
 <pre><code class="language-c">int mt_account_delete(lua_State *L) {
-  Account *self = luaL_checkudata(L, 1, &quot;mt_account&quot;);
+  Account *self = luaL_checkudata(L, 1, "mt_account");
   free(self-&gt;name);
-}
-</code></pre>
-
+}</code></pre>
 <p>Test it out in Lua to check that everything works:</p>
-
-<pre><code class="language-lua">local acc = sys.Account.new(&quot;Jason&quot;, 1000)
+<pre><code class="language-lua">local acc = sys.Account.new("Jason", 1000)
 acc:withdraw(200)
-print(string.format(&quot;name: %s, balance: %d&quot;, acc:get_name(), acc:get_balance()))
+print(string.format("name: %s, balance: %d", acc:get_name(), acc:get_balance()))
 acc:deposit(100)
-print(string.format(&quot;name: %s, balance: %d&quot;, acc:get_name(), acc:get_balance()))
+print(string.format("name: %s, balance: %d", acc:get_name(), acc:get_balance()))
 
 --[[
 name: Jason, balance: 800
 name: Jason, balance: 900
-]]
-</code></pre>
-
+]]</code></pre>
 <p>We can use Valgrind to check for memory leaks:</p>
-
 <pre><code class="language-plaintext">$ valgrind ./a.out
 
 ==52== Memcheck, a memory error detector
@@ -461,13 +707,10 @@ name: Jason, balance: 900
 ==52== All heap blocks were freed -- no leaks are possible
 ==52==
 ==52== For lists of detected and suppressed errors, rerun with: -s
-==52== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
-</code></pre>
-
-<h2 id="full-source-code">Full source code</h2>
-
+==52== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)</code></pre>
+<h2>Full source code</h2>
 <pre><code class="language-c">#define MAKE_LIB
-#include &quot;lua/onelua.c&quot;
+#include "lua/onelua.c"
 
 typedef struct {
   char *name;
@@ -485,76 +728,76 @@ int mt_account_new(lua_State *L) {
 
   self-&gt;balance = balance;
 
-  luaL_setmetatable(L, &quot;mt_account&quot;);
+  luaL_setmetatable(L, "mt_account");
 
   return 1;
 }
 
 int mt_account_delete(lua_State *L) {
-  Account *self = luaL_checkudata(L, 1, &quot;mt_account&quot;);
+  Account *self = luaL_checkudata(L, 1, "mt_account");
   free(self-&gt;name);
   return 0;
 }
 
 int mt_account_deposit(lua_State *L) {
-  Account *self = luaL_checkudata(L, 1, &quot;mt_account&quot;);
+  Account *self = luaL_checkudata(L, 1, "mt_account");
   int n = (int)luaL_checknumber(L, 2);
   self-&gt;balance += n;
   return 0;
 }
 
 int mt_account_withdraw(lua_State *L) {
-  Account *self = luaL_checkudata(L, 1, &quot;mt_account&quot;);
+  Account *self = luaL_checkudata(L, 1, "mt_account");
   int n = (int)luaL_checknumber(L, 2);
   self-&gt;balance -= n;
   return 0;
 }
 
 int mt_account_get_name(lua_State *L) {
-  Account *self = luaL_checkudata(L, 1, &quot;mt_account&quot;);
+  Account *self = luaL_checkudata(L, 1, "mt_account");
   lua_pushstring(L, self-&gt;name);
   return 1;
 }
 
 int mt_account_get_balance(lua_State *L) {
-  Account *self = luaL_checkudata(L, 1, &quot;mt_account&quot;);
+  Account *self = luaL_checkudata(L, 1, "mt_account");
   lua_pushinteger(L, self-&gt;balance);
   return 1;
 }
 
 int register_mt_account(lua_State *L) {
   luaL_Reg reg[] = {
-    {&quot;new&quot;, mt_account_new},
-    {&quot;__gc&quot;, mt_account_delete},
-    {&quot;deposit&quot;, mt_account_deposit},
-    {&quot;withdraw&quot;, mt_account_withdraw},
-    {&quot;get_name&quot;, mt_account_get_name},
-    {&quot;get_balance&quot;, mt_account_get_balance},
+    {"new", mt_account_new},
+    {"__gc", mt_account_delete},
+    {"deposit", mt_account_deposit},
+    {"withdraw", mt_account_withdraw},
+    {"get_name", mt_account_get_name},
+    {"get_balance", mt_account_get_balance},
     {NULL, NULL},
   };
 
-  luaL_newmetatable(L, &quot;mt_account&quot;);
+  luaL_newmetatable(L, "mt_account");
   luaL_setfuncs(L, reg, 0);
   lua_pushvalue(L, -1);
-  lua_setfield(L, -2, &quot;__index&quot;);
+  lua_setfield(L, -2, "__index");
 
   return 1;
 }
 
 int sys_say_hi(lua_State *L) {
-  printf(&quot;hi\n&quot;);
+  printf("hi\n");
   return 0;
 }
 
 int open_sys(lua_State *L) {
   luaL_Reg reg[] = {
-    {&quot;say_hi&quot;, sys_say_hi},
+    {"say_hi", sys_say_hi},
     {NULL, NULL},
   };
 
   luaL_newlib(L, reg);
   register_mt_account(L);
-  lua_setfield(L, -2, &quot;Account&quot;);
+  lua_setfield(L, -2, "Account");
 
   return 1;
 }
@@ -563,30 +806,60 @@ int main(void) {
   lua_State *L = luaL_newstate();
 
   luaL_openlibs(L);
-  luaL_requiref(L, &quot;sys&quot;, open_sys, 1);
+  luaL_requiref(L, "sys", open_sys, 1);
 
-  const char *run = &quot;xpcall(function ()\n&quot;
-                    &quot;  require 'main'\n&quot;
-                    &quot;end, function(err)\n&quot;
-                    &quot;  print(tostring(err))\n&quot;
-                    &quot;  print(debug.traceback(nil, 2))\n&quot;
-                    &quot;  os.exit(1)\n&quot;
-                    &quot;end)\n&quot;;
+  const char *run = "xpcall(function ()\n"
+                    "  require 'main'\n"
+                    "end, function(err)\n"
+                    "  print(tostring(err))\n"
+                    "  print(debug.traceback(nil, 2))\n"
+                    "  os.exit(1)\n"
+                    "end)\n";
   luaL_dostring(L, run);
 
   lua_close(L);
-}
-</code></pre>
-
-    </article>
+}</code></pre>    </article>
   </div>
 
-  
-  <script src="/public/hljs/highlight.min.js"></script>
+  <script src="/public/highlight.min.js"></script>
   <script>
+    hljs.registerLanguage("wgsl", hljs => {
+      return {
+        name: "WGSL",
+        aliases: ["wgsl", "language-wgsl"],
+        keywords: {
+          keyword: "alias break case const const_assert continue continuing default diagnostic discard else enable false fn for if let loop override requires return struct switch true var while",
+          type: "vec2f vec3f vec4f",
+        },
+        contains: [
+          hljs.C_LINE_COMMENT_MODE,
+          hljs.C_BLOCK_COMMENT_MODE,
+          {
+            className: "built_in",
+            begin: /@\w+/,
+          },
+          {
+            beginKeywords: "struct",
+            end: /{/,
+            contains: [hljs.TITLE_MODE],
+          },
+        ]
+      }
+    });
+
     hljs.highlightAll();
   </script>
 
+    <footer class="dim">
+              <a href="/">Jason Liang</a>
+            &middot;
+      <a href="https://github.com/jasonliang-dev/">GitHub</a>
+      &middot;
+      jasonliang512@gmail.com
+    </footer>
+  </body>
+
+  <!-- be nice to people -->
+
+  </html>
   
-</body>
-</html>

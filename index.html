@@ -1,732 +1,467 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Home</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/public/style.css">
-  <link rel="stylesheet" href="/public/tachyons.min.css">
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-1691VYRF8G"></script>
-  <script>
-    window.dataLayer = window.dataLayer || []
-    function gtag(){dataLayer.push(arguments)}
-    gtag('js', new Date())
-    gtag('config', 'G-1691VYRF8G')
-  </script>
+
+  <!DOCTYPE html>
+  <html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Jason Liang</title>
+
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-1691VYRF8G');
+    </script>
+
+    <style>
+      body {
+  font-family: sans-serif;
+  margin: 0 auto;
+  max-width: 800px;
+
+  @media (prefers-color-scheme: dark) {
+    color: white;
+    background-color: #111;
+  }
+}
+
+a {
+  color: black;
+  border-radius: .25rem;
+
+  &:hover, &:focus {
+    background-color: black;
+    color: white;
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    color: white;
+
+    &:hover, &:focus {
+      background-color: white;
+      color: black;
+    }
+  }
+}
+
+.post-list {
+  list-style-type: none;
+  padding: 0;
+
+  a {
+    text-decoration: none;
+    display: flex;
+    justify-content: space-between;
+    padding: .5rem;
+
+    &:hover, &:focus {
+      background-color: black;
+      color: #fff;
+    }
+  }
+}
+
+nav a {
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-decoration: none;
+  margin-top: 2rem;
+  margin-bottom: 4rem;
+  display: inline-block;
+}
+
+.post {
+  h1 {
+    margin-top: 0;
+  }
+
+  article {
+    line-height: 1.5;
+    font-size: 1.125em;
+    color: #111;
+
+    @media (prefers-color-scheme: dark) {
+      color: #ddd;
+    }
+  }
+
+  ul {
+    padding-left: 1.25rem;
+  }
+
+  img {
+    max-width: 100%;
+    border-radius: .5rem;
+    border: 1px solid #bbb;
+
+    @media (prefers-color-scheme: dark) {
+      border-color: #444;
+    }
+  }
+
+  table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    overflow-x: auto;
+  }
+
+  th {
+    text-align: left;
+    border: 1px solid #bbb;
+    padding: .25rem .5rem;
+  }
+
+  td {
+    border: 1px solid #bbb;
+    padding: .25rem .5rem;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    th, td {
+      border-color: #444;
+    }
+  }
+
+  pre>code {
+    padding: 1em;
+    display: block;
+    border-radius: .5rem;
+    overflow-x: auto;
+
+    background-color: #f8f8f8 !important;
+
+    @media (prefers-color-scheme: dark) {
+      background-color: black !important;
+    }
+  }
+}
+
+footer {
+  border-top: 1px solid #ddd;
+  padding: 2rem 0;
+  margin-bottom: 12rem;
+  margin-top: 3rem;
+
+  @media (prefers-color-scheme: dark) {
+    border-top: 1px solid #444;
+  }
+}
+
+.dim {
+  color: #444;
+
+  @media (prefers-color-scheme: dark) {
+    color: #888;
+  }
+}
+
+/*!
+  Theme: GitHub
+  Description: Light theme as seen on github.com
+  Author: github.com
+  Maintainer: @Hirse
+  Updated: 2021-05-15
+
+  Outdated base version: https://github.com/primer/github-syntax-light
+  Current colors taken from GitHub's CSS
+*/
+
+.hljs {
+  color: #24292e;
+  background: #ffffff;
+}
+
+.hljs-doctag,
+.hljs-keyword,
+.hljs-meta .hljs-keyword,
+.hljs-template-tag,
+.hljs-template-variable,
+.hljs-type,
+.hljs-variable.language_ {
+  /* prettylights-syntax-keyword */
+  color: #d73a49;
+}
+
+.hljs-title,
+.hljs-title.class_,
+.hljs-title.class_.inherited__,
+.hljs-title.function_ {
+  /* prettylights-syntax-entity */
+  color: #6f42c1;
+}
+
+.hljs-attr,
+.hljs-attribute,
+.hljs-literal,
+.hljs-meta,
+.hljs-number,
+.hljs-operator,
+.hljs-variable,
+.hljs-selector-attr,
+.hljs-selector-class,
+.hljs-selector-id {
+  /* prettylights-syntax-constant */
+  color: #005cc5;
+}
+
+.hljs-regexp,
+.hljs-string,
+.hljs-meta .hljs-string {
+  /* prettylights-syntax-string */
+  color: #032f62;
+}
+
+.hljs-built_in,
+.hljs-symbol {
+  /* prettylights-syntax-variable */
+  color: #e36209;
+}
+
+.hljs-comment,
+.hljs-code,
+.hljs-formula {
+  /* prettylights-syntax-comment */
+  color: #6a737d;
+}
+
+.hljs-name,
+.hljs-quote,
+.hljs-selector-tag,
+.hljs-selector-pseudo {
+  /* prettylights-syntax-entity-tag */
+  color: #22863a;
+}
+
+.hljs-subst {
+  /* prettylights-syntax-storage-modifier-import */
+  color: #24292e;
+}
+
+.hljs-section {
+  /* prettylights-syntax-markup-heading */
+  color: #005cc5;
+  font-weight: bold;
+}
+
+.hljs-bullet {
+  /* prettylights-syntax-markup-list */
+  color: #735c0f;
+}
+
+.hljs-emphasis {
+  /* prettylights-syntax-markup-italic */
+  color: #24292e;
+  font-style: italic;
+}
+
+.hljs-strong {
+  /* prettylights-syntax-markup-bold */
+  color: #24292e;
+  font-weight: bold;
+}
+
+.hljs-addition {
+  /* prettylights-syntax-markup-inserted */
+  color: #22863a;
+  background-color: #f0fff4;
+}
+
+.hljs-deletion {
+  /* prettylights-syntax-markup-deleted */
+  color: #b31d28;
+  background-color: #ffeef0;
+}
+
+@media (prefers-color-scheme: dark) {
+  /*!
+    Theme: GitHub Dark
+    Description: Dark theme as seen on github.com
+    Author: github.com
+    Maintainer: @Hirse
+    Updated: 2021-05-15
+
+    Outdated base version: https://github.com/primer/github-syntax-dark
+    Current colors taken from GitHub's CSS
+  */
+
+  .hljs {
+    color: #c9d1d9;
+    background: #0d1117;
+  }
+
+  .hljs-doctag,
+  .hljs-keyword,
+  .hljs-meta .hljs-keyword,
+  .hljs-template-tag,
+  .hljs-template-variable,
+  .hljs-type,
+  .hljs-variable.language_ {
+    /* prettylights-syntax-keyword */
+    color: #ff7b72;
+  }
+
+  .hljs-title,
+  .hljs-title.class_,
+  .hljs-title.class_.inherited__,
+  .hljs-title.function_ {
+    /* prettylights-syntax-entity */
+    color: #d2a8ff;
+  }
+
+  .hljs-attr,
+  .hljs-attribute,
+  .hljs-literal,
+  .hljs-meta,
+  .hljs-number,
+  .hljs-operator,
+  .hljs-variable,
+  .hljs-selector-attr,
+  .hljs-selector-class,
+  .hljs-selector-id {
+    /* prettylights-syntax-constant */
+    color: #79c0ff;
+  }
+
+  .hljs-regexp,
+  .hljs-string,
+  .hljs-meta .hljs-string {
+    /* prettylights-syntax-string */
+    color: #a5d6ff;
+  }
+
+  .hljs-built_in,
+  .hljs-symbol {
+    /* prettylights-syntax-variable */
+    color: #ffa657;
+  }
+
+  .hljs-comment,
+  .hljs-code,
+  .hljs-formula {
+    /* prettylights-syntax-comment */
+    color: #8b949e;
+  }
+
+  .hljs-name,
+  .hljs-quote,
+  .hljs-selector-tag,
+  .hljs-selector-pseudo {
+    /* prettylights-syntax-entity-tag */
+    color: #7ee787;
+  }
+
+  .hljs-subst {
+    /* prettylights-syntax-storage-modifier-import */
+    color: #c9d1d9;
+  }
+
+  .hljs-section {
+    /* prettylights-syntax-markup-heading */
+    color: #1f6feb;
+    font-weight: bold;
+  }
+
+  .hljs-bullet {
+    /* prettylights-syntax-markup-list */
+    color: #f2cc60;
+  }
+
+  .hljs-emphasis {
+    /* prettylights-syntax-markup-italic */
+    color: #c9d1d9;
+    font-style: italic;
+  }
+
+  .hljs-strong {
+    /* prettylights-syntax-markup-bold */
+    color: #c9d1d9;
+    font-weight: bold;
+  }
+
+  .hljs-addition {
+    /* prettylights-syntax-markup-inserted */
+    color: #aff5b4;
+    background-color: #033a16;
+  }
+
+  .hljs-deletion {
+    /* prettylights-syntax-markup-deleted */
+    color: #ffdcd7;
+    background-color: #67060c;
+  }
+}
+    </style>
+  </head>
+
+  <body>
+      <h1>Jason Liang</h1>
+
+  <ul class="post-list">
+          <li>
+        <a href="wordpress.html">
+          <span>WordPress For Non-WordPress Developers</span>
+          <span>2023-09-13</span>
+        </a>
+      </li>
+          <li>
+        <a href="triangles.html">
+          <span>Drawing A Triangle 7 Ways</span>
+          <span>2023-06-06</span>
+        </a>
+      </li>
+          <li>
+        <a href="fusing.html">
+          <span>How LÖVE's Fused Mode Works</span>
+          <span>2023-02-27</span>
+        </a>
+      </li>
+          <li>
+        <a href="cpp-style.html">
+          <span>C++ Coding Style</span>
+          <span>2023-01-06</span>
+        </a>
+      </li>
+          <li>
+        <a href="metatables-in-c.html">
+          <span>Using Lua Metatables With The C API</span>
+          <span>2022-11-30</span>
+        </a>
+      </li>
+          <li>
+        <a href="coroutines.html">
+          <span>Lua Coroutines By Example</span>
+          <span>2022-04-06</span>
+        </a>
+      </li>
+          <li>
+        <a href="batch-renderer.html">
+          <span>A Tiny OpenGL 2D Batch Renderer</span>
+          <span>2022-01-04</span>
+        </a>
+      </li>
+          <li>
+        <a href="unit-testing.html">
+          <span>Write Your Own C++ Unit Testing Library</span>
+          <span>2022-01-03</span>
+        </a>
+      </li>
+      </ul>
+
+    <footer class="dim">
+              Jason Liang
+            &middot;
+      <a href="https://github.com/jasonliang-dev/">GitHub</a>
+      &middot;
+      jasonliang512@gmail.com
+    </footer>
+  </body>
+
+  <!-- be nice to people -->
+
+  </html>
   
-  <script>
-    function updateTheme() {
-      const doc = document.documentElement
-
-      let dark
-      if ('theme' in localStorage) {
-        dark = localStorage.theme === 'dark'
-      } else {
-        dark = window.matchMedia('(prefers-color-scheme: dark)').matches
-      }
-
-      if (dark) {
-        doc.classList.add('dark')
-      } else {
-        doc.classList.remove('dark')
-      }
-
-      if (typeof onUpdateTheme === 'function') {
-        onUpdateTheme()
-      }
-    }
-
-    function toggleTheme() {
-      const doc = document.documentElement
-      localStorage.theme = doc.classList.contains('dark') ? 'light' : 'dark'
-      updateTheme()
-    }
-
-    updateTheme()
-  </script>
-</head>
-<body>
-  <button class="theme-button fixed top-0 right-0 z-999 flex mt3 mr3 bn br-pill pa2" onclick="toggleTheme()">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="20" height="20">
-      <path d="M10 2a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 2zM10 15a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 15zM10 7a3 3 0 100 6 3 3 0 000-6zM15.657 5.404a.75.75 0 10-1.06-1.06l-1.061 1.06a.75.75 0 001.06 1.06l1.06-1.06zM6.464 14.596a.75.75 0 10-1.06-1.06l-1.06 1.06a.75.75 0 001.06 1.06l1.06-1.06zM18 10a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0118 10zM5 10a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 015 10zM14.596 15.657a.75.75 0 001.06-1.06l-1.06-1.061a.75.75 0 10-1.06 1.06l1.06 1.06zM5.404 6.464a.75.75 0 001.06-1.06l-1.06-1.06a.75.75 0 10-1.061 1.06l1.06 1.06z" />
-    </svg>
-  </button>
-  
-  <div class="absolute w-100 vh-100" style="z-index: -1">
-    <canvas id="canvas"></canvas>
-  </div>
-  <div class="vh-100 flex flex-column justify-center items-center">
-    <h1 class="hero-text tc mv0 fw9">Jason Liang</h1>
-    <p class="fw4 soft f3 f2-l mw6 mw8-l mb6 tc center">
-      A developer that loves to create attractive and interactive
-      applications for the web and desktop.
-    </p>
-  </div>
-  <div class="mw8 center ph2" style="font-size: 1.1rem">
-    <h2 class="mb0">Blog Posts</h2>
-    <p class="soft">Programming guides and thoughts on software.</p>
-    <ul class="list pl0 mt4 mb6">
-      
-        <li class="lh-copy">
-          <a class="post-link no-underline harsh pv2 ph2 nl2 nr2 db br2 flex" href="/wordpress.html">
-            <span class="soft flex-none" style="width: 9rem">
-              Sep 13, 2023
-            </span>
-            <span class="pl1 fw5">
-              WordPress For Non-WordPress Developers
-            </span>
-          </a>
-        </li>
-      
-        <li class="lh-copy">
-          <a class="post-link no-underline harsh pv2 ph2 nl2 nr2 db br2 flex" href="/triangles.html">
-            <span class="soft flex-none" style="width: 9rem">
-              Jun 6, 2023
-            </span>
-            <span class="pl1 fw5">
-              Drawing A Triangle 7 Ways
-            </span>
-          </a>
-        </li>
-      
-        <li class="lh-copy">
-          <a class="post-link no-underline harsh pv2 ph2 nl2 nr2 db br2 flex" href="/fusing.html">
-            <span class="soft flex-none" style="width: 9rem">
-              Feb 27, 2023
-            </span>
-            <span class="pl1 fw5">
-              How LÖVE&#39;s Fused Mode Works
-            </span>
-          </a>
-        </li>
-      
-        <li class="lh-copy">
-          <a class="post-link no-underline harsh pv2 ph2 nl2 nr2 db br2 flex" href="/cpp-style.html">
-            <span class="soft flex-none" style="width: 9rem">
-              Jan 6, 2023
-            </span>
-            <span class="pl1 fw5">
-              C&#43;&#43; Coding Style
-            </span>
-          </a>
-        </li>
-      
-        <li class="lh-copy">
-          <a class="post-link no-underline harsh pv2 ph2 nl2 nr2 db br2 flex" href="/metatables-in-c.html">
-            <span class="soft flex-none" style="width: 9rem">
-              Nov 30, 2022
-            </span>
-            <span class="pl1 fw5">
-              Using Lua Metatables With The C API
-            </span>
-          </a>
-        </li>
-      
-        <li class="lh-copy">
-          <a class="post-link no-underline harsh pv2 ph2 nl2 nr2 db br2 flex" href="/coroutines.html">
-            <span class="soft flex-none" style="width: 9rem">
-              Apr 6, 2022
-            </span>
-            <span class="pl1 fw5">
-              Lua Coroutines By Example
-            </span>
-          </a>
-        </li>
-      
-        <li class="lh-copy">
-          <a class="post-link no-underline harsh pv2 ph2 nl2 nr2 db br2 flex" href="/batch-renderer.html">
-            <span class="soft flex-none" style="width: 9rem">
-              Jan 4, 2022
-            </span>
-            <span class="pl1 fw5">
-              A Tiny OpenGL 2D Batch Renderer
-            </span>
-          </a>
-        </li>
-      
-        <li class="lh-copy">
-          <a class="post-link no-underline harsh pv2 ph2 nl2 nr2 db br2 flex" href="/unit-testing.html">
-            <span class="soft flex-none" style="width: 9rem">
-              Jan 3, 2022
-            </span>
-            <span class="pl1 fw5">
-              Write Your Own C&#43;&#43; Unit Testing Library
-            </span>
-          </a>
-        </li>
-      
-    </ul>
-
-    <h2 class="mb0">GitHub Projects</h2>
-    <p class="soft lh-copy">
-      You can also find these projects on my
-      <a href="https://github.com/jasonliang-dev/" class="harsh better-underline fw5">GitHub</a>
-      profile.
-    </p>
-    <ul class="project-grid list pl0 mt4 mb6">
-      
-        <li class="mb3">
-          <a href="https://jasonliang.js.org/spry/" class="no-underline br3 db border-outline shadow img-scale-over" style="max-width: 24rem">
-            <img src="/public/images/spry.png" alt="Screenshot of a 2D game with planes" class="db w-100" style="object-fit: cover; aspect-ratio: 16 / 9">
-          </a>
-          <div class="pt3">
-            <h3 class="mt0 mb2 fw5 f4">
-              <a href="https://jasonliang.js.org/spry/" class="harsh better-underline">
-                Spry
-              </a>
-            </h3>
-            <p class="mt0 lh-copy soft mb0">
-              A 2D game framework for rapid prototyping and game jams.
-            </p>
-            
-              <a class="eyebrow better-underline inline-flex items-center mt2" href="https://github.com/jasonliang-dev/spry">
-                <span class="mr1">
-                  GitHub
-                </span>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 20px; height: 20px">
-                  <path fill-rule="evenodd" d="M4.25 5.5a.75.75 0 00-.75.75v8.5c0 .414.336.75.75.75h8.5a.75.75 0 00.75-.75v-4a.75.75 0 011.5 0v4A2.25 2.25 0 0112.75 17h-8.5A2.25 2.25 0 012 14.75v-8.5A2.25 2.25 0 014.25 4h5a.75.75 0 010 1.5h-5z" clip-rule="evenodd" />
-                  <path fill-rule="evenodd" d="M6.194 12.753a.75.75 0 001.06.053L16.5 4.44v2.81a.75.75 0 001.5 0v-4.5a.75.75 0 00-.75-.75h-4.5a.75.75 0 000 1.5h2.553l-9.056 8.194a.75.75 0 00-.053 1.06z" clip-rule="evenodd" />
-                </svg>
-              </a>
-            
-          </div>
-        </li>
-      
-        <li class="mb3">
-          <a href="https://github.com/jasonliang-dev/thp" class="no-underline br3 db border-outline shadow img-scale-over" style="max-width: 24rem">
-            <img src="/public/images/thp.png" alt="" class="db w-100" style="object-fit: cover; aspect-ratio: 16 / 9">
-          </a>
-          <div class="pt3">
-            <h3 class="mt0 mb2 fw5 f4">
-              <a href="https://github.com/jasonliang-dev/thp" class="harsh better-underline">
-                Tiny Hypertext Preprocessor
-              </a>
-            </h3>
-            <p class="mt0 lh-copy soft mb0">
-              A program that helps generate static websites using Lua.
-            </p>
-            
-          </div>
-        </li>
-      
-        <li class="mb3">
-          <a href="https://jasonliang.js.org/rootie-the-mouse/" class="no-underline br3 db border-outline shadow img-scale-over" style="max-width: 24rem">
-            <img src="/public/images/rootie-the-mouse.png" alt="2D game title screen with a mouse" class="db w-100" style="object-fit: cover; aspect-ratio: 16 / 9">
-          </a>
-          <div class="pt3">
-            <h3 class="mt0 mb2 fw5 f4">
-              <a href="https://jasonliang.js.org/rootie-the-mouse/" class="harsh better-underline">
-                Rootie the Mouse
-              </a>
-            </h3>
-            <p class="mt0 lh-copy soft mb0">
-              You play as Rootie, a mouse that has the power to control water, air, and fire.
-            </p>
-            
-              <a class="eyebrow better-underline inline-flex items-center mt2" href="https://github.com/jasonliang-dev/rootie-the-mouse">
-                <span class="mr1">
-                  GitHub
-                </span>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 20px; height: 20px">
-                  <path fill-rule="evenodd" d="M4.25 5.5a.75.75 0 00-.75.75v8.5c0 .414.336.75.75.75h8.5a.75.75 0 00.75-.75v-4a.75.75 0 011.5 0v4A2.25 2.25 0 0112.75 17h-8.5A2.25 2.25 0 012 14.75v-8.5A2.25 2.25 0 014.25 4h5a.75.75 0 010 1.5h-5z" clip-rule="evenodd" />
-                  <path fill-rule="evenodd" d="M6.194 12.753a.75.75 0 001.06.053L16.5 4.44v2.81a.75.75 0 001.5 0v-4.5a.75.75 0 00-.75-.75h-4.5a.75.75 0 000 1.5h2.553l-9.056 8.194a.75.75 0 00-.053 1.06z" clip-rule="evenodd" />
-                </svg>
-              </a>
-            
-          </div>
-        </li>
-      
-        <li class="mb3">
-          <a href="https://shoppy-store-chi.vercel.app/" class="no-underline br3 db border-outline shadow img-scale-over" style="max-width: 24rem">
-            <img src="/public/images/storefront.png" alt="Homepage of an online store" class="db w-100" style="object-fit: cover; aspect-ratio: 16 / 9">
-          </a>
-          <div class="pt3">
-            <h3 class="mt0 mb2 fw5 f4">
-              <a href="https://shoppy-store-chi.vercel.app/" class="harsh better-underline">
-                shoppy-store
-              </a>
-            </h3>
-            <p class="mt0 lh-copy soft mb0">
-              Custom ecommerce storefront using Next.js and Shopify.
-            </p>
-            
-              <a class="eyebrow better-underline inline-flex items-center mt2" href="https://github.com/jasonliang-dev/shoppy-store">
-                <span class="mr1">
-                  GitHub
-                </span>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 20px; height: 20px">
-                  <path fill-rule="evenodd" d="M4.25 5.5a.75.75 0 00-.75.75v8.5c0 .414.336.75.75.75h8.5a.75.75 0 00.75-.75v-4a.75.75 0 011.5 0v4A2.25 2.25 0 0112.75 17h-8.5A2.25 2.25 0 012 14.75v-8.5A2.25 2.25 0 014.25 4h5a.75.75 0 010 1.5h-5z" clip-rule="evenodd" />
-                  <path fill-rule="evenodd" d="M6.194 12.753a.75.75 0 001.06.053L16.5 4.44v2.81a.75.75 0 001.5 0v-4.5a.75.75 0 00-.75-.75h-4.5a.75.75 0 000 1.5h2.553l-9.056 8.194a.75.75 0 00-.053 1.06z" clip-rule="evenodd" />
-                </svg>
-              </a>
-            
-          </div>
-        </li>
-      
-        <li class="mb3">
-          <a href="https://github.com/jasonliang-dev/file-sink" class="no-underline br3 db border-outline shadow img-scale-over" style="max-width: 24rem">
-            <img src="/public/images/sftp.png" alt="A window displaying list of files" class="db w-100" style="object-fit: cover; aspect-ratio: 16 / 9">
-          </a>
-          <div class="pt3">
-            <h3 class="mt0 mb2 fw5 f4">
-              <a href="https://github.com/jasonliang-dev/file-sink" class="harsh better-underline">
-                file-sink
-              </a>
-            </h3>
-            <p class="mt0 lh-copy soft mb0">
-              Tiny SFTP client with automatic file synchronization using C&#43;&#43;.
-            </p>
-            
-          </div>
-        </li>
-      
-        <li class="mb3">
-          <a href="https://github.com/jasonliang-dev/odin-lua" class="no-underline br3 db border-outline shadow img-scale-over" style="max-width: 24rem">
-            <img src="/public/images/odin-lua.png" alt="odin-lua&#39;s source code" class="db w-100" style="object-fit: cover; aspect-ratio: 16 / 9">
-          </a>
-          <div class="pt3">
-            <h3 class="mt0 mb2 fw5 f4">
-              <a href="https://github.com/jasonliang-dev/odin-lua" class="harsh better-underline">
-                odin-lua
-              </a>
-            </h3>
-            <p class="mt0 lh-copy soft mb0">
-              Lua 5.4.4 and LuaJIT support for the Odin programming language.
-            </p>
-            
-          </div>
-        </li>
-      
-        <li class="mb3">
-          <a href="https://jasonliang.js.org/shooty-game/" class="no-underline br3 db border-outline shadow img-scale-over" style="max-width: 24rem">
-            <img src="/public/images/shooty-game.png" alt="Screenshot of shooty-game" class="db w-100" style="object-fit: cover; aspect-ratio: 16 / 9">
-          </a>
-          <div class="pt3">
-            <h3 class="mt0 mb2 fw5 f4">
-              <a href="https://jasonliang.js.org/shooty-game/" class="harsh better-underline">
-                shooty-game
-              </a>
-            </h3>
-            <p class="mt0 lh-copy soft mb0">
-              A game where you shoot stuff. Made with C&#43;&#43; and Lua, without an engine.
-            </p>
-            
-              <a class="eyebrow better-underline inline-flex items-center mt2" href="https://github.com/jasonliang-dev/shooty-game">
-                <span class="mr1">
-                  GitHub
-                </span>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 20px; height: 20px">
-                  <path fill-rule="evenodd" d="M4.25 5.5a.75.75 0 00-.75.75v8.5c0 .414.336.75.75.75h8.5a.75.75 0 00.75-.75v-4a.75.75 0 011.5 0v4A2.25 2.25 0 0112.75 17h-8.5A2.25 2.25 0 012 14.75v-8.5A2.25 2.25 0 014.25 4h5a.75.75 0 010 1.5h-5z" clip-rule="evenodd" />
-                  <path fill-rule="evenodd" d="M6.194 12.753a.75.75 0 001.06.053L16.5 4.44v2.81a.75.75 0 001.5 0v-4.5a.75.75 0 00-.75-.75h-4.5a.75.75 0 000 1.5h2.553l-9.056 8.194a.75.75 0 00-.053 1.06z" clip-rule="evenodd" />
-                </svg>
-              </a>
-            
-          </div>
-        </li>
-      
-        <li class="mb3">
-          <a href="https://jasonliang.js.org/heroicons-for-elm/" class="no-underline br3 db border-outline shadow img-scale-over" style="max-width: 24rem">
-            <img src="/public/images/elm-heroicons.png" alt="Gallery of icons in a grid" class="db w-100" style="object-fit: cover; aspect-ratio: 16 / 9">
-          </a>
-          <div class="pt3">
-            <h3 class="mt0 mb2 fw5 f4">
-              <a href="https://jasonliang.js.org/heroicons-for-elm/" class="harsh better-underline">
-                Heroicons for Elm
-              </a>
-            </h3>
-            <p class="mt0 lh-copy soft mb0">
-              Web app that provides SVG icons for the Elm programming language.
-            </p>
-            
-              <a class="eyebrow better-underline inline-flex items-center mt2" href="https://github.com/jasonliang-dev/heroicons-for-elm">
-                <span class="mr1">
-                  GitHub
-                </span>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 20px; height: 20px">
-                  <path fill-rule="evenodd" d="M4.25 5.5a.75.75 0 00-.75.75v8.5c0 .414.336.75.75.75h8.5a.75.75 0 00.75-.75v-4a.75.75 0 011.5 0v4A2.25 2.25 0 0112.75 17h-8.5A2.25 2.25 0 012 14.75v-8.5A2.25 2.25 0 014.25 4h5a.75.75 0 010 1.5h-5z" clip-rule="evenodd" />
-                  <path fill-rule="evenodd" d="M6.194 12.753a.75.75 0 001.06.053L16.5 4.44v2.81a.75.75 0 001.5 0v-4.5a.75.75 0 00-.75-.75h-4.5a.75.75 0 000 1.5h2.553l-9.056 8.194a.75.75 0 00-.053 1.06z" clip-rule="evenodd" />
-                </svg>
-              </a>
-            
-          </div>
-        </li>
-      
-        <li class="mb3">
-          <a href="https://github.com/jasonliang-dev/yet-another-chat-app" class="no-underline br3 db border-outline shadow img-scale-over" style="max-width: 24rem">
-            <img src="/public/images/chat-app.png" alt="A chat interface" class="db w-100" style="object-fit: cover; aspect-ratio: 16 / 9">
-          </a>
-          <div class="pt3">
-            <h3 class="mt0 mb2 fw5 f4">
-              <a href="https://github.com/jasonliang-dev/yet-another-chat-app" class="harsh better-underline">
-                Yet Another Chat App
-              </a>
-            </h3>
-            <p class="mt0 lh-copy soft mb0">
-              Chat application that uses the MERN stack. Messages are sent in real time using Socket.IO.
-            </p>
-            
-          </div>
-        </li>
-      
-        <li class="mb3">
-          <a href="https://temtypecalc.netlify.app/" class="no-underline br3 db border-outline shadow img-scale-over" style="max-width: 24rem">
-            <img src="/public/images/temtem.png" alt="Temtem creatures in a list" class="db w-100" style="object-fit: cover; aspect-ratio: 16 / 9">
-          </a>
-          <div class="pt3">
-            <h3 class="mt0 mb2 fw5 f4">
-              <a href="https://temtypecalc.netlify.app/" class="harsh better-underline">
-                Temtem Type Calculator
-              </a>
-            </h3>
-            <p class="mt0 lh-copy soft mb0">
-              For the game Temtem, view matchups between different creature types. Made with Gatsby.
-            </p>
-            
-              <a class="eyebrow better-underline inline-flex items-center mt2" href="https://github.com/jasonliang-dev/temtem-type-calculator">
-                <span class="mr1">
-                  GitHub
-                </span>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 20px; height: 20px">
-                  <path fill-rule="evenodd" d="M4.25 5.5a.75.75 0 00-.75.75v8.5c0 .414.336.75.75.75h8.5a.75.75 0 00.75-.75v-4a.75.75 0 011.5 0v4A2.25 2.25 0 0112.75 17h-8.5A2.25 2.25 0 012 14.75v-8.5A2.25 2.25 0 014.25 4h5a.75.75 0 010 1.5h-5z" clip-rule="evenodd" />
-                  <path fill-rule="evenodd" d="M6.194 12.753a.75.75 0 001.06.053L16.5 4.44v2.81a.75.75 0 001.5 0v-4.5a.75.75 0 00-.75-.75h-4.5a.75.75 0 000 1.5h2.553l-9.056 8.194a.75.75 0 00-.053 1.06z" clip-rule="evenodd" />
-                </svg>
-              </a>
-            
-          </div>
-        </li>
-      
-        <li class="mb3">
-          <a href="https://jasonliang.js.org/wildermaze/" class="no-underline br3 db border-outline shadow img-scale-over" style="max-width: 24rem">
-            <img src="/public/images/maze.png" alt="Screenshot of Wildermaze" class="db w-100" style="object-fit: cover; aspect-ratio: 16 / 9">
-          </a>
-          <div class="pt3">
-            <h3 class="mt0 mb2 fw5 f4">
-              <a href="https://jasonliang.js.org/wildermaze/" class="harsh better-underline">
-                Wildermaze
-              </a>
-            </h3>
-            <p class="mt0 lh-copy soft mb0">
-              A game where you escape a maze while avoiding wolves. Created during BC Game Jam 2020.
-            </p>
-            
-              <a class="eyebrow better-underline inline-flex items-center mt2" href="https://github.com/jasonliang-dev/wildermaze">
-                <span class="mr1">
-                  GitHub
-                </span>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 20px; height: 20px">
-                  <path fill-rule="evenodd" d="M4.25 5.5a.75.75 0 00-.75.75v8.5c0 .414.336.75.75.75h8.5a.75.75 0 00.75-.75v-4a.75.75 0 011.5 0v4A2.25 2.25 0 0112.75 17h-8.5A2.25 2.25 0 012 14.75v-8.5A2.25 2.25 0 014.25 4h5a.75.75 0 010 1.5h-5z" clip-rule="evenodd" />
-                  <path fill-rule="evenodd" d="M6.194 12.753a.75.75 0 001.06.053L16.5 4.44v2.81a.75.75 0 001.5 0v-4.5a.75.75 0 00-.75-.75h-4.5a.75.75 0 000 1.5h2.553l-9.056 8.194a.75.75 0 00-.053 1.06z" clip-rule="evenodd" />
-                </svg>
-              </a>
-            
-          </div>
-        </li>
-      
-        <li class="mb3">
-          <a href="https://github.com/jasonliang-dev/space-shooter" class="no-underline br3 db border-outline shadow img-scale-over" style="max-width: 24rem">
-            <img src="/public/images/spaceshooter.png" alt="Screenshot of Space Shooter Game" class="db w-100" style="object-fit: cover; aspect-ratio: 16 / 9">
-          </a>
-          <div class="pt3">
-            <h3 class="mt0 mb2 fw5 f4">
-              <a href="https://github.com/jasonliang-dev/space-shooter" class="harsh better-underline">
-                Space Shooter Game
-              </a>
-            </h3>
-            <p class="mt0 lh-copy soft mb0">
-              Avoid asteroids and enemy fire in a fast paced arcade romp.
-            </p>
-            
-          </div>
-        </li>
-      
-        <li class="mb3">
-          <a href="https://github.com/jasonliang-dev/lite-vim" class="no-underline br3 db border-outline shadow img-scale-over" style="max-width: 24rem">
-            <img src="/public/images/lite-vim.png" alt="lite-vim&#39;s source code" class="db w-100" style="object-fit: cover; aspect-ratio: 16 / 9">
-          </a>
-          <div class="pt3">
-            <h3 class="mt0 mb2 fw5 f4">
-              <a href="https://github.com/jasonliang-dev/lite-vim" class="harsh better-underline">
-                lite-vim
-              </a>
-            </h3>
-            <p class="mt0 lh-copy soft mb0">
-              A plugin for the Lite text editor that emulates a subset of Vim.
-            </p>
-            
-          </div>
-        </li>
-      
-        <li class="mb3">
-          <a href="https://github.com/jasonliang-dev/entity-component-system" class="no-underline br3 db border-outline shadow img-scale-over" style="max-width: 24rem">
-            <img src="/public/images/ecs.png" alt="A 2d game screenshot with many projectiles" class="db w-100" style="object-fit: cover; aspect-ratio: 16 / 9">
-          </a>
-          <div class="pt3">
-            <h3 class="mt0 mb2 fw5 f4">
-              <a href="https://github.com/jasonliang-dev/entity-component-system" class="harsh better-underline">
-                Entity Component System
-              </a>
-            </h3>
-            <p class="mt0 lh-copy soft mb0">
-              Archetype entity component system library for C.
-            </p>
-            
-          </div>
-        </li>
-      
-        <li class="mb3">
-          <a href="https://github.com/jasonliang-dev/costello" class="no-underline br3 db border-outline shadow img-scale-over" style="max-width: 24rem">
-            <img src="/public/images/discord-stickers.png" alt="Several images/stickers shown in a grid" class="db w-100" style="object-fit: cover; aspect-ratio: 16 / 9">
-          </a>
-          <div class="pt3">
-            <h3 class="mt0 mb2 fw5 f4">
-              <a href="https://github.com/jasonliang-dev/costello" class="harsh better-underline">
-                Costello
-              </a>
-            </h3>
-            <p class="mt0 lh-copy soft mb0">
-              BetterDiscord plugin that lets you save and rapidly send a collection of images.
-            </p>
-            
-          </div>
-        </li>
-      
-        <li class="mb3">
-          <a href="https://github.com/jasonliang-dev/dream-eater" class="no-underline br3 db border-outline shadow img-scale-over" style="max-width: 24rem">
-            <img src="/public/images/php.png" alt="Some PHP source code" class="db w-100" style="object-fit: cover; aspect-ratio: 16 / 9">
-          </a>
-          <div class="pt3">
-            <h3 class="mt0 mb2 fw5 f4">
-              <a href="https://github.com/jasonliang-dev/dream-eater" class="harsh better-underline">
-                dream-eater
-              </a>
-            </h3>
-            <p class="mt0 lh-copy soft mb0">
-              Emacs minor mode that respects Dreamweaver&#39;s check in/out system.
-            </p>
-            
-          </div>
-        </li>
-      
-        <li class="mb3">
-          <a href="https://github.com/jasonliang-dev/lulu" class="no-underline br3 db border-outline shadow img-scale-over" style="max-width: 24rem">
-            <img src="/public/images/lulu.png" alt="Code showcasing the lulu programming language" class="db w-100" style="object-fit: cover; aspect-ratio: 16 / 9">
-          </a>
-          <div class="pt3">
-            <h3 class="mt0 mb2 fw5 f4">
-              <a href="https://github.com/jasonliang-dev/lulu" class="harsh better-underline">
-                lulu
-              </a>
-            </h3>
-            <p class="mt0 lh-copy soft mb0">
-              Tiny lispy toy programming language. Written in Haskell under 300 SLOC.
-            </p>
-            
-          </div>
-        </li>
-      
-        <li class="mb3">
-          <a href="https://github.com/jasonliang-dev/game-of-life" class="no-underline br3 db border-outline shadow img-scale-over" style="max-width: 24rem">
-            <img src="/public/images/game-of-life.png" alt="A grid of black/white squares" class="db w-100" style="object-fit: cover; aspect-ratio: 16 / 9">
-          </a>
-          <div class="pt3">
-            <h3 class="mt0 mb2 fw5 f4">
-              <a href="https://github.com/jasonliang-dev/game-of-life" class="harsh better-underline">
-                Game of Life
-              </a>
-            </h3>
-            <p class="mt0 lh-copy soft mb0">
-              Conway&#39;s Game of Life written in C with SDL2.
-            </p>
-            
-          </div>
-        </li>
-      
-    </ul>
-
-    <h2 class="mb0">WordPress Work</h2>
-    <p class="soft lh-copy">
-      WordPress Websites that I've built for clients.
-    </p>
-    <ul class="list pl0 mt4 mb6">
-      
-        <li class="flex flex-column flex-row-l items-start items-center-l mb4">
-          <a href="https://burnabyheightsaccounting.com/" class="no-underline db br3 border-outline shadow img-scale-over" style="max-width: 24rem">
-            <img src="/public/websites/burnabyheightsaccounting.com_.png" alt="Screenshot of Burnaby Heights Accounting&#39;s website" class="db">
-          </a>
-          <div class="pl4-l pt3 pt0-l pb3">
-            <h3 class="mt0 mb2 fw5 f4">
-              <a href="https://burnabyheightsaccounting.com/" class="harsh better-underline inline-flex items-center">
-                Burnaby Heights Accounting
-                <svg class="ml2 soft" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="20" height="20">
-                  <path fill-rule="evenodd" d="M4.25 5.5a.75.75 0 00-.75.75v8.5c0 .414.336.75.75.75h8.5a.75.75 0 00.75-.75v-4a.75.75 0 011.5 0v4A2.25 2.25 0 0112.75 17h-8.5A2.25 2.25 0 012 14.75v-8.5A2.25 2.25 0 014.25 4h5a.75.75 0 010 1.5h-5z" clip-rule="evenodd" />
-                  <path fill-rule="evenodd" d="M6.194 12.753a.75.75 0 001.06.053L16.5 4.44v2.81a.75.75 0 001.5 0v-4.5a.75.75 0 00-.75-.75h-4.5a.75.75 0 000 1.5h2.553l-9.056 8.194a.75.75 0 00-.053 1.06z" clip-rule="evenodd" />
-                </svg>
-              </a>
-            </h3>
-            <p class="mt0 lh-copy soft mw6">
-              A sleek and user-friendly website for a business that specializes in tax and accounting services.
-            </p>
-          </div>
-        </li>
-      
-        <li class="flex flex-column flex-row-l items-start items-center-l mb4">
-          <a href="https://nimbasa.co/" class="no-underline db br3 border-outline shadow img-scale-over" style="max-width: 24rem">
-            <img src="/public/websites/nimbasa.co_.png" alt="Screenshot of Nimbasa Entertainment&#39;s website" class="db">
-          </a>
-          <div class="pl4-l pt3 pt0-l pb3">
-            <h3 class="mt0 mb2 fw5 f4">
-              <a href="https://nimbasa.co/" class="harsh better-underline inline-flex items-center">
-                Nimbasa Entertainment
-                <svg class="ml2 soft" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="20" height="20">
-                  <path fill-rule="evenodd" d="M4.25 5.5a.75.75 0 00-.75.75v8.5c0 .414.336.75.75.75h8.5a.75.75 0 00.75-.75v-4a.75.75 0 011.5 0v4A2.25 2.25 0 0112.75 17h-8.5A2.25 2.25 0 012 14.75v-8.5A2.25 2.25 0 014.25 4h5a.75.75 0 010 1.5h-5z" clip-rule="evenodd" />
-                  <path fill-rule="evenodd" d="M6.194 12.753a.75.75 0 001.06.053L16.5 4.44v2.81a.75.75 0 001.5 0v-4.5a.75.75 0 00-.75-.75h-4.5a.75.75 0 000 1.5h2.553l-9.056 8.194a.75.75 0 00-.053 1.06z" clip-rule="evenodd" />
-                </svg>
-              </a>
-            </h3>
-            <p class="mt0 lh-copy soft mw6">
-              E-commerce storefront that showcases anime figures and video games for a local vendor in Vancouver.
-            </p>
-          </div>
-        </li>
-      
-    </ul>
-  </div>
-  <footer class="print-hidden tc gray pb4 pt6">
-    Made with <a class="harsh better-underline fw5" href="https://github.com/jasonliang-dev/jasonliang-dev.github.io/">code</a>
-  </footer>
-
-  
-  <script>
-    const canvas = document.getElementById('canvas')
-    const ctx = canvas.getContext('2d')
-
-    const reserved = {width: 0, height: 0}
-    const points = []
-    const mouse = {x: 300, y: 300}
-    const camera = {x: 0, y: 0}
-    let dark = document.documentElement.classList.contains('dark')
-
-    function mousemove(e) {
-      mouse.x = e.pageX
-      mouse.y = e.pageY
-    }
-    window.addEventListener('mousemove', mousemove)
-
-    function resize() {
-      canvas.width = canvas.parentNode.clientWidth
-      canvas.height = canvas.parentNode.clientHeight
-
-      if (reserved.width < canvas.width || reserved.height < canvas.height) {
-        reserved.width = Math.max(reserved.width, canvas.width)
-        reserved.height = Math.max(reserved.height, canvas.height)
-
-        const count = reserved.width * reserved.height * 0.0001
-        for (let i = 0; i < count; i++) {
-          points[i] = {
-            x: random(0, reserved.width),
-            y: random(0, reserved.height),
-            vx: random(0.2, 0.8),
-            vy: random(0.2, 0.8),
-            size: Math.floor(random(2, 5)),
-          }
-        }
-      }
-    }
-    window.addEventListener('resize', resize)
-    resize()
-
-    function draw() {
-      ctx.resetTransform()
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
-      ctx.translate(camera.x, camera.y)
-
-      const cam_move = 20
-      const cx = lerp(-cam_move, cam_move, mouse.x / canvas.width)
-      const cy = lerp(-cam_move, cam_move, clamp(mouse.y / canvas.height, 0, 1))
-      camera.x += (cx - camera.x) * 0.1
-      camera.y += (cy - camera.y) * 0.1
-
-      for (let p of points) {
-        p.x += p.vx
-        p.y += p.vy
-
-        const padding = 50
-        if (p.x > reserved.width + padding) {
-          p.x = -padding
-        }
-
-        if (p.y > reserved.height + padding) {
-          p.y = -padding
-        }
-      }
-
-      if (dark) {
-        ctx.fillStyle = 'rgb(250 250 250 / 0.15)'
-      } else {
-        ctx.fillStyle = 'rgb(0 0 0 / 0.2)'
-      }
-
-      ctx.beginPath()
-      for (let p of points) {
-        ctx.moveTo(p.x, p.y)
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2)
-      }
-      ctx.fill()
-
-      for (let p of points) {
-        
-        const bias = 0.707106781186548
-
-        const dx = mouse.x - p.x
-        const dy = mouse.y - p.y
-        const dist = dx * dx + dy * dy
-
-        if (dark) {
-          const opacity = clamp(2000 / dist, 0, 0.15)
-          ctx.strokeStyle = `rgb(250 250 250 / ${opacity})`
-        } else {
-          const opacity = clamp(2000 / dist, 0, 0.2)
-          ctx.strokeStyle = `rgb(0 0 0 / ${opacity})`
-        }
-
-        const len = 50 * (p.size * 0.5)
-        ctx.beginPath()
-        ctx.moveTo(p.x - (p.size * bias), p.y - (p.size * bias))
-        ctx.lineTo(p.x - len, p.y - len)
-        ctx.stroke()
-      }
-
-      requestAnimationFrame(draw)
-    }
-    draw()
-
-    function random(min, max) {
-      const diff = max - min
-      return Math.random() * diff + min
-    }
-
-    function clamp(x, min, max) {
-      if (x < min) {
-        return min
-      } else if (x > max) {
-        return max
-      } else {
-        return x
-      }
-    }
-
-    function lerp(a, b, t) {
-      return a + (b - a) * t
-    }
-
-    function onUpdateTheme() {
-      dark = document.documentElement.classList.contains('dark')
-    }
-  </script>
-
-  
-</body>
-</html>

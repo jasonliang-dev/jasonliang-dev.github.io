@@ -1,83 +1,424 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>
-  WordPress For Non-WordPress Developers
-</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/public/style.css">
-  <link rel="stylesheet" href="/public/tachyons.min.css">
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-1691VYRF8G"></script>
-  <script>
-    window.dataLayer = window.dataLayer || []
-    function gtag(){dataLayer.push(arguments)}
-    gtag('js', new Date())
-    gtag('config', 'G-1691VYRF8G')
-  </script>
-  
-  <script>
-    function updateTheme() {
-      const doc = document.documentElement
 
-      let dark
-      if ('theme' in localStorage) {
-        dark = localStorage.theme === 'dark'
-      } else {
-        dark = window.matchMedia('(prefers-color-scheme: dark)').matches
-      }
+  <!DOCTYPE html>
+  <html lang="en">
 
-      if (dark) {
-        doc.classList.add('dark')
-      } else {
-        doc.classList.remove('dark')
-      }
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>WordPress For Non-WordPress Developers - Jason Liang</title>
 
-      if (typeof onUpdateTheme === 'function') {
-        onUpdateTheme()
-      }
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-1691VYRF8G');
+    </script>
+
+    <style>
+      body {
+  font-family: sans-serif;
+  margin: 0 auto;
+  max-width: 800px;
+
+  @media (prefers-color-scheme: dark) {
+    color: white;
+    background-color: #111;
+  }
+}
+
+a {
+  color: black;
+  border-radius: .25rem;
+
+  &:hover, &:focus {
+    background-color: black;
+    color: white;
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    color: white;
+
+    &:hover, &:focus {
+      background-color: white;
+      color: black;
     }
+  }
+}
 
-    function toggleTheme() {
-      const doc = document.documentElement
-      localStorage.theme = doc.classList.contains('dark') ? 'light' : 'dark'
-      updateTheme()
+.post-list {
+  list-style-type: none;
+  padding: 0;
+
+  a {
+    text-decoration: none;
+    display: flex;
+    justify-content: space-between;
+    padding: .5rem;
+
+    &:hover, &:focus {
+      background-color: black;
+      color: #fff;
     }
+  }
+}
 
-    updateTheme()
-  </script>
-</head>
-<body>
-  <button class="theme-button fixed top-0 right-0 z-999 flex mt3 mr3 bn br-pill pa2" onclick="toggleTheme()">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="20" height="20">
-      <path d="M10 2a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 2zM10 15a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 15zM10 7a3 3 0 100 6 3 3 0 000-6zM15.657 5.404a.75.75 0 10-1.06-1.06l-1.061 1.06a.75.75 0 001.06 1.06l1.06-1.06zM6.464 14.596a.75.75 0 10-1.06-1.06l-1.06 1.06a.75.75 0 001.06 1.06l1.06-1.06zM18 10a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0118 10zM5 10a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 015 10zM14.596 15.657a.75.75 0 001.06-1.06l-1.06-1.061a.75.75 0 10-1.06 1.06l1.06 1.06zM5.404 6.464a.75.75 0 001.06-1.06l-1.06-1.06a.75.75 0 10-1.061 1.06l1.06 1.06z" />
-    </svg>
-  </button>
-  
-  <div class="mw7 center ph3">
-    <header class="pt4">
-      <a class="harsh fw7 f3 link" href="/">Jason Liang</a>
-    </header>
-    <article class="prose">
-      <time>September 13, 2023</time>
-      <h1>WordPress For Non-WordPress Developers</h1>
-      <p>Learning WordPress development today can be really overwhelming. It&rsquo;s a
+nav a {
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-decoration: none;
+  margin-top: 2rem;
+  margin-bottom: 4rem;
+  display: inline-block;
+}
+
+.post {
+  h1 {
+    margin-top: 0;
+  }
+
+  article {
+    line-height: 1.5;
+    font-size: 1.125em;
+    color: #111;
+
+    @media (prefers-color-scheme: dark) {
+      color: #ddd;
+    }
+  }
+
+  ul {
+    padding-left: 1.25rem;
+  }
+
+  img {
+    max-width: 100%;
+    border-radius: .5rem;
+    border: 1px solid #bbb;
+
+    @media (prefers-color-scheme: dark) {
+      border-color: #444;
+    }
+  }
+
+  table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    overflow-x: auto;
+  }
+
+  th {
+    text-align: left;
+    border: 1px solid #bbb;
+    padding: .25rem .5rem;
+  }
+
+  td {
+    border: 1px solid #bbb;
+    padding: .25rem .5rem;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    th, td {
+      border-color: #444;
+    }
+  }
+
+  pre>code {
+    padding: 1em;
+    display: block;
+    border-radius: .5rem;
+    overflow-x: auto;
+
+    background-color: #f8f8f8 !important;
+
+    @media (prefers-color-scheme: dark) {
+      background-color: black !important;
+    }
+  }
+}
+
+footer {
+  border-top: 1px solid #ddd;
+  padding: 2rem 0;
+  margin-bottom: 12rem;
+  margin-top: 3rem;
+
+  @media (prefers-color-scheme: dark) {
+    border-top: 1px solid #444;
+  }
+}
+
+.dim {
+  color: #444;
+
+  @media (prefers-color-scheme: dark) {
+    color: #888;
+  }
+}
+
+/*!
+  Theme: GitHub
+  Description: Light theme as seen on github.com
+  Author: github.com
+  Maintainer: @Hirse
+  Updated: 2021-05-15
+
+  Outdated base version: https://github.com/primer/github-syntax-light
+  Current colors taken from GitHub's CSS
+*/
+
+.hljs {
+  color: #24292e;
+  background: #ffffff;
+}
+
+.hljs-doctag,
+.hljs-keyword,
+.hljs-meta .hljs-keyword,
+.hljs-template-tag,
+.hljs-template-variable,
+.hljs-type,
+.hljs-variable.language_ {
+  /* prettylights-syntax-keyword */
+  color: #d73a49;
+}
+
+.hljs-title,
+.hljs-title.class_,
+.hljs-title.class_.inherited__,
+.hljs-title.function_ {
+  /* prettylights-syntax-entity */
+  color: #6f42c1;
+}
+
+.hljs-attr,
+.hljs-attribute,
+.hljs-literal,
+.hljs-meta,
+.hljs-number,
+.hljs-operator,
+.hljs-variable,
+.hljs-selector-attr,
+.hljs-selector-class,
+.hljs-selector-id {
+  /* prettylights-syntax-constant */
+  color: #005cc5;
+}
+
+.hljs-regexp,
+.hljs-string,
+.hljs-meta .hljs-string {
+  /* prettylights-syntax-string */
+  color: #032f62;
+}
+
+.hljs-built_in,
+.hljs-symbol {
+  /* prettylights-syntax-variable */
+  color: #e36209;
+}
+
+.hljs-comment,
+.hljs-code,
+.hljs-formula {
+  /* prettylights-syntax-comment */
+  color: #6a737d;
+}
+
+.hljs-name,
+.hljs-quote,
+.hljs-selector-tag,
+.hljs-selector-pseudo {
+  /* prettylights-syntax-entity-tag */
+  color: #22863a;
+}
+
+.hljs-subst {
+  /* prettylights-syntax-storage-modifier-import */
+  color: #24292e;
+}
+
+.hljs-section {
+  /* prettylights-syntax-markup-heading */
+  color: #005cc5;
+  font-weight: bold;
+}
+
+.hljs-bullet {
+  /* prettylights-syntax-markup-list */
+  color: #735c0f;
+}
+
+.hljs-emphasis {
+  /* prettylights-syntax-markup-italic */
+  color: #24292e;
+  font-style: italic;
+}
+
+.hljs-strong {
+  /* prettylights-syntax-markup-bold */
+  color: #24292e;
+  font-weight: bold;
+}
+
+.hljs-addition {
+  /* prettylights-syntax-markup-inserted */
+  color: #22863a;
+  background-color: #f0fff4;
+}
+
+.hljs-deletion {
+  /* prettylights-syntax-markup-deleted */
+  color: #b31d28;
+  background-color: #ffeef0;
+}
+
+@media (prefers-color-scheme: dark) {
+  /*!
+    Theme: GitHub Dark
+    Description: Dark theme as seen on github.com
+    Author: github.com
+    Maintainer: @Hirse
+    Updated: 2021-05-15
+
+    Outdated base version: https://github.com/primer/github-syntax-dark
+    Current colors taken from GitHub's CSS
+  */
+
+  .hljs {
+    color: #c9d1d9;
+    background: #0d1117;
+  }
+
+  .hljs-doctag,
+  .hljs-keyword,
+  .hljs-meta .hljs-keyword,
+  .hljs-template-tag,
+  .hljs-template-variable,
+  .hljs-type,
+  .hljs-variable.language_ {
+    /* prettylights-syntax-keyword */
+    color: #ff7b72;
+  }
+
+  .hljs-title,
+  .hljs-title.class_,
+  .hljs-title.class_.inherited__,
+  .hljs-title.function_ {
+    /* prettylights-syntax-entity */
+    color: #d2a8ff;
+  }
+
+  .hljs-attr,
+  .hljs-attribute,
+  .hljs-literal,
+  .hljs-meta,
+  .hljs-number,
+  .hljs-operator,
+  .hljs-variable,
+  .hljs-selector-attr,
+  .hljs-selector-class,
+  .hljs-selector-id {
+    /* prettylights-syntax-constant */
+    color: #79c0ff;
+  }
+
+  .hljs-regexp,
+  .hljs-string,
+  .hljs-meta .hljs-string {
+    /* prettylights-syntax-string */
+    color: #a5d6ff;
+  }
+
+  .hljs-built_in,
+  .hljs-symbol {
+    /* prettylights-syntax-variable */
+    color: #ffa657;
+  }
+
+  .hljs-comment,
+  .hljs-code,
+  .hljs-formula {
+    /* prettylights-syntax-comment */
+    color: #8b949e;
+  }
+
+  .hljs-name,
+  .hljs-quote,
+  .hljs-selector-tag,
+  .hljs-selector-pseudo {
+    /* prettylights-syntax-entity-tag */
+    color: #7ee787;
+  }
+
+  .hljs-subst {
+    /* prettylights-syntax-storage-modifier-import */
+    color: #c9d1d9;
+  }
+
+  .hljs-section {
+    /* prettylights-syntax-markup-heading */
+    color: #1f6feb;
+    font-weight: bold;
+  }
+
+  .hljs-bullet {
+    /* prettylights-syntax-markup-list */
+    color: #f2cc60;
+  }
+
+  .hljs-emphasis {
+    /* prettylights-syntax-markup-italic */
+    color: #c9d1d9;
+    font-style: italic;
+  }
+
+  .hljs-strong {
+    /* prettylights-syntax-markup-bold */
+    color: #c9d1d9;
+    font-weight: bold;
+  }
+
+  .hljs-addition {
+    /* prettylights-syntax-markup-inserted */
+    color: #aff5b4;
+    background-color: #033a16;
+  }
+
+  .hljs-deletion {
+    /* prettylights-syntax-markup-deleted */
+    color: #ffdcd7;
+    background-color: #67060c;
+  }
+}
+    </style>
+  </head>
+
+  <body>
+      <div class="post">
+    <nav>
+      <a href="/">Jason Liang</a>
+    </nav>
+
+    <time class="dim" datetime="2023-09-13">September 13, 2023</time>
+    <h1>WordPress For Non-WordPress Developers</h1>
+    <article>
+      <p>Learning WordPress development today can be really overwhelming. It's a
 project with lots of history, and has been around for over 20 years now.
-There&rsquo;s tons of resources online to learn how to develop for WordPress, but
-it&rsquo;s hard to get a sense of direction with the crazy amounts of content that
+There's tons of resources online to learn how to develop for WordPress, but
+it's hard to get a sense of direction with the crazy amounts of content that
 exist for this software.</p>
-
 <p>This article exists to help understand the WordPress ecosystem from the
 perspective of someone who already knows web development with HTML, CSS,
 JavaScript, etc. This is less of a WordPress development tutorial, and more
 like a roadmap, where I point out the many different things that exist within
 WordPress so that you can start to figure out how to create content for the
-<a href="https://w3techs.com/technologies/overview/content_management" target="_blank">world&rsquo;s most popular</a>
+<a href="https://w3techs.com/technologies/overview/content_management">world's most popular</a>
 website builder.</p>
-
 <ul>
 <li><a href="#wordpress-com-vs-wordpress-org">WordPress.com vs WordPress.org</a></li>
 <li><a href="#installing-wordpress">Installing WordPress</a></li>
@@ -97,95 +438,75 @@ website builder.</p>
 <li><a href="#custom-fields">Custom Fields</a></li>
 <li><a href="#headless-wordpress">Headless WordPress</a></li>
 </ul>
-
-<h2 id="wordpress-com-vs-wordpress-org">WordPress.com vs WordPress.org</h2>
-
-<p>If you didn&rsquo;t already know, WordPress.com and WordPress.org aims to do two
+<h2>WordPress.com vs WordPress.org</h2>
+<p>If you didn't already know, WordPress.com and WordPress.org aims to do two
 different things. WordPress.com lives in the same space as Squarespace, Wix,
 and Webflow. They offer website hosting and ways to build your website
 quickly from a selection of pre-built templates. Users edit their websites
 visually by dragging and dropping elements.</p>
-
 <p>WordPress.org gives you the WordPress software, which is can be ran on a
-server host, or locally on a desktop machine. If you&rsquo;re reading this article,
+server host, or locally on a desktop machine. If you're reading this article,
 this is what you should be looking at. WordPress is licensed under the GPL,
-meaning it&rsquo;s free (as in both beer and freedom), open source software.</p>
-
-<h2 id="installing-wordpress">Installing WordPress</h2>
-
+meaning it's free (as in both beer and freedom), open source software.</p>
+<h2>Installing WordPress</h2>
 <p>Many guides, especially YouTube tutorials, start off by having you purchase
-website hosting. Don&rsquo;t do this! Well, not at first. When you&rsquo;re just starting
+website hosting. Don't do this! Well, not at first. When you're just starting
 off with WordPress, you can use a local server to run the software on your
 own computer. Here are some examples of local server programs:</p>
-
 <ul>
-<li><a href="https://localwp.com/" target="_blank">Local</a></li>
-<li><a href="https://laragon.org/" target="_blank">Laragon</a></li>
-<li><a href="https://www.apachefriends.org/" target="_blank">XAMPP</a></li>
-<li><a href="https://hub.docker.com/_/wordpress" target="_blank">Docker</a></li>
+<li><a href="https://localwp.com/">Local</a></li>
+<li><a href="https://laragon.org/">Laragon</a></li>
+<li><a href="https://www.apachefriends.org/">XAMPP</a></li>
+<li><a href="https://hub.docker.com/_/wordpress">Docker</a></li>
 </ul>
-
 <p>Local, XAMPP, and Docker are available on Windows, macOS, and Linux. Laragon
 is only built for Windows.</p>
-
-<p>There also exists <a href="https://instawp.com/" target="_blank">InstaWP</a>, which is a service lets you
+<p>There also exists <a href="https://instawp.com/">InstaWP</a>, which is a service lets you
 create temporary WordPress websites in the browser. They offer a free plan
 that gives you up to 3 WordPress websites at a time.</p>
-
-<h2 id="page-builders">Page Builders</h2>
-
+<h2>Page Builders</h2>
 <p>Page builders are WordPress plugins that let you build webpages by dragging
-and dropping blocks, sections, and text. You&rsquo;ll probably want to spend some
+and dropping blocks, sections, and text. You'll probably want to spend some
 time learning at least one page builder, just to understand how people create
 websites without ever opening a text editor.</p>
-
-<p>The most popular page builder by far is <a href="https://elementor.com/" target="_blank">Elementor</a>.
-It&rsquo;s free, there&rsquo;s lots of <a href="https://elementor.com/academy/get-started/" target="_blank">resources</a>
-for using Elementor, and it&rsquo;s a very mature tool.</p>
-
+<p>The most popular page builder by far is <a href="https://elementor.com/">Elementor</a>.
+It's free, there's lots of <a href="https://elementor.com/academy/get-started/">resources</a>
+for using Elementor, and it's a very mature tool.</p>
 <p><img src="/public/wordpress/elementor.png" alt="Elementor editor" /></p>
-
-<p>Of course, other page builders exist. Here&rsquo;s a few examples:</p>
-
+<p>Of course, other page builders exist. Here's a few examples:</p>
 <ul>
-<li><a href="https://bricksbuilder.io/" target="_blank">Bricks</a>: For advanced developers. Not shy to
+<li><a href="https://bricksbuilder.io/">Bricks</a>: For advanced developers. Not shy to
 expose HTML elements and CSS attributes.</li>
-<li><a href="https://oxygenbuilder.com/" target="_blank">Oxygen</a>: Aimed for advanced users just like
+<li><a href="https://oxygenbuilder.com/">Oxygen</a>: Aimed for advanced users just like
 Bricks, but more mature.</li>
-<li><a href="https://breakdance.com/" target="_blank">Breakdance</a>: Made by the same team behind Oxygen.
+<li><a href="https://breakdance.com/">Breakdance</a>: Made by the same team behind Oxygen.
 Simpler to use.</li>
-<li><a href="https://www.wpbeaverbuilder.com/" target="_blank">Beaver Builder</a>: Similar to Elementor.
+<li><a href="https://www.wpbeaverbuilder.com/">Beaver Builder</a>: Similar to Elementor.
 Less popular, but better performance.</li>
-<li><a href="https://www.elegantthemes.com/gallery/divi/" target="_blank">Divi</a>: Marketed towards
-clients/designers that aren&rsquo;t as tech savvy as programmers.</li>
-<li><a href="https://wpbakery.com/" target="_blank">WPBakery</a>: A page builder that&rsquo;s been around for a
+<li><a href="https://www.elegantthemes.com/gallery/divi/">Divi</a>: Marketed towards
+clients/designers that aren't as tech savvy as programmers.</li>
+<li><a href="https://wpbakery.com/">WPBakery</a>: A page builder that's been around for a
 long time.</li>
 </ul>
-
-<h2 id="the-block-editor">The Block Editor</h2>
-
+<h2>The Block Editor</h2>
 <p>WordPress version 5.0 introduced the block editor, aka
-<a href="https://wordpress.org/gutenberg/" target="_blank">Gutenberg</a>.
+<a href="https://wordpress.org/gutenberg/">Gutenberg</a>.
 Like Elementor, Gutenberg users drag and drop blocks to edit their webpages.
 The block editor generally performs better compared to Elementor. The editing
 experience is faster, and it typically produces less DOM elements on the
 front-end.</p>
-
 <p><img src="/public/wordpress/gutenberg.png" alt="Gutenberg UI" /></p>
-
 <p>At the time of writing this article, WordPress is heading in a direction that
 sees the block editor combined with Full Site Editing (FSE), where templates
 and blocks are shared across different parts of the website, not just
 restricted to pages. Themes that take advantage of FSE include
-<a href="https://olliewp.com/" target="_blank">Ollie</a>, <a href="https://frostwp.com/" target="_blank">Frost</a>, and the default
+<a href="https://olliewp.com/">Ollie</a>, <a href="https://frostwp.com/">Frost</a>, and the default
 theme that comes with WordPress, Twenty Twenty-Three.</p>
-
 <p>Block plugins adds extra blocks to Gutenberg. Some of them add multiple blocks
 that page builders usually have out of the box such as flexbox containers and
-grids sections. When installing some popular themes, you&rsquo;ll might find that
+grids sections. When installing some popular themes, you'll might find that
 the theme promotes a block plugin that works well with the theme. Here are a
 few block theme/plugin parings:</p>
-
 <table>
 <thead>
 <tr>
@@ -194,26 +515,22 @@ few block theme/plugin parings:</p>
 <th>Description</th>
 </tr>
 </thead>
-
 <tbody>
 <tr>
 <td>Astra</td>
 <td>Spectra</td>
 <td>Very popular. Large collection of blocks and promotes a selection of starter templates.</td>
 </tr>
-
 <tr>
 <td>Kadence</td>
 <td>Kadence Blocks</td>
 <td>Similar to Astra + Spectra. Performs a little better on the front-end.</td>
 </tr>
-
 <tr>
 <td>Blocksy</td>
 <td>Stackable</td>
 <td>Richer editing experience at the cost of performance.</td>
 </tr>
-
 <tr>
 <td>GeneratePress</td>
 <td>GenerateBlocks</td>
@@ -221,15 +538,12 @@ few block theme/plugin parings:</p>
 </tr>
 </tbody>
 </table>
-<p>You can also author their own blocks with JavaScript and React. I&rsquo;ll explain
+<p>You can also author their own blocks with JavaScript and React. I'll explain
 how to create your own Gutenberg blocks <a href="#block-development">later</a> in the
 article.</p>
-
-<h2 id="plugins">Plugins</h2>
-
+<h2>Plugins</h2>
 <p>WordPress has lots and lots of plugins to extend and modify the behavior of
 your website. Here are some examples:</p>
-
 <table>
 <thead>
 <tr>
@@ -237,58 +551,47 @@ your website. Here are some examples:</p>
 <th>Examples</th>
 </tr>
 </thead>
-
 <tbody>
 <tr>
 <td>Analytics</td>
 <td>Koko Analytics, Site Kit by Google, MonsterInsights</td>
 </tr>
-
 <tr>
 <td>Backup/Migration</td>
 <td>UpDraft, All in One WP Migration, Duplicator, WPVivid, WP Migrate</td>
 </tr>
-
 <tr>
 <td>Content Types</td>
 <td>ACF, Meta Box, Pods, Custom Post Type UI, TaxoPress, Carbon Fields</td>
 </tr>
-
 <tr>
 <td>Forms</td>
 <td>WPForms, Forminator, Gravity Forms, Contact Form 7</td>
 </tr>
-
 <tr>
 <td>Image Optimization</td>
 <td>Smush, EWWW, Imagify, WebP Express</td>
 </tr>
-
 <tr>
 <td>Multilingual</td>
 <td>Polylang, Weglot, WPML</td>
 </tr>
-
 <tr>
 <td>Performance</td>
 <td>WP Super Cache, Autoptimize, WP Rocket, Perfmatters, W3 Total Cache, LiteSpeed Cache, Ngnix Helper, Redis Object Cache</td>
 </tr>
-
 <tr>
 <td>SEO</td>
 <td>The SEO Framework, Yoast SEO, Rank Math, All in One SEO</td>
 </tr>
-
 <tr>
 <td>SMTP</td>
 <td>WP Mail SMTP, FluentSMTP, MailPoet</td>
 </tr>
-
 <tr>
 <td>Security</td>
 <td>WordFence, iThemes Security, All In One WP Security</td>
 </tr>
-
 <tr>
 <td>Others</td>
 <td>FileBird, WPCode, Jetpack, WooCommerce</td>
@@ -298,100 +601,74 @@ your website. Here are some examples:</p>
 <p>Plugins are really cool, but too many plugins can slow down a site and can
 increase the likelihood of a security vulnerability. If you find yourself
 struggling with bloat, here are some ways you can reduce the use of plugins:</p>
-
 <ul>
 <li>A crude backup method is to make a copy of the WordPress directory and run
 <code>mysqldump</code> on the database.</li>
 <li>If you have control over images, process them before uploading to the
 website with Photoshop or GIMP.</li>
-<li>Depending on your hosting solution, use fail2ban, Cloudflare&rsquo;s firewall, and
+<li>Depending on your hosting solution, use fail2ban, Cloudflare's firewall, and
 web server configuration (<code>.htaccess</code>, <code>nginx.conf</code>) to secure your
 website.</li>
 <li>If your block/widget plugin includes form components, you might not need a
 form plugin.</li>
 </ul>
-
-<h2 id="additional-css">Additional CSS</h2>
-
+<h2>Additional CSS</h2>
 <p>After getting familiar with page builders, the block editor, common plugins,
-and themes, it&rsquo;s time to finally start coding for WordPress.</p>
-
-<p>Adding CSS to your website is pretty simple. If you&rsquo;re using any of the themes
-listed above (GeneratePress, Astra, Kadence), or any other theme that doesn&rsquo;t
-use the FSE features (Hello Elementor), then it&rsquo;s likely that you have the
+and themes, it's time to finally start coding for WordPress.</p>
+<p>Adding CSS to your website is pretty simple. If you're using any of the themes
+listed above (GeneratePress, Astra, Kadence), or any other theme that doesn't
+use the FSE features (Hello Elementor), then it's likely that you have the
 option to add Custom CSS in the Customizer. You can find the Customizer by
 going to Appearance &gt; Customize in the admin dashboard.</p>
-
 <p><img src="/public/wordpress/customizer.png" alt="Link to customizer" /></p>
-
 <p>From there, find the Additional CSS section. You should be presented with a
 text area to insert your own CSS code.</p>
-
 <p><img src="/public/wordpress/additional-css.png" alt="Additional CSS section" /></p>
-
 <p>Use this area to augment an already existing website built with visual WYSIWYG
-editors. It&rsquo;s not suitable to style an entire website in this section. For
+editors. It's not suitable to style an entire website in this section. For
 that, you might want to look at making your own <a href="#making-your-own-theme">theme</a>.</p>
-
-<p>If you&rsquo;re using FSE, you&rsquo;ll find Additional CSS hiding under the Styles
+<p>If you're using FSE, you'll find Additional CSS hiding under the Styles
 section in the block editor.</p>
-
 <p><img src="/public/wordpress/fce-css.png" alt="Block editor Additional CSS" /></p>
-
-<h2 id="your-first-plugin">Your First Plugin</h2>
-
-<p>Navigate to your site&rsquo;s plugin folder. It should be located under
+<h2>Your First Plugin</h2>
+<p>Navigate to your site's plugin folder. It should be located under
 <code>wp-content/plugins</code> from the root of the WordPress installation. Create a
 folder called <code>my-plugin</code>, and then inside the new folder, create a file
 called <code>my-plugin.php</code>. WordPress expects plugin metadata in a form of a
 comment at the top of the PHP file:</p>
-
 <pre><code class="language-php-template">&lt;?php
 /**
  * Plugin Name: My Plugin
  * Version: 0.1.0
  * Text Domain: my-plugin
- */
-</code></pre>
-
-<p>Save the file. You should be able to see &ldquo;My Plugin&rdquo; in the Plugins screen.
+ */</code></pre>
+<p>Save the file. You should be able to see "My Plugin" in the Plugins screen.
 Activate it.</p>
-
 <p><img src="/public/wordpress/my-plugin.png" alt="Plugin list" /></p>
-
-<p>Let&rsquo;s disable the block editor.</p>
-
+<p>Let's disable the block editor.</p>
 <pre><code class="language-php">add_filter( 'use_block_editor_for_post', 'my_plugin_use_block_editor' );
 function my_plugin_use_block_editor() {
   return false;
-}
-</code></pre>
-
+}</code></pre>
 <p>Changing how WordPress behaves is done through hooks. Hooks come in two
 flavors: filters and actions. Filters usually go through a callback function
 that returns a value, while actions typically perform some side effect.</p>
-
 <p>Whenever WordPress checks if a post type can use the block editor, it uses the
 <code>use_block_editor_for_post</code> filter to run the <code>my_plugin_use_block_editor</code>
-callback function. Since it always returns <code>false</code>, we&rsquo;ve effectively
-disabled Gutenberg. Edit any page and you&rsquo;ll find that Gutenberg has been
+callback function. Since it always returns <code>false</code>, we've effectively
+disabled Gutenberg. Edit any page and you'll find that Gutenberg has been
 replaced by the classic editor.</p>
-
 <p>Turns out that WordPress provides developers a function that
-<a href="https://developer.wordpress.org/reference/functions/__return_false/" target="_blank">always returns <code>false</code></a>,
-so we&rsquo;ll use that instead:</p>
-
-<pre><code class="language-php">add_filter( 'use_block_editor_for_post', '__return_false' );
-</code></pre>
-
-<p>To demonstrate action hooks, we&rsquo;ll add Google Analytics to the website:</p>
-
+<a href="https://developer.wordpress.org/reference/functions/__return_false/">always returns <code>false</code></a>,
+so we'll use that instead:</p>
+<pre><code class="language-php">add_filter( 'use_block_editor_for_post', '__return_false' );</code></pre>
+<p>To demonstrate action hooks, we'll add Google Analytics to the website:</p>
 <pre><code class="language-php-template">&lt;?php
 
 add_action( 'wp_head', 'my_plugin_add_google_analytics' );
 function my_plugin_add_google_analytics() {
   ?&gt;
-  &lt;script async src=&quot;https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX&quot;&gt;&lt;/script&gt;
+  &lt;script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"&gt;&lt;/script&gt;
   &lt;script&gt;
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
@@ -399,21 +676,15 @@ function my_plugin_add_google_analytics() {
     gtag('config', 'G-XXXXXXXXXX');
   &lt;/script&gt;
   &lt;?php
-}
-</code></pre>
-
+}</code></pre>
 <p>Whenever WordPress renders the front-end of the website, it will go through
 several different hooks, one of them being <code>wp_head</code>. In this example, the
 action performs a side effect, printing out the script tags into the
-website&rsquo;s <code>&lt;head&gt;</code> tag.</p>
-
-<p>The <a href="https://developer.wordpress.org/plugins/" target="_blank">Plugin Handbook</a> goes over
+website's <code>&lt;head&gt;</code> tag.</p>
+<p>The <a href="https://developer.wordpress.org/plugins/">Plugin Handbook</a> goes over
 plugin development in detail.</p>
-
-<h2 id="elementor-widget-development">Elementor Widget Development</h2>
-
+<h2>Elementor Widget Development</h2>
 <p>Below is a custom Elementor widget which displays an anchor tag.</p>
-
 <pre><code class="language-php-template">&lt;?php
 class My_Link_Widget extends \Elementor\Widget_Base {
   public function get_name() {
@@ -447,137 +718,102 @@ class My_Link_Widget extends \Elementor\Widget_Base {
     &lt;/a&gt;
     &lt;?php
   }
-}
-</code></pre>
-
+}</code></pre>
 <p>Save the contents to <code>widgets/my-link-widget.php</code>. Inside <code>my-plugin.php</code>, you
 can register the widget by using the <code>elementor/widgets/register</code> action:</p>
-
 <pre><code class="language-php">add_action( 'elementor/widgets/register', 'my_plugin_register_new_widgets' );
 function my_plugin_register_new_widgets( $widgets_manager ) {
   require_once( __DIR__ . '/widgets/my-link-widget.php' );
   $widgets_manager-&gt;register( new My_Link_Widget() );
-}
-</code></pre>
-
-<p>Go ahead and edit a page with Elementor. You should be able to find &ldquo;My Link
-Widget&rdquo; in the Elements section. Drag and drop it somewhere in the page and
-you&rsquo;ll see a link that says &ldquo;This is some text&rdquo;.</p>
-
+}</code></pre>
+<p>Go ahead and edit a page with Elementor. You should be able to find "My Link
+Widget" in the Elements section. Drag and drop it somewhere in the page and
+you'll see a link that says "This is some text".</p>
 <p><img src="/public/wordpress/my-link-widget.png" alt="Elementor My Link Widget" /></p>
-
 <p>Learn more about Elementor development by visiting the
-<a href="https://developers.elementor.com/docs/" target="_blank">Elementor Developer Docs</a>.</p>
-
-<h2 id="internationalization">Internationalization</h2>
-
+<a href="https://developers.elementor.com/docs/">Elementor Developer Docs</a>.</p>
+<h2>Internationalization</h2>
 <p>You might be wondering about the <code>__</code> and <code>esc_html_e</code> functions used in the
 Elementor widget. These are escaping and internationalization (i18n) functions
 provided by WordPress. Whenever you write English text in code, wrap the text
 using one of the i18n functions to support multiple languages.</p>
-
 <p><code>__( $text, $domain = 'default' )</code> is the most basic i18n function. It returns
 the translated form for <code>$text</code>. Translators would use a tool such as
-<a href="https://poedit.net/" target="_blank">Poedit</a> to convert the English <code>$text</code> into another
-language. Even though the <code>$domain</code> parameter is optional, you&rsquo;ll want to
-always provide your plugin&rsquo;s text domain, which is determined by the header
+<a href="https://poedit.net/">Poedit</a> to convert the English <code>$text</code> into another
+language. Even though the <code>$domain</code> parameter is optional, you'll want to
+always provide your plugin's text domain, which is determined by the header
 comment in <code>my-plugin.php</code>.</p>
-
 <p><code>esc_html_e( $text, $domain = 'default' )</code> is a combination of <code>echo</code>,
 <code>esc_html</code>, and <code>__</code>. <code>echo</code> outputs a string and <code>esc_html</code> removes any
 special HTML characters.</p>
-
 <pre><code class="language-php">esc_html_e( 'Submit Form', 'my-plugin' );
 // and
 echo esc_html( __( 'Submit Form', 'my-plugin' ) );
-// are the same
-</code></pre>
-
+// are the same</code></pre>
 <p>You can support multiple languages outside of plugins and themes by using
-<a href="https://polylang.pro/" target="_blank">Polylang</a>,
-<a href="https://wpml.org/" target="_blank">WPML</a>, or
-<a href="https://www.weglot.com/integrations/wordpress-translation-plugin" target="_blank">Weglot</a>.
+<a href="https://polylang.pro/">Polylang</a>,
+<a href="https://wpml.org/">WPML</a>, or
+<a href="https://www.weglot.com/integrations/wordpress-translation-plugin">Weglot</a>.
 These solutions let you translate posts, pages, taxonomies, etc. Read the
 WordPress handbook for more info on
-<a href="https://developer.wordpress.org/apis/security/escaping/" target="_blank">escaping data</a> and
-<a href="https://developer.wordpress.org/apis/internationalization/" target="_blank">internationalization</a>.</p>
-
-<h2 id="pluralization">Pluralization</h2>
-
-<p>Pluralization is done through the function, <code>_n( $single, $plural, $number,
-$domain = 'default' )</code>. It takes the single/plural forms as strings, a
+<a href="https://developer.wordpress.org/apis/security/escaping/">escaping data</a> and
+<a href="https://developer.wordpress.org/apis/internationalization/">internationalization</a>.</p>
+<h2>Pluralization</h2>
+<p>Pluralization is done through the function, <code>_n( $single, $plural, $number, $domain = 'default' )</code>. It takes the single/plural forms as strings, a
 number, and a text domain. It returns either the single or plural form
 depending on the number given.</p>
-
-<pre><code class="language-php">$str = _n( 'Added %d review.', 'Added %d reviews.', $review_count, 'my-plugin' );
-</code></pre>
-
+<pre><code class="language-php">$str = _n( 'Added %d review.', 'Added %d reviews.', $review_count, 'my-plugin' );</code></pre>
 <p>The <code>_n</code> function is not suitable for displaying one or many items. Languages
 like Russian use the singular form when <code>$review_count</code> is 1, 21, 31, etc. If
 you want to specifically handle one item, add a branch.</p>
-
 <pre><code class="language-php">if ( 1 === $review_count ) {
   $str = __( 'Review added.', 'my-plugin' );
 } else {
   // translators: %d review count number.
   $str = _n( 'Added %d review.', 'Added %d reviews.', $review_count, 'my-plugin' );
-}
-</code></pre>
-
-<h2 id="block-development">Block Development</h2>
-
+}</code></pre>
+<h2>Block Development</h2>
 <p>Call <code>register_block_type</code> during the <code>init</code> action to add your own custom
 blocks.</p>
-
 <pre><code class="language-php">add_action( 'init', 'my_plugin_register_blocks' );
 function my_plugin_register_blocks() {
   register_block_type( __DIR__ . '/build/hello-block' );
-}
-</code></pre>
-
-<p>You&rsquo;ll need Node.js to create blocks. Install <code>@wordpress/scripts</code> as a
+}</code></pre>
+<p>You'll need Node.js to create blocks. Install <code>@wordpress/scripts</code> as a
 development dependency:</p>
-
-<pre><code class="language-plaintext">npm install @wordpress/scripts --save-dev
-</code></pre>
-
-<p>The <a href="https://developer.wordpress.org/block-editor/getting-started/create-block/" target="_blank">Block Editor Handbook</a>
+<pre><code class="language-plaintext">npm install @wordpress/scripts --save-dev</code></pre>
+<p>The <a href="https://developer.wordpress.org/block-editor/getting-started/create-block/">Block Editor Handbook</a>
 uses the <code>@wordpress/create-block</code> package to create the necessary files for a
-block, but I&rsquo;ll demonstrate how to create a block without it.</p>
-
-<p>From the root of your plugin&rsquo;s directory, create a <code>src</code> directory, and
+block, but I'll demonstrate how to create a block without it.</p>
+<p>From the root of your plugin's directory, create a <code>src</code> directory, and
 navigate to it. Create another directory called <code>hello-block</code>. Inside
 <code>hello-block</code>, make a new file called <code>block.json</code>.</p>
-
 <pre><code class="language-json">{
-  &quot;$schema&quot;: &quot;https://schemas.wp.org/trunk/block.json&quot;,
-  &quot;apiVersion&quot;: 3,
-  &quot;name&quot;: &quot;my-plugin/hello-block-editor&quot;,
-  &quot;version&quot;: &quot;0.1.0&quot;,
-  &quot;title&quot;: &quot;Hello Block Editor&quot;,
-  &quot;attributes&quot;: {
-    &quot;message&quot;: {
-      &quot;type&quot;: &quot;string&quot;,
-      &quot;source&quot;: &quot;text&quot;,
-      &quot;selector&quot;: &quot;h2&quot;
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "my-plugin/hello-block-editor",
+  "version": "0.1.0",
+  "title": "Hello Block Editor",
+  "attributes": {
+    "message": {
+      "type": "string",
+      "source": "text",
+      "selector": "h2"
     },
-    &quot;title&quot;: {
-      &quot;type&quot;: &quot;string&quot;,
-      &quot;source&quot;: &quot;attribute&quot;,
-      &quot;selector&quot;: &quot;h2&quot;,
-      &quot;attribute&quot;: &quot;title&quot;
+    "title": {
+      "type": "string",
+      "source": "attribute",
+      "selector": "h2",
+      "attribute": "title"
     }
   },
-  &quot;editorScript&quot;: &quot;file:./index.js&quot;
-}
-</code></pre>
-
+  "editorScript": "file:./index.js"
+}</code></pre>
 <p>When we build the block, new files will be created in <code>build/hello-block</code>. The
 directory will contain a <code>block.json</code> file, which is a copy of the
 <code>block.json</code> that we created, and an <code>index.js</code>, which will be built from our
 <code>index.jsx</code> file. Next to <code>block.json</code>, create <code>index.jsx</code> with the following
 content:</p>
-
 <pre><code class="language-jsx">import { registerBlockType } from '@wordpress/blocks';
 import { __ } from '@wordpress/i18n';
 import { PanelBody, TextControl } from '@wordpress/components';
@@ -608,7 +844,7 @@ function Edit( { attributes, setAttributes } ) {
         &lt;/PanelBody&gt;
       &lt;/InspectorControls&gt;
       &lt;RichText
-        tagName=&quot;h2&quot;
+        tagName="h2"
         placeholder={ __( 'Your text here', 'my-plugin' ) }
         title={ attributes.title }
         value={ attributes.message }
@@ -624,107 +860,81 @@ function Edit( { attributes, setAttributes } ) {
 function save( { attributes } ) {
   return (
     &lt;RichText.Content
-      tagName=&quot;h2&quot;
+      tagName="h2"
       title={ attributes.title }
       value={ attributes.message }
       { ...useBlockProps.save() }
     /&gt;
   );
-}
-</code></pre>
-
+}</code></pre>
 <p><code>registerBlockType</code> creates a new block with the metadata inside <code>block.json</code>
-by using the block&rsquo;s name. <code>edit</code> is a function that&rsquo;s used whenever the user
+by using the block's name. <code>edit</code> is a function that's used whenever the user
 is interacting with the block in the editor. <code>save</code> is a function that runs
 whenever the user saves the page and stores the content in the database,
 producing plain HTML. Here is an example of what <code>save</code> can output:</p>
-
-<pre><code class="language-html">&lt;h2 title=&quot;Some title text&quot;&gt;Some Text&lt;/h2&gt;
-</code></pre>
-
-<p>The <code>RichText</code> component allows users to change the block&rsquo;s text within the
+<pre><code class="language-html">&lt;h2 title="Some title text"&gt;Some Text&lt;/h2&gt;</code></pre>
+<p>The <code>RichText</code> component allows users to change the block's text within the
 <code>h2</code> element itself. You can allow the user to change the title attribute in
 the style sidebar by using the <code>InspectorControls</code> component.</p>
-
 <p>Both edit and save functions should produce the same HTML markup. The
 difference between the two is that <code>edit</code> is interactive, where users can
-change the block&rsquo;s data on the fly by using the settings sidebar and toolbar,
+change the block's data on the fly by using the settings sidebar and toolbar,
 while <code>save</code> is used to display content on the front-end and cannot have side
 effects.</p>
-
 <p>The plugin folder should look something like this:</p>
-
 <pre><code class="language-plaintext">my-plugin.php
 package-lock.json
 package.json
 src
 └───hello-block-editor
         block.json
-        index.jsx
-</code></pre>
-
+        index.jsx</code></pre>
 <p>Go ahead and run <code>npx wp-scripts build</code> to populate the <code>build</code> directory. If
-you don&rsquo;t have access to the WordPress installation, you can create a zip
+you don't have access to the WordPress installation, you can create a zip
 file of the block plugin with <code>npx wp-scripts plugin-zip</code>, where you can then
 upload your plugin from the admin dashboard. Edit a page and insert
-the &ldquo;Hello Block Editor&rdquo; component onto the page.</p>
-
+the "Hello Block Editor" component onto the page.</p>
 <p><img src="/public/wordpress/hello-block.png" alt="Hello Block Editor" /></p>
-
-<h2 id="child-themes">Child Themes</h2>
-
+<h2>Child Themes</h2>
 <p>Child themes extend an existing (parent) theme, allowing you to add and change
-the theme without directly modifying the parent theme&rsquo;s source code. This is
-suitable for making larger changes to the website&rsquo;s style unlike the
+the theme without directly modifying the parent theme's source code. This is
+suitable for making larger changes to the website's style unlike the
 <a href="#additional-css">Additional CSS</a> section from earlier in the article. Much
 like plugins, WordPress expects a block comment containing metadata for your
 theme, only this time, the comment is located in a CSS file.</p>
-
 <pre><code class="language-css">/**
  * Theme Name: Kadence Child
  * Template: kadence
  * Text Domain: kadencechild
- */
-</code></pre>
-
+ */</code></pre>
 <p>You can save the file in <code>wp-content/themes/kadencechild/style.css</code>. Depending
 on the parent theme, you might need to let WordPress know that you want to
 use the <code>style.css</code> file in the front-end. Create a <code>functions.php</code> file next
 the CSS file and use the <code>wp_enqueue_scripts</code> action to add the style sheet.</p>
-
 <pre><code class="language-php-template">&lt;?php
 
 add_action( 'wp_enqueue_scripts', 'kadencechild_enqueue_styles' );
 function kadencechild_enqueue_styles() {
   wp_enqueue_style( 'kadencechild-style', get_stylesheet_uri(), array( 'kadence-content' ), '0.1.0' );
-}
-</code></pre>
-
-<h2 id="making-your-own-theme">Making Your Own Theme</h2>
-
-<p>When looking into theme development, you&rsquo;ll find that the term &ldquo;starter theme&rdquo;
+}</code></pre>
+<h2>Making Your Own Theme</h2>
+<p>When looking into theme development, you'll find that the term "starter theme"
 shows up time and time again. Starter themes are code templates that help you
 develop your own themes.</p>
-
-<p>A very popular starter theme is called <a href="https://underscores.me/" target="_blank">_s</a>, aka
+<p>A very popular starter theme is called <a href="https://underscores.me/">_s</a>, aka
 underscores. It contains minimal styling, suitable for starting a theme from
 scratch. However, _s is not actively maintained anymore. Another popular
-starter theme is <a href="https://roots.io/sage/" target="_blank">Sage</a>, which provides a more modern
+starter theme is <a href="https://roots.io/sage/">Sage</a>, which provides a more modern
 take on WordPress theme development by leveraging Tailwind CSS and Laravel
 Blade. While you could use a starter theme, I think that starting from ground
 zero is the best way to learn how WordPress themes work.</p>
-
 <p>Your theme can start its life with a <code>style.css</code> file:</p>
-
 <pre><code class="language-css">/**
  * Theme Name: Handmade
  * Version: 0.1.0
  * Text Domain: handmade
- */
-</code></pre>
-
-<p>&hellip;and an <code>index.php</code> file, that displays post content through <a href="https://developer.wordpress.org/themes/basics/the-loop/" target="_blank">The Loop</a>:</p>
-
+ */</code></pre>
+<p>...and an <code>index.php</code> file, that displays post content through <a href="https://developer.wordpress.org/themes/basics/the-loop/">The Loop</a>:</p>
 <pre><code class="language-php-template">&lt;?php get_header(); ?&gt;
 
 &lt;?php if ( have_posts() ) : ?&gt;
@@ -733,11 +943,11 @@ zero is the best way to learn how WordPress themes work.</p>
   &lt;?php while ( have_posts() ) : ?&gt;
     &lt;?php the_post(); ?&gt;
     &lt;div&gt;
-      &lt;time datetime=&quot;&lt;?php echo esc_attr( get_the_date( DATE_W3C ) ); ?&gt;&quot;&gt;
+      &lt;time datetime="&lt;?php echo esc_attr( get_the_date( DATE_W3C ) ); ?&gt;"&gt;
         &lt;?php the_date(); ?&gt;
       &lt;/time&gt;
       &lt;h3&gt;
-        &lt;a href=&quot;&lt;?php the_permalink(); ?&gt;&quot;&gt;&lt;?php the_title(); ?&gt;&lt;/a&gt;
+        &lt;a href="&lt;?php the_permalink(); ?&gt;"&gt;&lt;?php the_title(); ?&gt;&lt;/a&gt;
       &lt;/h3&gt;
       &lt;?php the_excerpt(); ?&gt;
     &lt;/div&gt;
@@ -745,20 +955,14 @@ zero is the best way to learn how WordPress themes work.</p>
 &lt;?php endif ?&gt;
 
 &lt;?php
-get_footer();
-</code></pre>
-
+get_footer();</code></pre>
 <p><img src="/public/wordpress/a-cool-website.png" alt="UI of index.php" /></p>
-
 <p>From here, you can refer to underscores to see what kind of files WordPress
 expects from a theme, and what kind of content goes into each file.</p>
-
-<h2 id="coding-standards">Coding Standards</h2>
-
+<h2>Coding Standards</h2>
 <p>When developing for WordPress, you should consider following the WordPress
-<a href="https://developer.wordpress.org/coding-standards/wordpress-coding-standards/" target="_blank">Coding Standards</a>.
+<a href="https://developer.wordpress.org/coding-standards/wordpress-coding-standards/">Coding Standards</a>.
 The rules include, but are not limited to:</p>
-
 <ul>
 <li>Tabs for indentation (boo!)</li>
 <li>Single quote instead of double quotes for strings</li>
@@ -770,54 +974,47 @@ The rules include, but are not limited to:</p>
 <li>Strings escaped with <code>esc_html</code>, <code>esc_attr</code>, etc</li>
 <li>No direct database access</li>
 </ul>
-
 <p>To check your PHP code, install the WordPress standards for
-<a href="https://github.com/WordPress/WordPress-Coding-Standards" target="_blank">PHP_CodeSniffer</a>.
+<a href="https://github.com/WordPress/WordPress-Coding-Standards">PHP_CodeSniffer</a>.
 After installing PHP_CodeSniffer and the WordPress rules, run <code>phpcs</code> in your
-project&rsquo;s directory to check for errors, and run <code>phpcbf</code> to fix them. You&rsquo;ll
+project's directory to check for errors, and run <code>phpcbf</code> to fix them. You'll
 want a <code>phpcs.xml.dist</code> file in the root of your project for those commands
 to work:</p>
-
-<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot;?&gt;
-&lt;ruleset name=&quot;WordPress Standard&quot;&gt;
-  &lt;arg value=&quot;ps&quot;/&gt;
-  &lt;arg name=&quot;basepath&quot; value=&quot;./&quot;/&gt;
-  &lt;arg name=&quot;parallel&quot; value=&quot;8&quot;/&gt;
-  &lt;arg name=&quot;extensions&quot; value=&quot;php&quot;/&gt;
+<pre><code class="language-xml">&lt;?xml version="1.0"?&gt;
+&lt;ruleset name="WordPress Standard"&gt;
+  &lt;arg value="ps"/&gt;
+  &lt;arg name="basepath" value="./"/&gt;
+  &lt;arg name="parallel" value="8"/&gt;
+  &lt;arg name="extensions" value="php"/&gt;
   &lt;file&gt;.&lt;/file&gt;
   &lt;exclude-pattern&gt;/vendor/*&lt;/exclude-pattern&gt;
   &lt;exclude-pattern&gt;/node_modules/*&lt;/exclude-pattern&gt;
   &lt;exclude-pattern&gt;/build/*&lt;/exclude-pattern&gt;
 
-  &lt;rule ref=&quot;WordPress&quot;/&gt;
+  &lt;rule ref="WordPress"/&gt;
 
-  &lt;rule ref=&quot;WordPress.WP.I18n&quot;&gt;
+  &lt;rule ref="WordPress.WP.I18n"&gt;
     &lt;properties&gt;
-      &lt;property name=&quot;text_domain&quot; type=&quot;array&quot; value=&quot;my-text-domain&quot;/&gt;
+      &lt;property name="text_domain" type="array" value="my-text-domain"/&gt;
     &lt;/properties&gt;
   &lt;/rule&gt;
 
-  &lt;config name=&quot;minimum_supported_wp_version&quot; value=&quot;6.3&quot;/&gt;
+  &lt;config name="minimum_supported_wp_version" value="6.3"/&gt;
 
-  &lt;rule ref=&quot;WordPress.NamingConventions.PrefixAllGlobals&quot;&gt;
+  &lt;rule ref="WordPress.NamingConventions.PrefixAllGlobals"&gt;
     &lt;properties&gt;
-      &lt;property name=&quot;prefixes&quot; type=&quot;array&quot; value=&quot;my-text-domain&quot;/&gt;
+      &lt;property name="prefixes" type="array" value="my-text-domain"/&gt;
     &lt;/properties&gt;
   &lt;/rule&gt;
-&lt;/ruleset&gt;
-</code></pre>
-
+&lt;/ruleset&gt;</code></pre>
 <p>To check CSS and JavaScript code, you can use <code>wp-scripts lint-style</code> and
 <code>wp-scripts lint-js</code>. To fix CSS and JavaScript linting errors, run
 <code>wp-scripts format</code>.</p>
-
-<h2 id="custom-post-types">Custom Post Types</h2>
-
+<h2>Custom Post Types</h2>
 <p>Going beyond blogs and brochure websites is when WordPress becomes really
 powerful. You can use custom post types to group and reuse related content,
 such as services, local events, courses, webinars, recipes, construction
 projects, conference talks, staff members, etc.</p>
-
 <pre><code class="language-php">add_action( 'init', 'my_theme_add_post_types' );
 function my_theme_add_post_types() {
   register_post_type(
@@ -832,52 +1029,41 @@ function my_theme_add_post_types() {
       ),
     )
   );
-}
-</code></pre>
-
+}</code></pre>
 <p>Once you have a new custom post type, use <code>WP_Query</code> to display the contents
 on the front-end:</p>
-
 <pre><code class="language-php-template">&lt;?php
 $loop = new WP_Query( array( 'post_type' =&gt; 'events' ) );
 while ( $loop-&gt;have_posts() ) :
   $loop-&gt;the_post();
   ?&gt;
-  &lt;div class=&quot;event&quot;&gt;
+  &lt;div class="event"&gt;
     &lt;?php the_post_thumbnail( 'post-thumbnail' ); ?&gt;
-    &lt;h3 class=&quot;event__title&quot;&gt;&lt;?php the_title(); ?&gt;&lt;/h3&gt;
-    &lt;div class=&quot;event__content&quot;&gt;
+    &lt;h3 class="event__title"&gt;&lt;?php the_title(); ?&gt;&lt;/h3&gt;
+    &lt;div class="event__content"&gt;
       &lt;?php the_content(); ?&gt;
     &lt;/div&gt;
   &lt;/div&gt;
-&lt;?php endwhile ?&gt;
-</code></pre>
-
+&lt;?php endwhile ?&gt;</code></pre>
 <p>For a no-code approach, you can make use of plugins like ACF or Custom Post
 Type UI to create new post types and taxonomies (tags/categories) from the
 admin dashboard. Page builders and the block editor gives you the ability to
 display custom post types and taxonomies.</p>
-
 <p><img src="/public/wordpress/events.png" alt="Block editor showing list of events" /></p>
-
-<h2 id="custom-fields">Custom Fields</h2>
-
+<h2>Custom Fields</h2>
 <p>Posts typically have a title, author, thumbnail (featured image), and content
 that you can edit through the classic/block editor. With custom fields, you
 can attach any arbitrary data to a post.</p>
-
-<p>WordPress natively supports custom fields, but it&rsquo;s only in the form of plain
-text. When people talk about custom fields in WordPress, they&rsquo;re using
+<p>WordPress natively supports custom fields, but it's only in the form of plain
+text. When people talk about custom fields in WordPress, they're using
 plugins that include custom field types like files, dates, check-boxes,
 images, and colors.
-<a href="https://www.advancedcustomfields.com/" target="_blank">ACF</a> (Advanced Custom Fields),
-<a href="https://metabox.io/" target="_blank">Meta Box</a>,
-<a href="https://pods.io/" target="_blank">Pods</a>,
-and <a href="https://carbonfields.net/" target="_blank">Carbon Fields</a>
+<a href="https://www.advancedcustomfields.com/">ACF</a> (Advanced Custom Fields),
+<a href="https://metabox.io/">Meta Box</a>,
+<a href="https://pods.io/">Pods</a>,
+and <a href="https://carbonfields.net/">Carbon Fields</a>
 are just a few plugins that add these additional custom field types.</p>
-
 <p>You can use custom fields to:</p>
-
 <ul>
 <li>display the time for an event.</li>
 <li>attach a PDF file for a seminar.</li>
@@ -888,41 +1074,33 @@ are just a few plugins that add these additional custom field types.</p>
 <li>select the condition (new, used, salvage) of a product.</li>
 <li>display the location of a venue and the number of people it could support.</li>
 </ul>
-
 <p>Implementing custom post types, taxonomies, and custom fields to a WordPress
 website organizes your content in a way that makes it easier to find.
 Developers can reuse content across multiple pages, and content creators will
 have a easier time creating and editing their data.</p>
-
-<h2 id="headless-wordpress">Headless WordPress</h2>
-
+<h2>Headless WordPress</h2>
 <p>Rather than use WordPress to display your front-end, you can separate the
 website front-end and the content by using WordPress as a headless CMS.</p>
-
 <p>WordPress natively supports a REST API that sends and receives JSON. Sending a
 GET request to <code>/wp-json/wp/v2/pages</code> might give you the following response:</p>
-
 <pre><code class="language-json">[
   {
-    &quot;id&quot;: 1,
-    &quot;title&quot;: {
-      &quot;rendered&quot;: &quot;Hello world!&quot;
+    "id": 1,
+    "title": {
+      "rendered": "Hello world!"
     },
-    &quot;content&quot;: {
-      &quot;rendered&quot;: &quot;&lt;p&gt;Welcome to WordPress. This is your first post. Edit or delete it, then start writing!&lt;/p&gt;\n&quot;,
-      &quot;protected&quot;: false
+    "content": {
+      "rendered": "&lt;p&gt;Welcome to WordPress. This is your first post. Edit or delete it, then start writing!&lt;/p&gt;\n",
+      "protected": false
     },
     // much more data...
   },
   // ...
-]
-</code></pre>
-
+]</code></pre>
 <p>Alternatively, you can query WordPress content using the
-<a href="https://www.wpgraphql.com/" target="_blank">WPGraphQL</a> plugin. The plugin works well with
+<a href="https://www.wpgraphql.com/">WPGraphQL</a> plugin. The plugin works well with
 Gatsby, which is a React framework that embraces the use of GraphQL. But any
 web framework will work, as long as you can speak GraphQL.</p>
-
 <pre><code class="language-graphql">query {
   pages {
     edges {
@@ -933,48 +1111,71 @@ web framework will work, as long as you can speak GraphQL.</p>
       }
     }
   }
-}
-</code></pre>
-
+}</code></pre>
 <p>That query could produce the following JSON response:</p>
-
 <pre><code class="language-json">{
-  &quot;data&quot;: {
-    &quot;pages&quot;: {
-      &quot;edges&quot;: [
+  "data": {
+    "pages": {
+      "edges": [
         {
-          &quot;node&quot;: {
-            &quot;id&quot;: &quot;cG9zdDo2&quot;,
-            &quot;title&quot;: &quot;Hello world!&quot;,
-            &quot;content&quot;: &quot;&lt;p&gt;Welcome to WordPress. This is your first post. Edit or delete it, then start writing!&lt;/p&gt;\n&quot;
+          "node": {
+            "id": "cG9zdDo2",
+            "title": "Hello world!",
+            "content": "&lt;p&gt;Welcome to WordPress. This is your first post. Edit or delete it, then start writing!&lt;/p&gt;\n"
           }
         },
         // ...
       ]
     }
-  },
-</code></pre>
-
+  },</code></pre>
 <p>By decoupling the front-end and the content, marketers and content creators
 can use the WordPress admin dashboard to interact with their data. Developers
 can use familiar SPA frameworks like NextJS, Gatsby, Nuxt, and SvelteKit to
 design the front-end.</p>
-
-<h2 id="wrapping-up">Wrapping Up</h2>
-
-<p>One day I&rsquo;ll write a proper conclusion.</p>
-
-<p>That day is not today.</p>
-
-    </article>
+<h2>Wrapping Up</h2>
+<p>One day I'll write a proper conclusion.</p>
+<p>That day is not today.</p>    </article>
   </div>
 
-  
-  <script src="/public/hljs/highlight.min.js"></script>
+  <script src="/public/highlight.min.js"></script>
   <script>
+    hljs.registerLanguage("wgsl", hljs => {
+      return {
+        name: "WGSL",
+        aliases: ["wgsl", "language-wgsl"],
+        keywords: {
+          keyword: "alias break case const const_assert continue continuing default diagnostic discard else enable false fn for if let loop override requires return struct switch true var while",
+          type: "vec2f vec3f vec4f",
+        },
+        contains: [
+          hljs.C_LINE_COMMENT_MODE,
+          hljs.C_BLOCK_COMMENT_MODE,
+          {
+            className: "built_in",
+            begin: /@\w+/,
+          },
+          {
+            beginKeywords: "struct",
+            end: /{/,
+            contains: [hljs.TITLE_MODE],
+          },
+        ]
+      }
+    });
+
     hljs.highlightAll();
   </script>
 
+    <footer class="dim">
+              <a href="/">Jason Liang</a>
+            &middot;
+      <a href="https://github.com/jasonliang-dev/">GitHub</a>
+      &middot;
+      jasonliang512@gmail.com
+    </footer>
+  </body>
+
+  <!-- be nice to people -->
+
+  </html>
   
-</body>
-</html>

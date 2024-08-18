@@ -1,82 +1,421 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>
-  A Tiny OpenGL 2D Batch Renderer
-</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/public/style.css">
-  <link rel="stylesheet" href="/public/tachyons.min.css">
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-1691VYRF8G"></script>
-  <script>
-    window.dataLayer = window.dataLayer || []
-    function gtag(){dataLayer.push(arguments)}
-    gtag('js', new Date())
-    gtag('config', 'G-1691VYRF8G')
-  </script>
-  
-  <script>
-    function updateTheme() {
-      const doc = document.documentElement
 
-      let dark
-      if ('theme' in localStorage) {
-        dark = localStorage.theme === 'dark'
-      } else {
-        dark = window.matchMedia('(prefers-color-scheme: dark)').matches
-      }
+  <!DOCTYPE html>
+  <html lang="en">
 
-      if (dark) {
-        doc.classList.add('dark')
-      } else {
-        doc.classList.remove('dark')
-      }
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>A Tiny OpenGL 2D Batch Renderer - Jason Liang</title>
 
-      if (typeof onUpdateTheme === 'function') {
-        onUpdateTheme()
-      }
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-1691VYRF8G');
+    </script>
+
+    <style>
+      body {
+  font-family: sans-serif;
+  margin: 0 auto;
+  max-width: 800px;
+
+  @media (prefers-color-scheme: dark) {
+    color: white;
+    background-color: #111;
+  }
+}
+
+a {
+  color: black;
+  border-radius: .25rem;
+
+  &:hover, &:focus {
+    background-color: black;
+    color: white;
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    color: white;
+
+    &:hover, &:focus {
+      background-color: white;
+      color: black;
     }
+  }
+}
 
-    function toggleTheme() {
-      const doc = document.documentElement
-      localStorage.theme = doc.classList.contains('dark') ? 'light' : 'dark'
-      updateTheme()
+.post-list {
+  list-style-type: none;
+  padding: 0;
+
+  a {
+    text-decoration: none;
+    display: flex;
+    justify-content: space-between;
+    padding: .5rem;
+
+    &:hover, &:focus {
+      background-color: black;
+      color: #fff;
     }
+  }
+}
 
-    updateTheme()
-  </script>
-</head>
-<body>
-  <button class="theme-button fixed top-0 right-0 z-999 flex mt3 mr3 bn br-pill pa2" onclick="toggleTheme()">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="20" height="20">
-      <path d="M10 2a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 2zM10 15a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 15zM10 7a3 3 0 100 6 3 3 0 000-6zM15.657 5.404a.75.75 0 10-1.06-1.06l-1.061 1.06a.75.75 0 001.06 1.06l1.06-1.06zM6.464 14.596a.75.75 0 10-1.06-1.06l-1.06 1.06a.75.75 0 001.06 1.06l1.06-1.06zM18 10a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0118 10zM5 10a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 015 10zM14.596 15.657a.75.75 0 001.06-1.06l-1.06-1.061a.75.75 0 10-1.06 1.06l1.06 1.06zM5.404 6.464a.75.75 0 001.06-1.06l-1.06-1.06a.75.75 0 10-1.061 1.06l1.06 1.06z" />
-    </svg>
-  </button>
-  
-  <div class="mw7 center ph3">
-    <header class="pt4">
-      <a class="harsh fw7 f3 link" href="/">Jason Liang</a>
-    </header>
-    <article class="prose">
-      <time>January 4, 2022</time>
-      <h1>A Tiny OpenGL 2D Batch Renderer</h1>
+nav a {
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-decoration: none;
+  margin-top: 2rem;
+  margin-bottom: 4rem;
+  display: inline-block;
+}
+
+.post {
+  h1 {
+    margin-top: 0;
+  }
+
+  article {
+    line-height: 1.5;
+    font-size: 1.125em;
+    color: #111;
+
+    @media (prefers-color-scheme: dark) {
+      color: #ddd;
+    }
+  }
+
+  ul {
+    padding-left: 1.25rem;
+  }
+
+  img {
+    max-width: 100%;
+    border-radius: .5rem;
+    border: 1px solid #bbb;
+
+    @media (prefers-color-scheme: dark) {
+      border-color: #444;
+    }
+  }
+
+  table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    overflow-x: auto;
+  }
+
+  th {
+    text-align: left;
+    border: 1px solid #bbb;
+    padding: .25rem .5rem;
+  }
+
+  td {
+    border: 1px solid #bbb;
+    padding: .25rem .5rem;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    th, td {
+      border-color: #444;
+    }
+  }
+
+  pre>code {
+    padding: 1em;
+    display: block;
+    border-radius: .5rem;
+    overflow-x: auto;
+
+    background-color: #f8f8f8 !important;
+
+    @media (prefers-color-scheme: dark) {
+      background-color: black !important;
+    }
+  }
+}
+
+footer {
+  border-top: 1px solid #ddd;
+  padding: 2rem 0;
+  margin-bottom: 12rem;
+  margin-top: 3rem;
+
+  @media (prefers-color-scheme: dark) {
+    border-top: 1px solid #444;
+  }
+}
+
+.dim {
+  color: #444;
+
+  @media (prefers-color-scheme: dark) {
+    color: #888;
+  }
+}
+
+/*!
+  Theme: GitHub
+  Description: Light theme as seen on github.com
+  Author: github.com
+  Maintainer: @Hirse
+  Updated: 2021-05-15
+
+  Outdated base version: https://github.com/primer/github-syntax-light
+  Current colors taken from GitHub's CSS
+*/
+
+.hljs {
+  color: #24292e;
+  background: #ffffff;
+}
+
+.hljs-doctag,
+.hljs-keyword,
+.hljs-meta .hljs-keyword,
+.hljs-template-tag,
+.hljs-template-variable,
+.hljs-type,
+.hljs-variable.language_ {
+  /* prettylights-syntax-keyword */
+  color: #d73a49;
+}
+
+.hljs-title,
+.hljs-title.class_,
+.hljs-title.class_.inherited__,
+.hljs-title.function_ {
+  /* prettylights-syntax-entity */
+  color: #6f42c1;
+}
+
+.hljs-attr,
+.hljs-attribute,
+.hljs-literal,
+.hljs-meta,
+.hljs-number,
+.hljs-operator,
+.hljs-variable,
+.hljs-selector-attr,
+.hljs-selector-class,
+.hljs-selector-id {
+  /* prettylights-syntax-constant */
+  color: #005cc5;
+}
+
+.hljs-regexp,
+.hljs-string,
+.hljs-meta .hljs-string {
+  /* prettylights-syntax-string */
+  color: #032f62;
+}
+
+.hljs-built_in,
+.hljs-symbol {
+  /* prettylights-syntax-variable */
+  color: #e36209;
+}
+
+.hljs-comment,
+.hljs-code,
+.hljs-formula {
+  /* prettylights-syntax-comment */
+  color: #6a737d;
+}
+
+.hljs-name,
+.hljs-quote,
+.hljs-selector-tag,
+.hljs-selector-pseudo {
+  /* prettylights-syntax-entity-tag */
+  color: #22863a;
+}
+
+.hljs-subst {
+  /* prettylights-syntax-storage-modifier-import */
+  color: #24292e;
+}
+
+.hljs-section {
+  /* prettylights-syntax-markup-heading */
+  color: #005cc5;
+  font-weight: bold;
+}
+
+.hljs-bullet {
+  /* prettylights-syntax-markup-list */
+  color: #735c0f;
+}
+
+.hljs-emphasis {
+  /* prettylights-syntax-markup-italic */
+  color: #24292e;
+  font-style: italic;
+}
+
+.hljs-strong {
+  /* prettylights-syntax-markup-bold */
+  color: #24292e;
+  font-weight: bold;
+}
+
+.hljs-addition {
+  /* prettylights-syntax-markup-inserted */
+  color: #22863a;
+  background-color: #f0fff4;
+}
+
+.hljs-deletion {
+  /* prettylights-syntax-markup-deleted */
+  color: #b31d28;
+  background-color: #ffeef0;
+}
+
+@media (prefers-color-scheme: dark) {
+  /*!
+    Theme: GitHub Dark
+    Description: Dark theme as seen on github.com
+    Author: github.com
+    Maintainer: @Hirse
+    Updated: 2021-05-15
+
+    Outdated base version: https://github.com/primer/github-syntax-dark
+    Current colors taken from GitHub's CSS
+  */
+
+  .hljs {
+    color: #c9d1d9;
+    background: #0d1117;
+  }
+
+  .hljs-doctag,
+  .hljs-keyword,
+  .hljs-meta .hljs-keyword,
+  .hljs-template-tag,
+  .hljs-template-variable,
+  .hljs-type,
+  .hljs-variable.language_ {
+    /* prettylights-syntax-keyword */
+    color: #ff7b72;
+  }
+
+  .hljs-title,
+  .hljs-title.class_,
+  .hljs-title.class_.inherited__,
+  .hljs-title.function_ {
+    /* prettylights-syntax-entity */
+    color: #d2a8ff;
+  }
+
+  .hljs-attr,
+  .hljs-attribute,
+  .hljs-literal,
+  .hljs-meta,
+  .hljs-number,
+  .hljs-operator,
+  .hljs-variable,
+  .hljs-selector-attr,
+  .hljs-selector-class,
+  .hljs-selector-id {
+    /* prettylights-syntax-constant */
+    color: #79c0ff;
+  }
+
+  .hljs-regexp,
+  .hljs-string,
+  .hljs-meta .hljs-string {
+    /* prettylights-syntax-string */
+    color: #a5d6ff;
+  }
+
+  .hljs-built_in,
+  .hljs-symbol {
+    /* prettylights-syntax-variable */
+    color: #ffa657;
+  }
+
+  .hljs-comment,
+  .hljs-code,
+  .hljs-formula {
+    /* prettylights-syntax-comment */
+    color: #8b949e;
+  }
+
+  .hljs-name,
+  .hljs-quote,
+  .hljs-selector-tag,
+  .hljs-selector-pseudo {
+    /* prettylights-syntax-entity-tag */
+    color: #7ee787;
+  }
+
+  .hljs-subst {
+    /* prettylights-syntax-storage-modifier-import */
+    color: #c9d1d9;
+  }
+
+  .hljs-section {
+    /* prettylights-syntax-markup-heading */
+    color: #1f6feb;
+    font-weight: bold;
+  }
+
+  .hljs-bullet {
+    /* prettylights-syntax-markup-list */
+    color: #f2cc60;
+  }
+
+  .hljs-emphasis {
+    /* prettylights-syntax-markup-italic */
+    color: #c9d1d9;
+    font-style: italic;
+  }
+
+  .hljs-strong {
+    /* prettylights-syntax-markup-bold */
+    color: #c9d1d9;
+    font-weight: bold;
+  }
+
+  .hljs-addition {
+    /* prettylights-syntax-markup-inserted */
+    color: #aff5b4;
+    background-color: #033a16;
+  }
+
+  .hljs-deletion {
+    /* prettylights-syntax-markup-deleted */
+    color: #ffdcd7;
+    background-color: #67060c;
+  }
+}
+    </style>
+  </head>
+
+  <body>
+      <div class="post">
+    <nav>
+      <a href="/">Jason Liang</a>
+    </nav>
+
+    <time class="dim" datetime="2022-01-04">January 4, 2022</time>
+    <h1>A Tiny OpenGL 2D Batch Renderer</h1>
+    <article>
       <p><img src="/public/batch-rendering/aliens.png" alt="A grid of 2D sprites" /></p>
-
 <p>If you rather read code than words, the source is available
-on <a href="https://github.com/jasonliang-dev/tiny-batch-renderer" target="_blank">GitHub</a>.</p>
-
+on <a href="https://github.com/jasonliang-dev/tiny-batch-renderer">GitHub</a>.</p>
 <p>This article describes a small batch renderer written in C using modern OpenGL.
-The goal is to write the minimum amount to code to reduce draw calls. It&rsquo;s not
-going to be the fastest or the most efficient implementation, but it&rsquo;s probably
+The goal is to write the minimum amount to code to reduce draw calls. It's not
+going to be the fastest or the most efficient implementation, but it's probably
 one of the smallest, for learning purposes.</p>
-
 <p>Below is an example of how the batch renderer can be used to draw a grid of sprites
 representing aliens:</p>
-
 <pre><code class="language-c">typedef struct {
   // position
   float px, py;
@@ -109,7 +448,7 @@ void draw_alien(BatchRenderer *renderer, Texture tex, Alien a) {
 int main(void) {
   // ...
   BatchRenderer renderer = create_renderer(6000);
-  Texture tex_aliens = create_texture(&quot;aliens.png&quot;);
+  Texture tex_aliens = create_texture("aliens.png");
 
   struct {
     float x, y, w, h;
@@ -145,15 +484,10 @@ int main(void) {
     r_flush(&amp;renderer);
     // ...
   }
-}
-</code></pre>
-
+}</code></pre>
 <p>This (incomplete) program produces the image at the top of this article.</p>
-
-<h2 id="how-batch-rendering-works">How Batch Rendering Works</h2>
-
+<h2>How Batch Rendering Works</h2>
 <p>Without batch rendering, this is how drawing a grid of aliens might look like:</p>
-
 <pre><code class="language-c">void draw_alien() {
   // ...
   glBindVertexArray(vao);
@@ -166,29 +500,22 @@ int main() {
       draw_alien();
     }
   }
-}
-</code></pre>
-
+}</code></pre>
 <p>Each alien performs a draw call. Six vertices are drawn from the vertex array,
 which probably describes two triangles that make up a single quad.</p>
-
 <p>A batch renderer avoids making draw calls by setting up a large dynamic vertex
 buffer object, where vertex data gets written to a buffer every frame and then
 the buffer gets used in a single draw call. The data itself may contain
 multiple quads with different vertex positions, texture coordinates, and
 perhaps tint colour.</p>
-
 <p>A draw call should be performed:</p>
-
 <ul>
 <li>When the vertex buffer reaches its capacity</li>
 <li>When any uniform values need to change</li>
-<li>When it&rsquo;s the end of the frame</li>
+<li>When it's the end of the frame</li>
 </ul>
-
-<p>After submitting a draw call, the vertex buffer is &ldquo;flushed&rdquo; to set up for the
+<p>After submitting a draw call, the vertex buffer is "flushed" to set up for the
 next draw call.</p>
-
 <pre><code class="language-c">void draw_alien() {
   // nothing is actually drawn at this stage.
   // data is just being written to a buffer
@@ -202,27 +529,18 @@ int main() {
     }
     r_flush(); // this is where glDrawArrays actually gets called
   }
-}
-</code></pre>
-
+}</code></pre>
 <p>In summary, instead of naively making a draw call for each alien:</p>
-
 <p><img src="/public/batch-rendering/draw1.png" alt="" /></p>
-
 <p><code>draw_alien()</code> writes to a buffer, and then <code>r_flush()</code> performs a single draw
 call.</p>
-
 <p><img src="/public/batch-rendering/draw2.png" alt="" /></p>
-
 <p>By reducing the number of draw calls, we can increase the performance of our
 program.</p>
-
-<h2 id="implementation">Implementation</h2>
-
+<h2>Implementation</h2>
 <p>The <code>BatchRenderer</code> struct contains a shader program <code>shader</code>, a vertex array
 object <code>vao</code>, a vertex buffer object <code>vbo</code>, an array of vertices in CPU memory
 <code>vertices</code>, and values that get bound to uniforms <code>texture</code> and <code>mvp</code>.</p>
-
 <pre><code class="language-c">typedef struct { float cols[4][4]; } Matrix;
 typedef struct { float position[2]; float texcoord[2]; } Vertex;
 
@@ -239,18 +557,14 @@ typedef struct {
   // uniform values
   GLuint texture;
   Matrix mvp;
-} BatchRenderer;
-</code></pre>
-
+} BatchRenderer;</code></pre>
 <p>The <code>vertices</code> buffer is needed to write vertex data somewhere in CPU memory,
 and the vertex buffer object <code>vbo</code> is needed to read vertex data in GPU memory.
-To avoid confusion, I&rsquo;ll be referring to the vertex buffer object as the GPU
+To avoid confusion, I'll be referring to the vertex buffer object as the GPU
 vertex buffer or VBO, and the array of vertices in CPU memory as the CPU vertex
 buffer.</p>
-
 <p>The following function initializes a batch renderer with a given capacity for
 the CPU vertex buffer:</p>
-
 <pre><code class="language-c">BatchRenderer create_renderer(int vertex_capacity) {
   GLuint vao;
   glGenVertexArrays(1, &amp;vao);
@@ -272,23 +586,23 @@ the CPU vertex buffer:</p>
                         (void *)offsetof(Vertex, texcoord));
 
   const char *vertex =
-      &quot;#version 330 core\n&quot;
-      &quot;layout(location=0) in vec2 a_position;\n&quot;
-      &quot;layout(location=1) in vec2 a_texindex;\n&quot;
-      &quot;out vec2 v_texindex;\n&quot;
-      &quot;uniform mat4 u_mvp;\n&quot;
-      &quot;void main() {\n&quot;
-      &quot;    gl_Position = u_mvp * vec4(a_position, 0.0, 1.0);\n&quot;
-      &quot;    v_texindex = a_texindex;\n&quot;
-      &quot;}\n&quot;;
+      "#version 330 core\n"
+      "layout(location=0) in vec2 a_position;\n"
+      "layout(location=1) in vec2 a_texindex;\n"
+      "out vec2 v_texindex;\n"
+      "uniform mat4 u_mvp;\n"
+      "void main() {\n"
+      "    gl_Position = u_mvp * vec4(a_position, 0.0, 1.0);\n"
+      "    v_texindex = a_texindex;\n"
+      "}\n";
 
-  const char *fragment = &quot;#version 330 core\n&quot;
-                         &quot;in vec2 v_texindex;\n&quot;
-                         &quot;out vec4 f_color;\n&quot;
-                         &quot;uniform sampler2D u_texture;\n&quot;
-                         &quot;void main() {\n&quot;
-                         &quot;    f_color = texture(u_texture, v_texindex);\n&quot;
-                         &quot;}\n&quot;;
+  const char *fragment = "#version 330 core\n"
+                         "in vec2 v_texindex;\n"
+                         "out vec4 f_color;\n"
+                         "uniform sampler2D u_texture;\n"
+                         "void main() {\n"
+                         "    f_color = texture(u_texture, v_texindex);\n"
+                         "}\n";
 
   GLuint program = load_shader(vertex, fragment);
 
@@ -302,27 +616,22 @@ the CPU vertex buffer:</p>
     .texture = 0,
     .mvp = {0},
   };
-}
-</code></pre>
-
+}</code></pre>
 <p>The main takeaway is the call to <code>glBufferData()</code>. The usage pattern for the
 GPU vertex buffer is <code>GL_DYNAMIC_DRAW</code> instead of something like
 <code>GL_STATIC_DRAW</code>.  This allows us to change the contents of the GPU vertex
 buffer in the future using the <code>glBufferSubData()</code> function. The data parameter
 is <code>NULL</code>, which means the VBO data living in VRAM is uninitialized.</p>
-
-<p>I won&rsquo;t go into detail about the <code>load_shader()</code> function since it&rsquo;s nothing
+<p>I won't go into detail about the <code>load_shader()</code> function since it's nothing
 special. The function returns the result of <code>glCreateProgram()</code> after compiling
 the given vertex and fragment shaders. The shaders themselves consist of simple
 GLSL that would be expected from a basic 2D renderer.</p>
-
 <p>The memory allocated for <code>vertices</code> should be the same size as the VBO, which
 is <code>sizeof(Vertex) * vertex_capacity</code>. This array of vertices living in CPU
 memory is the buffer that will be written to whenever something needs to be
 drawn, but it should not be mutated directly. <code>r_push_vertex()</code> should be used
 instead, which does some housekeeping by incrementing <code>vertex_count</code> by one and
 it checks when the CPU vertex buffer is at capacity.</p>
-
 <pre><code class="language-c">void r_push_vertex(BatchRenderer *renderer, float x, float y, float u,
                    float v) {
   if (renderer-&gt;vertex_count == renderer-&gt;vertex_capacity) {
@@ -333,13 +642,10 @@ it checks when the CPU vertex buffer is at capacity.</p>
     .position = {x, y},
     .texcoord = {u, v},
   };
-}
-</code></pre>
-
+}</code></pre>
 <p>When the CPU vertex buffer reaches its capacity, then we have no more room to
 add another vertex. The solution is to submit a draw call and empty the CPU
 vertex buffer with <code>r_flush()</code>.</p>
-
 <pre><code class="language-c">void r_flush(BatchRenderer *renderer) {
   if (renderer-&gt;vertex_count == 0) {
     return;
@@ -350,8 +656,8 @@ vertex buffer with <code>r_flush()</code>.</p>
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, renderer-&gt;texture);
 
-  glUniform1i(glGetUniformLocation(renderer-&gt;shader, &quot;u_texture&quot;), 0);
-  glUniformMatrix4fv(glGetUniformLocation(renderer-&gt;shader, &quot;u_mvp&quot;), 1,
+  glUniform1i(glGetUniformLocation(renderer-&gt;shader, "u_texture"), 0);
+  glUniformMatrix4fv(glGetUniformLocation(renderer-&gt;shader, "u_mvp"), 1,
                      GL_FALSE, renderer-&gt;mvp.cols[0]);
 
   glBindBuffer(GL_ARRAY_BUFFER, renderer-&gt;vbo);
@@ -362,23 +668,18 @@ vertex buffer with <code>r_flush()</code>.</p>
   glDrawArrays(GL_TRIANGLES, 0, renderer-&gt;vertex_count);
 
   renderer-&gt;vertex_count = 0;
-}
-</code></pre>
-
+}</code></pre>
 <p>This is where <code>glBufferSubData()</code> comes into play. <code>glBufferSubData()</code> is analogous
 to <code>memcpy()</code> except it copies from CPU memory into GPU memory instead of
 exclusively working in CPU memory. <code>0</code> is the offset where data is copied to
 (0 being the start of the VBO data). <code>sizeof(Vertex) * renderer-&gt;vertex_count</code> is
 the number of bytes to copy. <code>renderer-&gt;vertices</code> is the data to copy from.</p>
-
 <p>After binding the uniform values, and copying the CPU vertex buffer data to GPU memory,
 a draw call is made with <code>glDrawArrays()</code>, and <code>vertex_count</code> is set to 0 to set up
 for the next call to <code>r_flush</code>.</p>
-
-<p>Almost done. There&rsquo;s one case that has to be handled: whenever any uniform needs to change,
+<p>Almost done. There's one case that has to be handled: whenever any uniform needs to change,
 the CPU vertex buffer needs to be flushed before setting the uniform. The following
 functions are created just for these cases:</p>
-
 <pre><code class="language-c">void r_texture(BatchRenderer *renderer, GLuint id) {
   if (renderer-&gt;texture != id) {
     r_flush(renderer);
@@ -391,37 +692,62 @@ void r_mvp(BatchRenderer *renderer, Matrix mat) {
     r_flush(renderer);
     renderer-&gt;mvp = mat;
   }
-}
-</code></pre>
-
-<p>That&rsquo;s it! To use the renderer, call <code>create_renderer()</code> during program initialization,
+}</code></pre>
+<p>That's it! To use the renderer, call <code>create_renderer()</code> during program initialization,
 <code>r_push_vertex()</code> when drawing in the main render loop, and <code>r_flush()</code> at the
 end of each frame.</p>
-
 <p>The source code for the entire program is available on
-<a href="https://github.com/jasonliang-dev/tiny-batch-renderer" target="_blank">GitHub</a>.</p>
-
-<h2 id="improvements">Improvements</h2>
-
+<a href="https://github.com/jasonliang-dev/tiny-batch-renderer">GitHub</a>.</p>
+<h2>Improvements</h2>
 <p>Here is a list of changes that can be made to this renderer to improve its
 performance and efficiency:</p>
-
 <ul>
 <li>Store uniform locations to avoid <code>glGetUniformLocation()</code> in <code>r_flush()</code>.</li>
 <li>Create an index buffer to improve efficiency and memory usage when exclusively
 drawing quads. Drawing a quad would need four calls to <code>r_push_vertex()</code> instead of six.</li>
 <li>Create multiple buffers and group them based on texture to minimize state changes.</li>
-</ul>
-
-    </article>
+</ul>    </article>
   </div>
 
-  
-  <script src="/public/hljs/highlight.min.js"></script>
+  <script src="/public/highlight.min.js"></script>
   <script>
+    hljs.registerLanguage("wgsl", hljs => {
+      return {
+        name: "WGSL",
+        aliases: ["wgsl", "language-wgsl"],
+        keywords: {
+          keyword: "alias break case const const_assert continue continuing default diagnostic discard else enable false fn for if let loop override requires return struct switch true var while",
+          type: "vec2f vec3f vec4f",
+        },
+        contains: [
+          hljs.C_LINE_COMMENT_MODE,
+          hljs.C_BLOCK_COMMENT_MODE,
+          {
+            className: "built_in",
+            begin: /@\w+/,
+          },
+          {
+            beginKeywords: "struct",
+            end: /{/,
+            contains: [hljs.TITLE_MODE],
+          },
+        ]
+      }
+    });
+
     hljs.highlightAll();
   </script>
 
+    <footer class="dim">
+              <a href="/">Jason Liang</a>
+            &middot;
+      <a href="https://github.com/jasonliang-dev/">GitHub</a>
+      &middot;
+      jasonliang512@gmail.com
+    </footer>
+  </body>
+
+  <!-- be nice to people -->
+
+  </html>
   
-</body>
-</html>
