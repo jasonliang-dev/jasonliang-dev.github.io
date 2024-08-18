@@ -14,11 +14,11 @@
       gtag('config', 'G-1691VYRF8G');
     </script>
 
-    <style>
-      body {
+    <style>body {
   font-family: sans-serif;
   margin: 0 auto;
   max-width: 800px;
+  padding: 0 .5rem;
 
   @media (prefers-color-scheme: dark) {
     color: white;
@@ -55,13 +55,23 @@ a {
 
   a {
     text-decoration: none;
+    flex-direction: column;
     display: flex;
     justify-content: space-between;
     padding: .5rem;
 
     &:hover, &:focus {
-      background-color: black;
-      color: #fff;
+      background-color: #ddd;
+      color: black;
+
+      @media (prefers-color-scheme: dark) {
+        background-color: #222;
+        color: white;
+      }
+    }
+
+    @media (min-width: 600px) {
+      flex-direction: row;
     }
   }
 }
@@ -395,7 +405,7 @@ footer {
     background-color: #67060c;
   }
 }
-    </style>
+</style>
   </head>
 
   <body>
@@ -653,23 +663,23 @@ is available on <a href="https://github.com/jasonliang-dev/coroutine-demo">GitHu
 
   <script src="/public/highlight.min.js"></script>
   <script>
-    hljs.registerLanguage("wgsl", hljs => {
+    hljs.registerLanguage('wgsl', hljs => {
       return {
-        name: "WGSL",
-        aliases: ["wgsl", "language-wgsl"],
+        name: 'WGSL',
+        aliases: ['wgsl', 'language-wgsl'],
         keywords: {
-          keyword: "alias break case const const_assert continue continuing default diagnostic discard else enable false fn for if let loop override requires return struct switch true var while",
-          type: "vec2f vec3f vec4f",
+          keyword: 'alias break case const const_assert continue continuing default diagnostic discard else enable false fn for if let loop override requires return struct switch true var while',
+          type: 'vec2f vec3f vec4f',
         },
         contains: [
           hljs.C_LINE_COMMENT_MODE,
           hljs.C_BLOCK_COMMENT_MODE,
           {
-            className: "built_in",
+            className: 'built_in',
             begin: /@\w+/,
           },
           {
-            beginKeywords: "struct",
+            beginKeywords: 'struct',
             end: /{/,
             contains: [hljs.TITLE_MODE],
           },

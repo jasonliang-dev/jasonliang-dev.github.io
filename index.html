@@ -14,11 +14,11 @@
       gtag('config', 'G-1691VYRF8G');
     </script>
 
-    <style>
-      body {
+    <style>body {
   font-family: sans-serif;
   margin: 0 auto;
   max-width: 800px;
+  padding: 0 .5rem;
 
   @media (prefers-color-scheme: dark) {
     color: white;
@@ -55,13 +55,23 @@ a {
 
   a {
     text-decoration: none;
+    flex-direction: column;
     display: flex;
     justify-content: space-between;
     padding: .5rem;
 
     &:hover, &:focus {
-      background-color: black;
-      color: #fff;
+      background-color: #ddd;
+      color: black;
+
+      @media (prefers-color-scheme: dark) {
+        background-color: #222;
+        color: white;
+      }
+    }
+
+    @media (min-width: 600px) {
+      flex-direction: row;
     }
   }
 }
@@ -395,7 +405,7 @@ footer {
     background-color: #67060c;
   }
 }
-    </style>
+</style>
   </head>
 
   <body>
@@ -405,49 +415,49 @@ footer {
           <li>
         <a href="wordpress.html">
           <span>WordPress For Non-WordPress Developers</span>
-          <span>2023-09-13</span>
+          <span class="dim">September 13, 2023</span>
         </a>
       </li>
           <li>
         <a href="triangles.html">
           <span>Drawing A Triangle 7 Ways</span>
-          <span>2023-06-06</span>
+          <span class="dim">June 6, 2023</span>
         </a>
       </li>
           <li>
         <a href="fusing.html">
           <span>How LÖVE's Fused Mode Works</span>
-          <span>2023-02-27</span>
+          <span class="dim">February 27, 2023</span>
         </a>
       </li>
           <li>
         <a href="cpp-style.html">
           <span>C++ Coding Style</span>
-          <span>2023-01-06</span>
+          <span class="dim">January 6, 2023</span>
         </a>
       </li>
           <li>
         <a href="metatables-in-c.html">
           <span>Using Lua Metatables With The C API</span>
-          <span>2022-11-30</span>
+          <span class="dim">November 30, 2022</span>
         </a>
       </li>
           <li>
         <a href="coroutines.html">
           <span>Lua Coroutines By Example</span>
-          <span>2022-04-06</span>
+          <span class="dim">April 6, 2022</span>
         </a>
       </li>
           <li>
         <a href="batch-renderer.html">
           <span>A Tiny OpenGL 2D Batch Renderer</span>
-          <span>2022-01-04</span>
+          <span class="dim">January 4, 2022</span>
         </a>
       </li>
           <li>
         <a href="unit-testing.html">
           <span>Write Your Own C++ Unit Testing Library</span>
-          <span>2022-01-03</span>
+          <span class="dim">January 3, 2022</span>
         </a>
       </li>
       </ul>
